@@ -35,7 +35,7 @@ public class BDD {
 
     public static Connection defautConnect()
             throws ClassNotFoundException, SQLException {
-        return connectGeneralPostGres("localhost", 5439, "postgres", "postgres", "pass");
+        return connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
     }
 
     public static void creeSchema(Connection con)
@@ -47,11 +47,23 @@ public class BDD {
             // creation des tables
             st.executeUpdate(
                     """
-                    create table utilisateur58 (
+                    create table utilisateur (
                         id integer not null primary key
                         generated always as identity,
                         nom varchar(30) not null unique,
                         pass varchar(30) not null
+                    )
+                    """);
+            st.executeUpdate(
+                    """
+                    create table enchere (
+                        
+                    )
+                    """);
+            st.executeUpdate(
+                    """
+                    create table categorie (
+                        
                     )
                     """);
 //            st.executeUpdate(
@@ -137,9 +149,9 @@ public class BDD {
             try {
                 st.executeUpdate(
                         """
-                    drop table utilisateur58
+                    drop table utilisateur
                     """);
-                System.out.println("table utilisateur58 dropped");
+                System.out.println("table utilisateur dropped");
             } catch (SQLException ex) {
                 // nothing to do : maybe the table was not created
             }
@@ -151,7 +163,7 @@ public class BDD {
             ResultSet res = st.executeQuery("select * from utilisateur");
             while (res.next()) {
                 String lenom = res.getString("nom");
-                String pass = res.getString(2);
+                String pass = res.getString("pass");
                 System.out.println("utilisateur " + lenom + " ("
                         + pass + ")");
             }
@@ -239,7 +251,7 @@ public class BDD {
             System.out.println("4) ajouter un utilisateur");
 //            System.out.println("5) ajouter un lien 'Aime'");
 //            System.out.println("6) ajouter n utilisateurs aléatoires");
-//            System.out.println("0) quitter");
+            System.out.println("0) quitter");
             System.out.println("5) Supprimer table");
             rep = ConsoleFdB.entreeEntier("Votre choix : ");
             try {
