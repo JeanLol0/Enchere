@@ -275,8 +275,8 @@ public class BDD {
 //
 //                    }
 //                }
-            } catch (SQLException ex) {
-                throw new Error(ex);
+            } catch (SQLException exe) {
+                throw new Error(exe);
             }
         }
     }
