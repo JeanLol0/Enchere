@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Project/Maven2/JavaApp/src/main/java/${packagePath}/${mainClassName}.java to edit this template
  */
-
 package fr.insa.strasbourg.zerr.enchereprojet.projetenchere;
 
 import fr.insa.beuvron.utils.ConsoleFdB;
@@ -20,6 +19,7 @@ import java.util.logging.Logger;
  * @author jules
  */
 public class BDD {
+
     public static Connection connectGeneralPostGres(String host,
             int port, String database,
             String user, String pass)
@@ -35,7 +35,7 @@ public class BDD {
 
     public static Connection defautConnect()
             throws ClassNotFoundException, SQLException {
-        return connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
+        return connectGeneralPostGres("localhost", 5439, "postgres", "postgres", "pass");
     }
 
     public static void creeSchema(Connection con)
@@ -45,27 +45,87 @@ public class BDD {
         con.setAutoCommit(false);
         try ( Statement st = con.createStatement()) {
             // creation des tables
-            st.executeUpdate(
+            st.executeUpdate( //utilisateur 
                     """
                     create table utilisateur (
                         id integer not null primary key
                         generated always as identity,
-                        nom varchar(30) not null unique,
-                        pass varchar(30) not null
+                        nom varchar(30) not null,
+                        pass varchar(30) not null,
+                        prenom varchar(50) not null,
+                        email varchar(100) not null unique,
+                        codepostale varchar(20)
                     )
                     """);
-            st.executeUpdate(
-                    """
-                    create table enchere (
-                        
-                    )
-                    """);
-            st.executeUpdate(
+            st.executeUpdate( // categorie
                     """
                     create table categorie (
-                        
+                        id integer not null primary key,
+                        nom varchar(50) not null
+                    ) 
+                    """
+            );
+
+            st.executeUpdate(//enchere
+                    """
+                    create table enchere(
+                            id integer not null,
+                            sur integer not null,
+                            de integer not null
                     )
-                    """);
+            """
+            );
+            //clé externes et liens
+            st.executeUpdate(
+                    """
+                    alter table enchere
+                         add constraint fk_enchere_objet
+                         foreign key (sur) references utilisateur(id)
+                            ON UPDATE RESTRICT
+                            ON DELETE RESTRICT
+                    """
+            );
+            st.executeUpdate(
+                    """
+                    alter table enchere
+                         add constraint fk_enchere_utilisateur
+                         foreign key (de) references utilisateur(id)
+                            ON UPDATE RESTRICT
+                            ON DELETE RESTRICT
+                    """
+            );
+            st.executeUpdate(//objet 
+                    """
+                    create table objet(
+                            id integer not null,
+                            titre varchar(100) not null,
+                            debut Timestamp not null,
+                            fin Timestamp not null,
+                            prixbase integer not null,
+                            categorie integer not null,
+                            proposerpar integer not null
+                    )
+                    """
+            );
+            //clé externe objet
+            st.executeUpdate(
+                    """
+                    alter table objet
+                         add constraint fk_objet_categorie
+                         foreign key (categorie) references categorie(id)
+                            ON UPDATE RESTRICT
+                            ON DELETE RESTRICT
+                    """
+            );
+            st.executeUpdate(
+                    """
+                    alter table objet
+                         add constraint fk_objet_utilisateur
+                         foreign key (proposerpar) references utilisateur(id)
+                            ON UPDATE RESTRICT
+                            ON DELETE RESTRICT
+                    """
+            );
 //            st.executeUpdate(
 //                    """
 //                    create table aime1 (
@@ -116,33 +176,53 @@ public class BDD {
             // pour être sûr de pouvoir supprimer, il faut d'abord supprimer les liens
             // puis les tables
             // suppression des liens
-                            try {
-                                st.executeUpdate(
-                                        """
-                                    alter table aime
-                                        drop constraint fk_aime_u1
+            try {
+                st.executeUpdate(
+                        """
+                                    alter table enchere
+                                        drop constraint fk_enchere_objet
                                              """);
-                                System.out.println("constraint fk_aime_u1 dropped");
-                            } catch (SQLException ex) {
-                                // nothing to do : maybe the constraint was not created
-                            }
-                            try {
-                                st.executeUpdate(
-                                        """
-                                    alter table aime
-                                        drop constraint fk_aime_u2
+                System.out.println("constraint fk_enchere_objet dropped");
+            } catch (SQLException ex) {
+                // nothing to do : maybe the constraint was not created
+            }
+            try {
+                st.executeUpdate(
+                        """
+                                    alter table enchere
+                                        drop constraint fk_enchere_utilisateur
+                                             """);
+                System.out.println("constraint fk_enchere_utilisateur dropped");
+            } catch (SQLException ex) {
+                // nothing to do : maybe the constraint was not created
+            }
+            try {
+                st.executeUpdate(
+                        """
+                                    alter table objet
+                                        drop constraint fk_objet_utilisateur
+                                             """);
+                System.out.println("constraint fk_objet_utilisateur dropped");
+            } catch (SQLException ex) {
+                // nothing to do : maybe the constraint was not created
+            }
+            try {
+                st.executeUpdate(
+                        """
+                                    alter table objet
+                                        drop constraint fk_objet_categorie
                                     """);
-                                System.out.println("constraint fk_aime_u2 dropped");
-                            } catch (SQLException ex) {
-                                // nothing to do : maybe the constraint was not created
-                            }
+                System.out.println("constraint fk_objet_categorie dropped");
+            } catch (SQLException ex) {
+                // nothing to do : maybe the constraint was not created
+            }
             // je peux maintenant supprimer les tables
             try {
                 st.executeUpdate(
                         """
-                    drop table aime
+                    drop table objet
                     """);
-                System.out.println("dable aime dropped");
+                System.out.println("table objet dropped");
             } catch (SQLException ex) {
                 // nothing to do : maybe the table was not created
             }
@@ -155,8 +235,27 @@ public class BDD {
             } catch (SQLException ex) {
                 // nothing to do : maybe the table was not created
             }
+            try {
+                st.executeUpdate(
+                        """
+                    drop table categorie
+                    """);
+                System.out.println("table categorie dropped");
+            } catch (SQLException ex) {
+                // nothing to do : maybe the table was not created
+            }
+            try {
+                st.executeUpdate(
+                        """
+                    drop table enchere
+                    """);
+                System.out.println("table enchere dropped");
+            } catch (SQLException ex) {
+                // nothing to do : maybe the table was not created
+            }
         }
     }
+
     public static void afficheTousLesUtilisateur(Connection con)
             throws SQLException {
         try ( Statement st = con.createStatement()) {
@@ -169,7 +268,7 @@ public class BDD {
             }
         }
     }
-    
+
     public static void afficheUtilisateurParNom(Connection con,
             String nom)
             throws SQLException {
@@ -185,7 +284,7 @@ public class BDD {
             }
         }
     }
-    
+
     public static int createUtilisateur(Connection con, String nom,
             String pass)
             throws SQLException {
@@ -198,9 +297,7 @@ public class BDD {
             ResultSet existe = pst2.executeQuery();
             if (!existe.next()) {
                 try ( PreparedStatement pst = con.prepareStatement(
-                        """
-                insert into utilisateur (nom,pass) values (?,?)
-                """, PreparedStatement.RETURN_GENERATED_KEYS)) {
+                        " insert into utilisateur (nom,pass) values (?,?)", PreparedStatement.RETURN_GENERATED_KEYS)) {
                     pst.setString(1, nom);
                     pst.setString(2, pass);
                     pst.executeUpdate();
@@ -221,11 +318,12 @@ public class BDD {
             }
         }
     }
-    
-    
+
     public static void demandeNouvelUtilisateur(Connection con)
             throws SQLException {
         String nom = ConsoleFdB.entreeString("nom ?");
+        String prenom = ConsoleFdB.entreeString("prenom?");
+        String email = ConsoleFdB.entreeString("email?");
         String pass = ConsoleFdB.entreeString("pass ?");
         int id = createUtilisateur(con, nom, pass);
         if (id == -1) {
@@ -239,7 +337,7 @@ public class BDD {
         deleteSchema(con);
         creeSchema(con);
     }
-    
+
     public static void menu(Connection con) {
         int rep = -1;
         while (rep != 0) {
@@ -264,8 +362,7 @@ public class BDD {
                     afficheUtilisateurParNom(con, lenom);
                 } else if (rep == 4) {
                     demandeNouvelUtilisateur(con);
-                } 
-                else if(rep==5){
+                } else if (rep == 5) {
                     deleteSchema(con);
                 }
 //                else if (rep == 5) {
@@ -294,15 +391,13 @@ public class BDD {
     }
 
     public static void main(String[] args) {
-        try (Connection con = defautConnect()) {
-            
+        try ( Connection con = defautConnect()) {
+
             System.out.println("Connection ok!");
             deleteSchema(con);
             creeSchema(con);
             menu(con);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(BDD.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
+        } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(BDD.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
