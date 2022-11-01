@@ -5,12 +5,14 @@
 package fr.insa.strasbourg.zerr.enchereprojet.projetenchere;
 
 import fr.insa.beuvron.utils.ConsoleFdB;
+import fr.insa.strasbourg.zerr.enchereprojet.projetenchere.model.Utilisateur;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,6 +21,26 @@ import java.util.logging.Logger;
  * @author jules
  */
 public class BDD {
+    
+    public static Optional<Utilisateur> login(Connection con,
+            String nom, String pass) throws SQLException {
+        try ( PreparedStatement pst = con.prepareStatement(
+                "select fdbutilisateur.id as uid,nrole"
+                + " from fdbutilisateur "
+                + "   join fdbrole on fdbutilisateur.role = fdbrole.id"
+                + " where fdbutilisateur.nom = ? and pass = ?")) {
+
+            pst.setString(1, nom);
+            pst.setString(2, pass);
+            ResultSet res = pst.executeQuery();
+            if (res.next()) {
+                return Optional.of(new Utilisateur(res.getInt("uid"), nom, pass, res.getString("nrole")));
+            } else {
+                return Optional.empty();
+            }
+        }
+    }
+    
 
     public static Connection connectGeneralPostGres(String host,
             int port, String database,
@@ -35,7 +57,7 @@ public class BDD {
 
     public static Connection defautConnect()
             throws ClassNotFoundException, SQLException {
-        return connectGeneralPostGres("localhost", 5439, "postgres", "postgres", "pass");
+        return connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
     }
 
     public static void creeSchema(Connection con)
