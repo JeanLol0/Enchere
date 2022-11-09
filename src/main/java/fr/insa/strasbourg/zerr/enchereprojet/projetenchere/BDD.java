@@ -57,7 +57,7 @@ public class BDD {
 
     public static Connection defautConnect()
             throws ClassNotFoundException, SQLException {
-        return connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
+        return connectGeneralPostGres("localhost", 5439, "postgres", "postgres", "pass");
     }
 
     public static void creeSchema(Connection con)
@@ -76,7 +76,7 @@ public class BDD {
                         pass varchar(30) not null,
                         prenom varchar(50) not null,
                         email varchar(100) not null unique,
-                        codepostale varchar(20)
+                        codepostal varchar(20)
                     )
                     """);
             st.executeUpdate( // categorie
@@ -285,8 +285,10 @@ public class BDD {
             while (res.next()) {
                 String lenom = res.getString("nom");
                 String pass = res.getString("pass");
-                System.out.println("utilisateur " + lenom + " ("
-                        + pass + ")");
+                String prenom = res.getString("prenom");
+                String mail  = res.getString("email");
+                System.out.println("utilisateur " + lenom + " " + prenom + " ("
+                        + pass + ")" + mail); 
             }
         }
     }
@@ -307,8 +309,7 @@ public class BDD {
         }
     }
 
-    public static int createUtilisateur(Connection con, String nom,
-            String pass)
+    public static int createUtilisateur(Connection con, String nom, String pass, String prenom, String email)
             throws SQLException {
         // lors de la creation du PreparedStatement, il faut que je précise
         // que je veux qu'il conserve les clés générées
@@ -319,10 +320,13 @@ public class BDD {
             ResultSet existe = pst2.executeQuery();
             if (!existe.next()) {
                 try ( PreparedStatement pst = con.prepareStatement(
-                        " insert into utilisateur (nom,pass) values (?,?)", PreparedStatement.RETURN_GENERATED_KEYS)) {
+                        " insert into utilisateur (nom,pass,prenom,email) values (?,?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS)) {
                     pst.setString(1, nom);
                     pst.setString(2, pass);
+                    pst.setString(3, prenom);
+                    pst.setString(4, email);
                     pst.executeUpdate();
+                    con.commit();
 
                     // je peux alors récupérer les clés créées comme un result set :
                     try ( ResultSet rid = pst.getGeneratedKeys()) {
@@ -338,6 +342,8 @@ public class BDD {
             } else {
                 return -1;
             }
+        } finally {
+            con.setAutoCommit(true);
         }
     }
 
@@ -347,7 +353,7 @@ public class BDD {
         String prenom = ConsoleFdB.entreeString("prenom?");
         String email = ConsoleFdB.entreeString("email?");
         String pass = ConsoleFdB.entreeString("pass ?");
-        int id = createUtilisateur(con, nom, pass);
+        int id = createUtilisateur(con, nom, pass,prenom,email);
         if (id == -1) {
             System.out.println("utilisateur existe déjà");
         } else {
@@ -417,7 +423,6 @@ public class BDD {
 
             System.out.println("Connection ok!");
             deleteSchema(con);
-            creeSchema(con);
             menu(con);
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(BDD.class.getName()).log(Level.SEVERE, null, ex);
