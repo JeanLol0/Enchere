@@ -4,9 +4,6 @@
  */
 package fr.insa.strasbourg.zerr.enchereprojet.projetenchere.FX;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
@@ -15,7 +12,7 @@ import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
-import javafx.scene.web.WebView;
+import javafx.stage.Stage;
 
 /**
  *
@@ -45,6 +42,15 @@ public class JavaFXUtils {
         alert.setContentText(detail);
         alert.showAndWait();
 
+    }
+    
+    public static void redimentionnerFenetre(Stage fenetre, int width, int height){
+        fenetre.setWidth(width);
+        fenetre.setHeight(height);
+    }
+    
+    public static void FullScreen(Stage fenetre){
+        fenetre.setFullScreen(true);
     }
     
 }

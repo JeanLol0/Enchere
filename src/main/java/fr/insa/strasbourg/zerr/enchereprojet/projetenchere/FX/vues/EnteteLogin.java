@@ -14,13 +14,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 /**
  *
  * @author jules
  */
-public class EnteteLogin extends HBox {
+public class EnteteLogin extends VBox {
 
     private VuePrincipale main;
 
@@ -38,6 +38,9 @@ public class EnteteLogin extends HBox {
         Button bLogin = new Button("Login");
         bLogin.setOnAction((t) -> {
             doLogin();
+            this.main.setCenter(null);
+            JavaFXUtils.FullScreen(this.main.getFenetre());
+            this.main.setBottom(null);
         });
         this.getChildren().add(bLogin);
 

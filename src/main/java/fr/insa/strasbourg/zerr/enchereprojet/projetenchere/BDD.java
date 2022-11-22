@@ -25,16 +25,16 @@ public class BDD {
     public static Optional<Utilisateur> login(Connection con,
             String nom, String pass) throws SQLException {
         try ( PreparedStatement pst = con.prepareStatement(
-                "select fdbutilisateur.id as uid,nrole"
-                + " from fdbutilisateur "
-                + "   join fdbrole on fdbutilisateur.role = fdbrole.id"
-                + " where fdbutilisateur.nom = ? and pass = ?")) {
+                "select utilisateur.id as uid"
+                + " from utilisateur "
+                + " where "
+                + "utilisateur.nom = ? and pass = ?")) {
 
             pst.setString(1, nom);
             pst.setString(2, pass);
             ResultSet res = pst.executeQuery();
             if (res.next()) {
-                return Optional.of(new Utilisateur(res.getInt("uid"), nom, pass, res.getString("nrole")));
+                return Optional.of(new Utilisateur(res.getInt("uid"), nom, pass));
             } else {
                 return Optional.empty();
             }
@@ -57,7 +57,7 @@ public class BDD {
 
     public static Connection defautConnect()
             throws ClassNotFoundException, SQLException {
-        return connectGeneralPostGres("localhost", 5439, "postgres", "postgres", "pass");
+        return connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
     }
 
     public static void creeSchema(Connection con)
@@ -424,6 +424,7 @@ public class BDD {
             System.out.println("Connection ok!");
             deleteSchema(con);
             menu(con);
+            System.out.println("user créé");
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(BDD.class.getName()).log(Level.SEVERE, null, ex);
         }
