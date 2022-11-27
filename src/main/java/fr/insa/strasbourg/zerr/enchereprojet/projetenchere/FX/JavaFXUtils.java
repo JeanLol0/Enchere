@@ -49,8 +49,18 @@ public class JavaFXUtils {
         fenetre.setHeight(height);
     }
     
+    public static void grandeFenetre(Stage fenetre){
+        fenetre.setWidth(1000);
+        fenetre.setHeight(800);
+    }
+    
     public static void FullScreen(Stage fenetre){
         fenetre.setFullScreen(true);
+    }
+
+    public static void petiteFenetre(Stage fenetre) {
+        fenetre.setWidth(400);
+        fenetre.setHeight(300);
     }
     
 }

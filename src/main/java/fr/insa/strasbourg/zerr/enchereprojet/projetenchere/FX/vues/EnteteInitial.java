@@ -28,11 +28,11 @@ public class EnteteInitial extends HBox {
         this.getChildren().addAll(this.bLogin, this.bNouvelUtilisateur);
 
         this.bLogin.setOnAction((t) -> {
-            this.main.setCenter(new EnteteLogin(this.main));
+            this.main.setMainPane(new EnteteLogin(this.main));
         });
 
         this.bNouvelUtilisateur.setOnAction((t) -> {
-            this.main.setCenter(new EnteteNouveauUtilisateur(this.main));
+            this.main.setMainPane(new EnteteNouveauUtilisateur(this.main));
         });
 
     

@@ -14,6 +14,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -24,29 +25,35 @@ import javafx.stage.Stage;
  */
 public class VuePrincipale extends BorderPane {
     private Stage fenetre;
-    private Pane mainPane;
+    private ScrollPane mainPane;
     private SessionInfo sessionInfo;
 
     public void setEntete(Node c) {
         this.setTop(c);
+    }
+    
+    public void setMainPane(Node c) {
+        this.mainPane.setContent(c);
     }
 
     public VuePrincipale(Stage fenetre) {
         this.fenetre = fenetre;
         
         this.sessionInfo = new SessionInfo();
-        this.mainPane = new Pane();
+        this.mainPane = new ScrollPane();
+        this.setCenter(this.mainPane);
+        JavaFXUtils.addSimpleBorder(mainPane);
 
         try {
             this.sessionInfo.setConBdD(BDD.defautConnect());
             //JavaFXUtils.addSimpleBorder(this.mainPane);
             this.setCenter(this.mainPane);
             Connection con = this.getBDD();
-            recreeTout(con);
+//            recreeTout(con);
             JavaFXUtils.redimentionnerFenetre(this.fenetre, 400, 300);
-            this.setBottom(new EnteteBienvenue(this));
+            this.setEntete(new EnteteBienvenue(this));
 
-            this.setEntete(new EnteteInitial(this));
+            this.setMainPane(new EnteteInitial(this));
 
         } catch (ClassNotFoundException ex) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -73,14 +80,18 @@ public class VuePrincipale extends BorderPane {
     /**
      * @return the mainPane
      */
-    public Pane getMainPane() {
+    public ScrollPane getMainPane() {
         return mainPane;
     }
 
-    public void setMainPane(Pane mainPane) {
+//    public void setMainPane(Pane mainPane) {
+//        this.mainPane = mainPane;
+
+    public void setMainPane(ScrollPane mainPane) {
         this.mainPane = mainPane;
     }
 
+//    }
     public SessionInfo getSessionInfo() {
         return sessionInfo;
     }

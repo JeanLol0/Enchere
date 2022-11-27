@@ -32,6 +32,11 @@ public class SessionInfo {
     public void setCurUser(Optional<Utilisateur> curUser) {
         this.curUser = curUser;
     }
+    
+//    @Override
+//    public String toString(){
+//      return this.get;  
+//    }
 
     public int getUserID() {
         return this.curUser.orElseThrow().getId();

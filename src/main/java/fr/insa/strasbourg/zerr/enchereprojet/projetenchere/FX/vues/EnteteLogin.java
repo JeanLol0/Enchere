@@ -39,8 +39,9 @@ public class EnteteLogin extends VBox {
         bLogin.setOnAction((t) -> {
             doLogin();
             this.main.setCenter(null);
-            JavaFXUtils.FullScreen(this.main.getFenetre());
+            JavaFXUtils.grandeFenetre(this.main.getFenetre());
             this.main.setBottom(null);
+            this.main.setEntete(new EnteteConnecte(main));
         });
         this.getChildren().add(bLogin);
 
@@ -50,10 +51,10 @@ public class EnteteLogin extends VBox {
         String nom = this.tfNom.getText();
         String pass = this.pfPass.getText();
         try {
-            Optional<Utilisateur> user
-                    = BDD.login(this.main.getBDD(), nom, pass);
+            Optional<Utilisateur> user = BDD.login(this.main.getBDD(), nom, pass);
             if (user.isEmpty()) {
                 JavaFXUtils.showErrorInAlert("Erreur", "utilisateur invalide", "");
+                this.main.setMainPane(new EnteteInitial(main));
             } else {
                 this.main.getSessionInfo().setCurUser(user);
                 this.main.setEntete(new Label("connection OK"));

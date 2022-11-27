@@ -59,7 +59,7 @@ public class EnteteNouveauUtilisateur extends VBox {
                
                 createUtilisateur(con, this.tfNom.getText(), this.pfPass.getText(), this.tfPrenom.getText(), this.tfEmail.getText());
                 System.out.println("utilisateur créé");
-                this.main.setCenter(new EnteteLogin(main));
+                this.main.setMainPane(new EnteteLogin(main));
             } catch (SQLException ex) {
                 Logger.getLogger(EnteteNouveauUtilisateur.class.getName()).log(Level.SEVERE, null, ex);
             }
