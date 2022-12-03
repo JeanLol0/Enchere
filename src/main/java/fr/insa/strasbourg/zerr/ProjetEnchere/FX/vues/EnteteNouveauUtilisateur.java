@@ -2,10 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package fr.insa.strasbourg.zerr.enchereprojet.projetenchere.FX.vues;
+package fr.insa.strasbourg.zerr.ProjetEnchere.FX.vues;
 
-import static fr.insa.strasbourg.zerr.enchereprojet.projetenchere.BDD.*;
-import fr.insa.strasbourg.zerr.enchereprojet.projetenchere.FX.VuePrincipale;
+import static fr.insa.strasbourg.zerr.ProjetEnchere.GestionBDD.BDD.*;
+import fr.insa.strasbourg.zerr.ProjetEnchere.FX.VuePrincipale;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;

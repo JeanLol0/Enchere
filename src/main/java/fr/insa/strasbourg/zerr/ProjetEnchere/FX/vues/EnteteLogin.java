@@ -2,12 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package fr.insa.strasbourg.zerr.enchereprojet.projetenchere.FX.vues;
+package fr.insa.strasbourg.zerr.ProjetEnchere.FX.vues;
 
-import fr.insa.strasbourg.zerr.enchereprojet.projetenchere.BDD;
+import fr.insa.strasbourg.zerr.ProjetEnchere.GestionBDD.BDD;
 import fr.insa.strasbourg.zerr.enchereprojet.projetenchere.FX.JavaFXUtils;
-import fr.insa.strasbourg.zerr.enchereprojet.projetenchere.FX.VuePrincipale;
-import fr.insa.strasbourg.zerr.enchereprojet.projetenchere.model.Utilisateur;
+import fr.insa.strasbourg.zerr.ProjetEnchere.FX.VuePrincipale;
+import fr.insa.strasbourg.zerr.ProjetEnchere.model.Utilisateur;
 import java.sql.SQLException;
 import java.util.Optional;
 import javafx.scene.control.Button;
@@ -44,7 +44,7 @@ public class EnteteLogin extends VBox {
             this.main.setEntete(new EnteteConnecte(main));
         });
         this.getChildren().add(bLogin);
-
+        this.getStylesheets().add("DarkTheme");
     }
 
     public void doLogin() {

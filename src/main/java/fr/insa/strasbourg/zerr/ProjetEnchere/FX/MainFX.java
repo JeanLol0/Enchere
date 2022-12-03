@@ -2,20 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package fr.insa.strasbourg.zerr.enchereprojet.projetenchere.FX;
-
-import fr.insa.strasbourg.zerr.enchereprojet.projetenchere.BDD;
-import static fr.insa.strasbourg.zerr.enchereprojet.projetenchere.BDD.defautConnect;
-import static fr.insa.strasbourg.zerr.enchereprojet.projetenchere.BDD.deleteSchema;
-import static fr.insa.strasbourg.zerr.enchereprojet.projetenchere.BDD.menu;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+package fr.insa.strasbourg.zerr.ProjetEnchere.FX;
 
 import javafx.application.Application;
 import static javafx.application.Application.launch;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -23,14 +13,23 @@ import javafx.stage.Stage;
  *
  * @author jules
  */
-public class MainFX extends Application{
+public class MainFX extends Application {
+
+    private VuePrincipale main;
+
     @Override
     public void start(Stage stage) {
-        Scene sc = new Scene(new VuePrincipale(stage));
-        
-        
+
+        this.main = new VuePrincipale(stage);
+        Scene sc = new Scene(main, Double.MAX_EXPONENT, Double.MAX_EXPONENT);
+
+        main.setStyle("{    -fx-background-color:aquamarine;    -fx-font-size : 17 pt;}");
+        System.out.println(sc.getStylesheets().size());
+        sc.getStylesheets().add("DarkTheme.css");
+        System.out.println(sc.getStylesheets().size());
         stage.setScene(sc);
         stage.setTitle("Enchère");
+
         stage.show();
     }
 
@@ -47,7 +46,7 @@ public class MainFX extends Application{
 //        } catch (ClassNotFoundException | SQLException ex) {
 //            Logger.getLogger(BDD.class.getName()).log(Level.SEVERE, null, ex);
 //        }
-        
+
     }
-    
+
 }

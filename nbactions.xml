@@ -7,4 +7,11 @@
                 <goal>javafx:run</goal>
             </goals>
         </action>
+        <action>
+            <actionName>CUSTOM-run FX</actionName>
+            <displayName>run FX</displayName>
+            <goals>
+                <goal>javafx:run</goal>
+            </goals>
+        </action>
     </actions>

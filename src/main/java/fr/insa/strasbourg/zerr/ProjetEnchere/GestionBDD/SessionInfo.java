@@ -2,9 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package fr.insa.strasbourg.zerr.enchereprojet.projetenchere;
+package fr.insa.strasbourg.zerr.ProjetEnchere.GestionBDD;
 
-import fr.insa.strasbourg.zerr.enchereprojet.projetenchere.model.Utilisateur;
+import fr.insa.strasbourg.zerr.ProjetEnchere.model.Utilisateur;
 import java.sql.Connection;
 import java.util.Optional;
 

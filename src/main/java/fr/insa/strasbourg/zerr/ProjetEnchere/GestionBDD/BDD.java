@@ -2,10 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Project/Maven2/JavaApp/src/main/java/${packagePath}/${mainClassName}.java to edit this template
  */
-package fr.insa.strasbourg.zerr.enchereprojet.projetenchere;
+package fr.insa.strasbourg.zerr.ProjetEnchere.GestionBDD;
 
 import fr.insa.beuvron.utils.ConsoleFdB;
-import fr.insa.strasbourg.zerr.enchereprojet.projetenchere.model.Utilisateur;
+import fr.insa.strasbourg.zerr.ProjetEnchere.model.Utilisateur;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;

@@ -2,21 +2,20 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package fr.insa.strasbourg.zerr.enchereprojet.projetenchere.FX;
+package fr.insa.strasbourg.zerr.ProjetEnchere.FX;
 
-import fr.insa.strasbourg.zerr.enchereprojet.projetenchere.FX.vues.EnteteBienvenue;
-import static fr.insa.strasbourg.zerr.enchereprojet.projetenchere.BDD.*;
+import fr.insa.strasbourg.zerr.ProjetEnchere.FX.vues.EnteteBienvenue;
 
-import fr.insa.strasbourg.zerr.enchereprojet.projetenchere.BDD;
-import fr.insa.strasbourg.zerr.enchereprojet.projetenchere.FX.vues.EnteteInitial;
-import fr.insa.strasbourg.zerr.enchereprojet.projetenchere.SessionInfo;
+import fr.insa.strasbourg.zerr.ProjetEnchere.GestionBDD.BDD;
+import fr.insa.strasbourg.zerr.ProjetEnchere.FX.vues.EnteteInitial;
+import fr.insa.strasbourg.zerr.ProjetEnchere.GestionBDD.SessionInfo;
+import fr.insa.strasbourg.zerr.enchereprojet.projetenchere.FX.JavaFXUtils;
 import java.sql.Connection;
 import java.sql.SQLException;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 /**
@@ -37,6 +36,7 @@ public class VuePrincipale extends BorderPane {
     }
 
     public VuePrincipale(Stage fenetre) {
+        
         this.fenetre = fenetre;
         
         this.sessionInfo = new SessionInfo();
@@ -51,6 +51,7 @@ public class VuePrincipale extends BorderPane {
             Connection con = this.getBDD();
 //            recreeTout(con);
             JavaFXUtils.redimentionnerFenetre(this.fenetre, 400, 300);
+            //this.getFenetre().setScene(new Scene(new EnteteBienvenue(this)));
             this.setEntete(new EnteteBienvenue(this));
 
             this.setMainPane(new EnteteInitial(this));
@@ -71,6 +72,8 @@ public class VuePrincipale extends BorderPane {
         //this.setMainPane(new Label("merci de vous connecter"));
         //this.setEntete(new EnteteLogin(this));
 //        this.setBottom(new EnteteNouveauUtilisateur(this));
+
+this.getStylesheets().add("DarkTheme");
     }
 
     public Stage getFenetre() {
@@ -98,5 +101,12 @@ public class VuePrincipale extends BorderPane {
 
     public Connection getBDD() {
         return this.sessionInfo.getConBdD();
+    }
+
+    /**
+     * @param fenetre the fenetre to set
+     */
+    public void setFenetre(Stage fenetre) {
+        this.fenetre = fenetre;
     }
 }
