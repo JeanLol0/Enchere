@@ -2,14 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package fr.insa.strasbourg.zerr.ProjetEnchere.FX;
+package fr.insa.strasbourg.zerr.projetEnchere.FX.vues;
 
-import fr.insa.strasbourg.zerr.ProjetEnchere.FX.vues.EnteteBienvenue;
 
-import fr.insa.strasbourg.zerr.ProjetEnchere.GestionBDD.BDD;
-import fr.insa.strasbourg.zerr.ProjetEnchere.FX.vues.EnteteInitial;
-import fr.insa.strasbourg.zerr.ProjetEnchere.GestionBDD.SessionInfo;
-import fr.insa.strasbourg.zerr.enchereprojet.projetenchere.FX.JavaFXUtils;
+import fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD;
+import fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.SessionInfo;
+import fr.insa.strasbourg.zerr.projetEnchere.FX.JavaFXUtils;
+import static fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD.recreeTout;
 import java.sql.Connection;
 import java.sql.SQLException;
 import javafx.scene.Node;
@@ -22,40 +21,29 @@ import javafx.stage.Stage;
  *
  * @author jules
  */
-public class VuePrincipale extends BorderPane {
+public class FenetrePrincipale extends BorderPane {
+
     private Stage fenetre;
     private ScrollPane mainPane;
     private SessionInfo sessionInfo;
 
-    public void setEntete(Node c) {
-        this.setTop(c);
-    }
-    
-    public void setMainPane(Node c) {
-        this.mainPane.setContent(c);
-    }
 
-    public VuePrincipale(Stage fenetre) {
+    public FenetrePrincipale(Stage fenetre) {
         
         this.fenetre = fenetre;
-        
+
         this.sessionInfo = new SessionInfo();
         this.mainPane = new ScrollPane();
-        this.setCenter(this.mainPane);
-        JavaFXUtils.addSimpleBorder(mainPane);
+        //JavaFXUtils.addSimpleBorder(mainPane);
 
         try {
+            
             this.sessionInfo.setConBdD(BDD.defautConnect());
-            //JavaFXUtils.addSimpleBorder(this.mainPane);
-            this.setCenter(this.mainPane);
+            this.setCenter(new VueLogin(this));
             Connection con = this.getBDD();
-//            recreeTout(con);
-            JavaFXUtils.redimentionnerFenetre(this.fenetre, 400, 300);
-            //this.getFenetre().setScene(new Scene(new EnteteBienvenue(this)));
-            this.setEntete(new EnteteBienvenue(this));
-
-            this.setMainPane(new EnteteInitial(this));
-
+            
+            //recreeTout(con);
+            
         } catch (ClassNotFoundException ex) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("PB");
@@ -64,16 +52,8 @@ public class VuePrincipale extends BorderPane {
             alert.showAndWait();
 
         } catch (SQLException ex) {
-
         }
 
-        //this.sessionInfo.setConBdD(BDD.defautConnect());
-        //this.setCenter(this.mainPane);
-        //this.setMainPane(new Label("merci de vous connecter"));
-        //this.setEntete(new EnteteLogin(this));
-//        this.setBottom(new EnteteNouveauUtilisateur(this));
-
-this.getStylesheets().add("DarkTheme");
     }
 
     public Stage getFenetre() {
@@ -89,7 +69,6 @@ this.getStylesheets().add("DarkTheme");
 
 //    public void setMainPane(Pane mainPane) {
 //        this.mainPane = mainPane;
-
     public void setMainPane(ScrollPane mainPane) {
         this.mainPane = mainPane;
     }
@@ -108,5 +87,15 @@ this.getStylesheets().add("DarkTheme");
      */
     public void setFenetre(Stage fenetre) {
         this.fenetre = fenetre;
+    }
+    
+    
+    
+    public void setEntete(Node c) {
+        this.setTop(c);
+    }
+
+    public void setMainPane(Node c) {
+        this.mainPane.setContent(c);
     }
 }

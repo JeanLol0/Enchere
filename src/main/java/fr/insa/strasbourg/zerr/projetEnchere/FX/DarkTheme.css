@@ -4,10 +4,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 */
 /* 
     Created on : 2 déc. 2022, 19:24:59
-    Author     : jules
+    Author     : jules 
 */
 
-root{
-    -fx-background-color:aquamarine;
+.Scene{
+    -fx-background-color:#696969;
     -fx-font-size : 11 pt;
 }

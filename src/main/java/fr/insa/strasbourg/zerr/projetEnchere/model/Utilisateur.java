@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package fr.insa.strasbourg.zerr.ProjetEnchere.model;
+package fr.insa.strasbourg.zerr.projetEnchere.model;
 
 /**
  *
@@ -10,28 +10,28 @@ package fr.insa.strasbourg.zerr.ProjetEnchere.model;
  */
 public class Utilisateur {
     private final int id;
-    private String nom;
+    private String email;
     private String pass;
    // private String nomRole;
 
-    public Utilisateur(int id, String nom, String pass) {
+    public Utilisateur(int id, String email, String pass) {
         this.id = id;
-        this.nom = nom;
+        this.email = email;
         this.pass = pass;
         //this.nomRole = nomRole;
     }
 
     @Override
     public String toString() {
-        return "Utilisateur{" + "id=" + id + ", nom=" + nom +"}";
+        return "Utilisateur{" + "id=" + id + ", nom=" + email +"}";
     }
 
     public int getId() {
         return id;
     }
 
-    public String getNom() {
-        return nom;
+    public String getEmail() {
+        return email;
     }
 
     public String getPass() {

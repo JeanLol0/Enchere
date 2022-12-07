@@ -2,11 +2,16 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package fr.insa.strasbourg.zerr.ProjetEnchere.FX;
+package fr.insa.strasbourg.zerr.projetEnchere.FX;
 
+import fr.insa.strasbourg.zerr.projetEnchere.FX.vues.VueInscription;
+import fr.insa.strasbourg.zerr.projetEnchere.FX.vues.VueLogin;
+import fr.insa.strasbourg.zerr.projetEnchere.FX.vues.FenetrePrincipale;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.scene.Scene;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 /**
@@ -15,23 +20,34 @@ import javafx.stage.Stage;
  */
 public class MainFX extends Application {
 
-    private VuePrincipale main;
+    public static Pane getMainVue;
+
+    private Pane mainVue;
+    private Scene scene;
 
     @Override
     public void start(Stage stage) {
 
-        this.main = new VuePrincipale(stage);
-        Scene sc = new Scene(main, Double.MAX_EXPONENT, Double.MAX_EXPONENT);
-
-        main.setStyle("{    -fx-background-color:aquamarine;    -fx-font-size : 17 pt;}");
-        System.out.println(sc.getStylesheets().size());
-        sc.getStylesheets().add("DarkTheme.css");
-        System.out.println(sc.getStylesheets().size());
-        stage.setScene(sc);
+        this.mainVue = new FenetrePrincipale(stage);
+         
+        this.scene = new Scene(mainVue);
+        JavaFXUtils.maxFenetre(stage);
+        //sc.getStylesheets().add("FX/DarkTheme.css");
+        stage.setScene(scene);
         stage.setTitle("Enchère");
 
         stage.show();
     }
+
+    public Pane getMainVue() {
+        return mainVue;
+    }
+
+    public void setMainVue(Pane mainVue) {
+        this.mainVue = mainVue;
+    }
+
+    
 
     public static void main(String[] args) {
         launch();
@@ -48,5 +64,7 @@ public class MainFX extends Application {
 //        }
 
     }
+
+   
 
 }

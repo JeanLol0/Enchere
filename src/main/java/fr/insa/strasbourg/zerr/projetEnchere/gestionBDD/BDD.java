@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Project/Maven2/JavaApp/src/main/java/${packagePath}/${mainClassName}.java to edit this template
  */
-package fr.insa.strasbourg.zerr.ProjetEnchere.GestionBDD;
+package fr.insa.strasbourg.zerr.projetEnchere.gestionBDD;
 
 import fr.insa.beuvron.utils.ConsoleFdB;
 import fr.insa.strasbourg.zerr.projetEnchere.model.Utilisateur;
@@ -12,7 +12,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,18 +23,18 @@ import java.util.logging.Logger;
 public class BDD {
     
     public static Optional<Utilisateur> login(Connection con,
-            String nom, String pass) throws SQLException {
+            String email, String pass) throws SQLException {
         try ( PreparedStatement pst = con.prepareStatement(
                 "select utilisateur.id as uid"
                 + " from utilisateur "
                 + " where "
-                + "utilisateur.nom = ? and pass = ?")) {
+                + "utilisateur.email = ? and pass = ?")) {
 
-            pst.setString(1, nom);
+            pst.setString(1, email);
             pst.setString(2, pass);
             ResultSet res = pst.executeQuery();
             if (res.next()) {
-                return Optional.of(new Utilisateur(res.getInt("uid"), nom, pass));
+                return Optional.of(new Utilisateur(res.getInt("uid"), email, pass));
             } else {
                 return Optional.empty();
             }
@@ -80,7 +79,6 @@ public class BDD {
                         codepostal varchar(20)
                     )
                     """);
-            
             st.executeUpdate( // categorie
                     """
                     create table categorie (
@@ -121,8 +119,7 @@ public class BDD {
             st.executeUpdate(//objet 
                     """
                     create table objet(
-                            id integer not null primary key
-                            generated always as identity,
+                            id integer not null,
                             titre varchar(100) not null,
                             debut Timestamp not null,
                             fin Timestamp not null,
@@ -133,24 +130,45 @@ public class BDD {
                     """
             );
             //clé externe objet
+            st.executeUpdate(
+                    """
+                    alter table objet
+                         add constraint fk_objet_categorie
+                         foreign key (categorie) references categorie(id)
+                            ON UPDATE RESTRICT
+                            ON DELETE RESTRICT
+                    """
+            );
+            st.executeUpdate(
+                    """
+                    alter table objet
+                         add constraint fk_objet_utilisateur
+                         foreign key (proposerpar) references utilisateur(id)
+                            ON UPDATE RESTRICT
+                            ON DELETE RESTRICT
+                    """
+            );
 //            st.executeUpdate(
 //                    """
-//                    alter table objet
-//                         add constraint fk_objet_categorie
-//                         foreign key (categorie) references categorie(id)
-//                            ON UPDATE RESTRICT
-//                            ON DELETE RESTRICT
-//                    """
-//            );
+//                    create table aime1 (
+//                        u1 integer not null,
+//                        u2 integer not null
+//                    )
+//                    """);
+            // je defini les liens entre les clés externes et les clés primaires
+            // correspondantes
 //            st.executeUpdate(
 //                    """
-//                    alter table objet
-//                         add constraint fk_objet_utilisateur
-//                         foreign key (proposerpar) references utilisateur(id)
-//                            ON UPDATE RESTRICT
-//                            ON DELETE RESTRICT
+//                    alter table aime
+//                        add constraint fk_aime_u1
+//                        foreign key (u1) references utilisateur(id)
+//                    """);
+//            st.executeUpdate(
 //                    """
-//            );
+//                    alter table aime
+//                        add constraint fk_aime_u2
+//                        foreign key (u2) references utilisateur(id)
+//                    """);
             // si j'arrive jusqu'ici, c'est que tout s'est bien passé
             // je confirme (commit) la transaction
             con.commit();
@@ -290,33 +308,6 @@ public class BDD {
             }
         }
     }
-    public static int createObjet(Connection con, String titre, Timestamp debut, Timestamp fin, int prixBase, int categorie, int proposerpar) throws SQLException {
-        con.setAutoCommit(false);
-        try ( PreparedStatement pst = con.prepareStatement(
-                            "insert into objet (titre,debut,fin,prixbase,categorie,proposerpar) values (?,?,?,?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS)){
-            pst.setString(1, titre);
-            pst.setTimestamp(2, debut);
-            pst.setTimestamp(3, fin);
-            pst.setInt(4, prixBase);
-            pst.setInt(5, categorie);
-            pst.setInt(6, proposerpar);
-            pst.executeUpdate();
-            con.commit();
-            System.out.println("objet créé");
-            try ( ResultSet rid = pst.getGeneratedKeys()) {
-                        // et comme ici je suis sur qu'il y a une et une seule clé, je
-                        // fait un simple next 
-                        rid.next();
-                        // puis je récupère la valeur de la clé créé qui est dans la
-                        // première colonne du ResultSet
-                        int id = rid.getInt(1);
-                        return id;
-                    }
-        }
-        finally {
-            con.setAutoCommit(true);
-        }
-    }
 
     public static int createUtilisateur(Connection con, String nom, String pass, String prenom, String email)
             throws SQLException {
@@ -355,16 +346,7 @@ public class BDD {
             con.setAutoCommit(true);
         }
     }
-    public static void demandeNouvelObjet(Connection con) throws SQLException{
-        String titre = ConsoleFdB.entreeString("titre ?");
-        Timestamp debut = new Timestamp(System.currentTimeMillis());
-        Timestamp fin= new Timestamp(2022, 12, 25, 0, 0, 0, 0);
-        int prixbase = ConsoleFdB.entreeInt("prix?");
-        int categorie = ConsoleFdB.entreeInt("categorie ?");
-        int proposerpar = ConsoleFdB.entreeInt("proposer par id de qui?");
-        createObjet(con, titre, debut, fin, prixbase, categorie, proposerpar);
-        System.out.println("objet est bien entrée");
-    }
+
     public static void demandeNouvelUtilisateur(Connection con)
             throws SQLException {
         String nom = ConsoleFdB.entreeString("nom ?");
@@ -393,10 +375,10 @@ public class BDD {
             System.out.println("2) liste des utilisateurs");
 //            System.out.println("3) liste des liens 'Aime'");
             System.out.println("4) ajouter un utilisateur");
+//            System.out.println("5) ajouter un lien 'Aime'");
 //            System.out.println("6) ajouter n utilisateurs aléatoires");
             System.out.println("0) quitter");
             System.out.println("5) Supprimer table");
-            System.out.println("6) Créer objet");
             rep = ConsoleFdB.entreeEntier("Votre choix : ");
             try {
                 if (rep == 1) {
@@ -411,10 +393,8 @@ public class BDD {
                 } else if (rep == 5) {
                     deleteSchema(con);
                 }
-                else if (rep==6){
-                    demandeNouvelObjet(con);
-                }
-
+//                else if (rep == 5) {
+//                    demandeNouvelAime(con);
 //                } else if (rep == 6) {
 //                    System.out.println("création d'utilisateurs 'aléatoires'");
 //                    int combien = ConsoleFdB.entreeEntier("combien d'utilisateur : ");

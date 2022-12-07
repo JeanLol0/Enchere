@@ -2,9 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package fr.insa.strasbourg.zerr.ProjetEnchere.GestionBDD;
+package fr.insa.strasbourg.zerr.projetEnchere.gestionBDD;
 
-import fr.insa.strasbourg.zerr.ProjetEnchere.model.Utilisateur;
+import fr.insa.strasbourg.zerr.projetEnchere.model.Utilisateur;
 import java.sql.Connection;
 import java.util.Optional;
 
@@ -60,6 +60,6 @@ public class SessionInfo {
      * @return the userName
      */
     public String getUserName() {
-        return this.curUser.orElseThrow().getNom();
+        return this.curUser.orElseThrow().getEmail();
     }
 }

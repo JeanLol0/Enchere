@@ -2,9 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package fr.insa.strasbourg.zerr.enchereprojet.projetenchere.FX;
+package fr.insa.strasbourg.zerr.projetEnchere.FX;
 
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import javafx.beans.binding.Bindings;
 import javafx.scene.control.Alert;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
@@ -54,6 +59,14 @@ public class JavaFXUtils {
         fenetre.setHeight(800);
     }
     
+    public static void maxFenetre(Stage fenetre){
+        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+int width = gd.getDisplayMode().getWidth();
+int height = gd.getDisplayMode().getHeight();
+        fenetre.setWidth(width);
+        fenetre.setHeight(height);
+    }
+    
     public static void FullScreen(Stage fenetre){
         fenetre.setFullScreen(true);
     }
@@ -61,6 +74,22 @@ public class JavaFXUtils {
     public static void petiteFenetre(Stage fenetre) {
         fenetre.setWidth(400);
         fenetre.setHeight(300);
+    }
+    
+    public static void DesactiveAutoFocus(TextField tf){
+        tf.styleProperty().bind(
+                Bindings
+                        .when(tf.focusedProperty())
+                        .then("-fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);")
+                        .otherwise("-fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);"));
+    }
+    
+    public static void DesactiveAutoFocus(PasswordField pf){
+        pf.styleProperty().bind(
+                Bindings
+                        .when(pf.focusedProperty())
+                        .then("-fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);")
+                        .otherwise("-fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);"));
     }
     
 }
