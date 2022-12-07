@@ -7,6 +7,7 @@ package fr.insa.strasbourg.zerr.projetEnchere.FX.vues;
 
 import fr.insa.strasbourg.zerr.projetEnchere.FX.JavaFXUtils;
 import fr.insa.strasbourg.zerr.projetEnchere.FX.StylesCSS;
+import fr.insa.strasbourg.zerr.projetEnchere.FX.composants.TopBar;
 import fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD;
 import fr.insa.strasbourg.zerr.projetEnchere.model.Utilisateur;
 import java.sql.SQLException;
@@ -37,6 +38,7 @@ public class VueLogin extends GridPane{
     
     
     public VueLogin (FenetrePrincipale fenetre){
+        
         this.main = fenetre;
         
         this.tfEmail = new TextField();
@@ -68,7 +70,7 @@ public class VueLogin extends GridPane{
         this.setHalignment(this.tInscription, HPos.CENTER);
         
         this.getStylesheets().add(getClass().getResource("CSS.css").toExternalForm());
-        //StylesCSS.DarkTheme(this);
+        StylesCSS.DarkTheme(this);
         //this.setStyle("-fx-border-color :red;");
         StylesCSS.StyleBoutonVert(bLogin);
         StylesCSS.StyleBoutonBleu(bInscription);
@@ -84,6 +86,7 @@ public class VueLogin extends GridPane{
         });
         
         this.bInscription.setOnAction((t) -> {
+            System.out.println("bouton incr");
             this.main.setCenter(new VueInscription(this.main));
         });
         
@@ -101,6 +104,7 @@ public class VueLogin extends GridPane{
             } else {
                 this.main.getSessionInfo().setCurUser(user);
                 this.main.setCenter(new VuePrincipale(this.main));
+                this.main.setTop(new TopBar(this.main));
                 //this.main.setMainContent(new Label("vous êtes " + user));
             }
 

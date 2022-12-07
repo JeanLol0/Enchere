@@ -8,6 +8,7 @@ package fr.insa.strasbourg.zerr.projetEnchere.FX.vues;
 import fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD;
 import fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.SessionInfo;
 import fr.insa.strasbourg.zerr.projetEnchere.FX.JavaFXUtils;
+import fr.insa.strasbourg.zerr.projetEnchere.FX.composants.TopBar;
 import static fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD.recreeTout;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -26,6 +27,7 @@ public class FenetrePrincipale extends BorderPane {
     private Stage fenetre;
     private ScrollPane mainPane;
     private SessionInfo sessionInfo;
+    private TopBar topBar;
 
 
     public FenetrePrincipale(Stage fenetre) {

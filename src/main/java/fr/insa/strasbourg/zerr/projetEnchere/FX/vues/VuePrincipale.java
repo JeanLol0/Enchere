@@ -15,12 +15,14 @@ import javafx.scene.layout.BorderPane;
 public class VuePrincipale extends BorderPane {
     
     private FenetrePrincipale main;
+    
     private TopBar topBar;
 
     public VuePrincipale(FenetrePrincipale main) {
         this.main = main;
-        this.topBar = new TopBar(main);
+        //this.topBar = new TopBar(main);
         this.setTop(topBar);
+        
         //this.setStyle("-fx-border-color :red;");
         StylesCSS.DarkTheme(this);
         //this.topBar.setStyle("-fx-background-color:#122e47;");

@@ -1,0 +1,49 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : 4 déc. 2022, 14:10:03
+    Author     : jules
+*/
+
+.buttton {
+     -fx-background-color: red;
+     -fx-text-fill: white;
+     
+}
+.button:hover {
+  -fx-background-color: linear-gradient(#2a5058, #61a2b1);
+}
+
+.text{
+    -fx-backgroung-color : forestgreen;
+}
+
+.hbox  > .button {  -fx-text-fill: black;  }
+
+.root {
+  /*This applies styling for the root node*/
+  -fx-background-color: linear-gradient(
+    from 0% 0% to 100% 200%,
+    repeat,
+    #fbeee6 0%,
+    #cde0c9 50%
+  );
+  -fx-font-family: "Lucida Console";
+}
+
+/*.label {
+   Styling for all Control with the class of 'label' 
+  -fx-padding: -2px;
+  -fx-start-margin: 2px;
+  -fx-end-margin: 2pt;
+}*/
+
+.guide-link {
+  /*Unique class customized by user*/
+}
+
+#btn {
+  -fx-font-family: "Chilanka";
+}

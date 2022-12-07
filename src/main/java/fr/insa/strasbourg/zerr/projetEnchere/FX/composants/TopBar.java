@@ -8,6 +8,7 @@ import fr.insa.strasbourg.zerr.projetEnchere.FX.JavaFXUtils;
 import fr.insa.strasbourg.zerr.projetEnchere.FX.StylesCSS;
 import fr.insa.strasbourg.zerr.projetEnchere.FX.vues.FenetrePrincipale;
 import fr.insa.strasbourg.zerr.projetEnchere.FX.vues.VueLogin;
+import fr.insa.strasbourg.zerr.projetEnchere.FX.vues.VueNouvelleAnnonce;
 import java.util.Optional;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -78,11 +79,16 @@ public class TopBar extends HBox {
             doLogout();
         });
         
+        this.bNouvelleAnnonce.setOnAction((t) -> {
+            this.main.setCenter(new VueNouvelleAnnonce(this.main));
+        });
+        
     }
 
     private void doLogout() {
 
         this.main.getSessionInfo().setCurUser(Optional.empty());
         this.main.setCenter(new VueLogin(this.main));
+        this.main.setTop(null);
     }    
 }

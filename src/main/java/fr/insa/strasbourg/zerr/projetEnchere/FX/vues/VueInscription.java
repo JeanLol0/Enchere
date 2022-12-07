@@ -78,14 +78,18 @@ public class VueInscription extends GridPane {
         JavaFXUtils.DesactiveAutoFocus(tfPrenom);
         JavaFXUtils.DesactiveAutoFocus(pfPass);
 
-//        StylesCSS.DarkTheme(this);
-//        StylesCSS.StyleBoutonBleu(bInscription);
-//        StylesCSS.StyleBoutonVert(bLogin);
-//        StylesCSS.StyleGrandTitre(lInscription);
-        //StylesCSS.StyleText(tInscription);
+        StylesCSS.DarkTheme(this);
+        StylesCSS.StyleBoutonBleu(bInscription);
+        StylesCSS.StyleBoutonVert(bLogin);
+        StylesCSS.StyleGrandTitre(lInscription);
+//        StylesCSS.StyleText(tInscription);
 
         this.bInscription.setOnAction((t) -> {
             doInscription();
+        });
+        
+        this.bLogin.setOnAction((t) -> {
+            this.main.setCenter(new VueLogin(main));
         });
 
     }
