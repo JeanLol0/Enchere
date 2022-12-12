@@ -120,7 +120,8 @@ public class BDD {
             st.executeUpdate(//objet 
                     """
                     create table objet(
-                            id integer not null,
+                            id integer not null primary key
+                            generated always as identity,
                             titre varchar(100) not null,
                             debut Timestamp not null,
                             fin Timestamp not null,
@@ -347,6 +348,8 @@ public class BDD {
             con.setAutoCommit(true);
         }
     }
+    
+    
 
     public static void demandeNouvelUtilisateur(Connection con)
             throws SQLException {
@@ -360,6 +363,44 @@ public class BDD {
         } else {
             System.out.println("utilisateur N° " + id + "créé");
         }
+    }
+    
+    public static int createObjet(Connection con, String titre, Timestamp debut, Timestamp fin, int prixBase, int categorie, int proposerpar) throws SQLException {
+        con.setAutoCommit(false);
+        try ( PreparedStatement pst = con.prepareStatement(
+                            "insert into objet (titre,debut,fin,prixbase,categorie,proposerpar) values (?,?,?,?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS)){
+            pst.setString(1, titre);
+            pst.setTimestamp(2, debut);
+            pst.setTimestamp(3, fin);
+            pst.setInt(4, prixBase);
+            pst.setInt(5, categorie);
+            pst.setInt(6, proposerpar);
+            pst.executeUpdate();
+            con.commit();
+            System.out.println("objet créé");
+            try ( ResultSet rid = pst.getGeneratedKeys()) {
+                        // et comme ici je suis sur qu'il y a une et une seule clé, je
+                        // fait un simple next 
+                        rid.next();
+                        // puis je récupère la valeur de la clé créé qui est dans la
+                        // première colonne du ResultSet
+                        int id = rid.getInt(1);
+                        return id;
+                    }
+        }
+        finally {
+            con.setAutoCommit(true);
+        }
+    }
+    public static void demandeNouvelObjet(Connection con) throws SQLException{
+        String titre = ConsoleFdB.entreeString("titre ?");
+        Timestamp debut = new Timestamp(System.currentTimeMillis());
+        Timestamp fin= new Timestamp(2022, 12, 25, 0, 0, 0, 0);
+        int prixbase = ConsoleFdB.entreeInt("prix?");
+        int categorie = ConsoleFdB.entreeInt("categorie ?");
+        int proposerpar = ConsoleFdB.entreeInt("proposer par id de qui?");
+        createObjet(con, titre, debut, fin, prixbase, categorie, proposerpar);
+        System.out.println("objet est bien entrée");
     }
 
     public static void recreeTout(Connection con) throws SQLException {
@@ -431,7 +472,5 @@ public class BDD {
         }
     }
 
-    public static void createObjet(Connection con, String titre, Timestamp timestamp, Timestamp timestamp0, int parseInt, int categorie, int userID) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+
 }

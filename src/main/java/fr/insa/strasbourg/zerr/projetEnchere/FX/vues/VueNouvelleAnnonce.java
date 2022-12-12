@@ -5,19 +5,18 @@
 package fr.insa.strasbourg.zerr.projetEnchere.FX.vues;
 
 import fr.insa.strasbourg.zerr.projetEnchere.FX.JavaFXUtils;
+import fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD;
 
 import fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.SessionInfo;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
@@ -121,45 +120,43 @@ public class VueNouvelleAnnonce extends GridPane {
 
     }
 
-//    private void doMiseEnLigne() {
-//
-//        Connection con = this.main.getBDD();
-//        try {
-//            if (this.tfTitre.getText().isEmpty()) {
-//                JavaFXUtils.showErrorInAlert("Erreur", "Competez les infos necessaires", "");
-//
-//            } else {
-//                String titre = this.tfTitre.getText();
-//                int yearD = dDebut.getValue().getYear();
-//                int monthD = dDebut.getValue().getMonthValue();
-//                int dayD = dDebut.getValue().getDayOfMonth();
-//                int heureD = tDebut.getHeure();
-//                int minuteD = tDebut.getMinute();
-//                
-//                int yearF = dFin.getValue().getYear();
-//                int monthF = dFin.getValue().getMonthValue();
-//                int dayF = dFin.getValue().getDayOfMonth();
-//                int heureF = tFin.getHeure();
-//                int minuteF = tFin.getMinute();
-//                int categorie = Integer.parseInt(this.categorie.getText());
-//                
-//                              
-//                BDD.createObjet(con, titre, 
-//                        new Timestamp(yearD, monthD, dayD, heureD, minuteD, 0, 0), 
-//                        new Timestamp(yearF, monthF, dayF, heureF, minuteF, 0, 0), 
-//                        Integer.parseInt(this.prixBase.getText()), categorie, this.sessionInfo.getUserID());
-//                System.out.println("annonce créé");
-//                this.main.setCenter(new VueAcceuil(this.main));
-//            }
-//        } 
-//        catch (SQLException ex) {
-//            Logger.getLogger(VueInscription.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//
-//    }
-
     private void doMiseEnLigne() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+
+        Connection con = this.main.getBDD();
+        try {
+            if (this.tfTitre.getText().isEmpty()) {
+                JavaFXUtils.showErrorInAlert("Erreur", "Competez les infos necessaires", "");
+
+            } else {
+                String titre = this.tfTitre.getText();
+                int yearD = dDebut.getValue().getYear();
+                int monthD = dDebut.getValue().getMonthValue();
+                int dayD = dDebut.getValue().getDayOfMonth();
+                int heureD = tDebut.getHeure();
+                int minuteD = tDebut.getMinute();
+                
+                int yearF = dFin.getValue().getYear();
+                int monthF = dFin.getValue().getMonthValue();
+                int dayF = dFin.getValue().getDayOfMonth();
+                int heureF = tFin.getHeure();
+                int minuteF = tFin.getMinute();
+                int categorie = Integer.parseInt(this.categorie.getText());
+                
+                              
+                BDD.createObjet(con, titre, 
+                        new Timestamp(yearD, monthD, dayD, heureD, minuteD, 0, 0), 
+                        new Timestamp(yearF, monthF, dayF, heureF, minuteF, 0, 0), 
+                        Integer.parseInt(this.prixBase.getText()), categorie, this.sessionInfo.getUserID());
+                System.out.println("annonce créé");
+                this.main.setCenter(new VueAcceuil(this.main));
+            }
+        } 
+        catch (SQLException ex) {
+            Logger.getLogger(VueInscription.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
+
+    
 
 }
