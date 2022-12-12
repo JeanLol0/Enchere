@@ -292,6 +292,7 @@ public class BDD {
     }
     public static int createObjet(Connection con, String titre, Timestamp debut, Timestamp fin, int prixBase, int categorie, int proposerpar) throws SQLException {
         con.setAutoCommit(false);
+        System.out.println("objet créé");
         try ( PreparedStatement pst = con.prepareStatement(
                             "insert into objet (titre,debut,fin,prixbase,categorie,proposerpar) values (?,?,?,?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS)){
             pst.setString(1, titre);

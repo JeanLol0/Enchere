@@ -4,10 +4,17 @@
  */
 package fr.insa.strasbourg.zerr.projetEnchere.FX.vues;
 
+import javafx.scene.layout.GridPane;
+
 /**
  *
  * @author jules
  */
-public class VueAcceuil {
+public class VueAcceuil extends GridPane{
+    private FenetrePrincipale main;
+
+    public VueAcceuil(FenetrePrincipale main) {
+        this.main = main;
+    }
     
 }

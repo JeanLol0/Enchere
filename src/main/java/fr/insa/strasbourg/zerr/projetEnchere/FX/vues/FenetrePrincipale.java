@@ -39,10 +39,9 @@ public class FenetrePrincipale extends BorderPane {
         //JavaFXUtils.addSimpleBorder(mainPane);
 
         try {
-            
+            Connection con = this.getBDD();
             this.sessionInfo.setConBdD(BDD.defautConnect());
             this.setCenter(new VueLogin(this));
-            Connection con = this.getBDD();
             
             //recreeTout(con);
             

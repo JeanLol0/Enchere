@@ -11,13 +11,16 @@
         <maven.compiler.target>18</maven.compiler.target>
         <exec.mainClass>fr.insa.strasbourg.zerr.enchereprojet.projetenchere.ProjetEnchere</exec.mainClass>
     </properties>
+
+
     <dependencies>
+   
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>42.5.0</version>
         </dependency>
-            <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-text -->
+        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-text -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-text</artifactId>
@@ -41,7 +44,7 @@
     
     <build>
         <plugins>
-<plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>3.2.0</version>
