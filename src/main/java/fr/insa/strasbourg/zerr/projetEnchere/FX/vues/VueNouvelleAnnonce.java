@@ -4,7 +4,6 @@
  */
 package fr.insa.strasbourg.zerr.projetEnchere.FX.vues;
 
-import fr.insa.strasbourg.zerr.ProjetEnchere.GestionBDD.BDD;
 import fr.insa.strasbourg.zerr.projetEnchere.FX.JavaFXUtils;
 
 import fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.SessionInfo;
@@ -122,41 +121,45 @@ public class VueNouvelleAnnonce extends GridPane {
 
     }
 
+//    private void doMiseEnLigne() {
+//
+//        Connection con = this.main.getBDD();
+//        try {
+//            if (this.tfTitre.getText().isEmpty()) {
+//                JavaFXUtils.showErrorInAlert("Erreur", "Competez les infos necessaires", "");
+//
+//            } else {
+//                String titre = this.tfTitre.getText();
+//                int yearD = dDebut.getValue().getYear();
+//                int monthD = dDebut.getValue().getMonthValue();
+//                int dayD = dDebut.getValue().getDayOfMonth();
+//                int heureD = tDebut.getHeure();
+//                int minuteD = tDebut.getMinute();
+//                
+//                int yearF = dFin.getValue().getYear();
+//                int monthF = dFin.getValue().getMonthValue();
+//                int dayF = dFin.getValue().getDayOfMonth();
+//                int heureF = tFin.getHeure();
+//                int minuteF = tFin.getMinute();
+//                int categorie = Integer.parseInt(this.categorie.getText());
+//                
+//                              
+//                BDD.createObjet(con, titre, 
+//                        new Timestamp(yearD, monthD, dayD, heureD, minuteD, 0, 0), 
+//                        new Timestamp(yearF, monthF, dayF, heureF, minuteF, 0, 0), 
+//                        Integer.parseInt(this.prixBase.getText()), categorie, this.sessionInfo.getUserID());
+//                System.out.println("annonce créé");
+//                this.main.setCenter(new VueAcceuil(this.main));
+//            }
+//        } 
+//        catch (SQLException ex) {
+//            Logger.getLogger(VueInscription.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//
+//    }
+
     private void doMiseEnLigne() {
-
-        Connection con = this.main.getBDD();
-        try {
-            if (this.tfTitre.getText().isEmpty()) {
-                JavaFXUtils.showErrorInAlert("Erreur", "Competez les infos necessaires", "");
-
-            } else {
-                String titre = this.tfTitre.getText();
-                int yearD = dDebut.getValue().getYear();
-                int monthD = dDebut.getValue().getMonthValue();
-                int dayD = dDebut.getValue().getDayOfMonth();
-                int heureD = tDebut.getHeure();
-                int minuteD = tDebut.getMinute();
-                
-                int yearF = dFin.getValue().getYear();
-                int monthF = dFin.getValue().getMonthValue();
-                int dayF = dFin.getValue().getDayOfMonth();
-                int heureF = tFin.getHeure();
-                int minuteF = tFin.getMinute();
-                int categorie = Integer.parseInt(this.categorie.getText());
-                
-                              
-                BDD.createObjet(con, titre, 
-                        new Timestamp(yearD, monthD, dayD, heureD, minuteD, 0, 0), 
-                        new Timestamp(yearF, monthF, dayF, heureF, minuteF, 0, 0), 
-                        Integer.parseInt(this.prixBase.getText()), categorie, this.sessionInfo.getUserID());
-                System.out.println("annonce créé");
-                this.main.setCenter(new VueAcceuil(this.main));
-            }
-        } 
-        catch (SQLException ex) {
-            Logger.getLogger(VueInscription.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 }

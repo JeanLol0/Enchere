@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -428,5 +429,9 @@ public class BDD {
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(BDD.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public static void createObjet(Connection con, String titre, Timestamp timestamp, Timestamp timestamp0, int parseInt, int categorie, int userID) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }
