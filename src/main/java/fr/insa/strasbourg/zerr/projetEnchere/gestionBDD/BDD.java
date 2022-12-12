@@ -418,7 +418,7 @@ public class BDD {
 //            System.out.println("3) liste des liens 'Aime'");
             System.out.println("4) ajouter un utilisateur");
 //            System.out.println("5) ajouter un lien 'Aime'");
-//            System.out.println("6) ajouter n utilisateurs aléatoires");
+            System.out.println("6) ajouter objet");
             System.out.println("0) quitter");
             System.out.println("5) Supprimer table");
             rep = ConsoleFdB.entreeEntier("Votre choix : ");
@@ -434,6 +434,12 @@ public class BDD {
                     demandeNouvelUtilisateur(con);
                 } else if (rep == 5) {
                     deleteSchema(con);
+                }
+                else if (rep == 6){
+                    demandeNouvelObjet(con);
+                }
+                else if (rep==7){
+                    creerCategorie(con); 
                 }
 //                else if (rep == 5) {
 //                    demandeNouvelAime(con);
@@ -462,13 +468,36 @@ public class BDD {
 
     public static void main(String[] args) {
         try ( Connection con = defautConnect()) {
-
+           
             System.out.println("Connection ok!");
-            deleteSchema(con);
             menu(con);
             System.out.println("user créé");
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(BDD.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public static int creerCategorie(Connection con) throws SQLException {
+        con.setAutoCommit(false);
+        try ( PreparedStatement pst = con.prepareStatement(
+                            "insert into categorie (id,nom) values (?,? )", PreparedStatement.RETURN_GENERATED_KEYS)){
+            pst.setInt(1, 1);
+            pst.setString(2, "meuble");
+            pst.executeUpdate();
+            con.commit();
+            System.out.println("categorie créé");
+            try ( ResultSet rid = pst.getGeneratedKeys()) {
+                        // et comme ici je suis sur qu'il y a une et une seule clé, je
+                        // fait un simple next 
+                        rid.next();
+                        // puis je récupère la valeur de la clé créé qui est dans la
+                        // première colonne du ResultSet
+                        int id = rid.getInt(1);
+                        return id;
+                    }
+        }
+        finally {
+            con.setAutoCommit(true);
         }
     }
 
