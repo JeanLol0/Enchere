@@ -92,7 +92,8 @@ public class BDD {
             st.executeUpdate(//enchere
                     """
                     create table enchere(
-                            id integer not null,
+                            id integer not null primary key
+                            generated always as identity,
                             sur integer not null,
                             de integer not null
                     )
@@ -103,7 +104,7 @@ public class BDD {
                     """
                     alter table enchere
                          add constraint fk_enchere_objet
-                         foreign key (sur) references utilisateur(id)
+                         foreign key (sur) references objet(id)
                             ON UPDATE RESTRICT
                             ON DELETE RESTRICT
                     """
@@ -441,6 +442,9 @@ public class BDD {
                 else if (rep==7){
                     creerCategorie(con); 
                 }
+                else if(rep==8){
+                    demandeEnchere(con);
+                }
 //                else if (rep == 5) {
 //                    demandeNouvelAime(con);
 //                } else if (rep == 6) {
@@ -500,6 +504,36 @@ public class BDD {
             con.setAutoCommit(true);
         }
     }
-
+    
+    public static int createEnchere(Connection con, int sur, int de) throws SQLException{
+        con.setAutoCommit(false);
+        try ( PreparedStatement pst = con.prepareStatement(
+                            "insert into enchere(sur,de) values (?,?)", PreparedStatement.RETURN_GENERATED_KEYS)){
+            pst.setInt(1, sur);
+            pst.setInt(2, de);
+            pst.executeUpdate();
+            con.commit();
+            System.out.println("enchere créé");
+             try ( ResultSet rid = pst.getGeneratedKeys()) {
+                        // et comme ici je suis sur qu'il y a une et une seule clé, je
+                        // fait un simple next 
+                        rid.next();
+                        // puis je récupère la valeur de la clé créé qui est dans la
+                        // première colonne du ResultSet
+                        int id = rid.getInt(1);
+                        return id;
+                    }
+        }
+        finally {
+            con.setAutoCommit(true);
+        }
+    }
+    
+    public static void demandeEnchere(Connection con) throws SQLException{
+        int sur = ConsoleFdB.entreeInt("quel id objet ?");
+        int de = ConsoleFdB.entreeInt("De QUI ?");
+            createEnchere(con, sur, de);
+            System.out.println("demande enchere faite");
+    }
 
 }
