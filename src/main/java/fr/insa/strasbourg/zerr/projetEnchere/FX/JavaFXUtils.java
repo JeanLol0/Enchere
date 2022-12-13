@@ -55,7 +55,7 @@ public class JavaFXUtils {
     }
     
     public static void grandeFenetre(Stage fenetre){
-        fenetre.setWidth(1000);
+        fenetre.setWidth(1400);
         fenetre.setHeight(800);
     }
     

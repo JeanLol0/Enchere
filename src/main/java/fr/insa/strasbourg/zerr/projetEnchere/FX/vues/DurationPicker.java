@@ -15,7 +15,6 @@ import javafx.util.StringConverter;
 public class DurationPicker extends ComboBox<Number> {
 
     long duration;
-    private PopOver popOver;
     private Label day;
     private Slider daySlider;
     private Label hour;
@@ -91,7 +90,6 @@ public class DurationPicker extends ComboBox<Number> {
         gridPane.add(second, 0, 3);
         gridPane.add(secondSlider, 1, 3);
 
-        popOver = new PopOver(gridPane);
         
     }
 
@@ -139,7 +137,6 @@ public class DurationPicker extends ComboBox<Number> {
             current = 1L;
         }
         setDuration(current);
-        popOver.show(this);
     }
 
     @Override
