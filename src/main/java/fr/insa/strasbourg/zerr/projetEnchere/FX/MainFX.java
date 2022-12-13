@@ -33,7 +33,7 @@ public class MainFX extends Application {
         this.scene = new Scene(mainVue);
         JavaFXUtils.maxFenetre(stage);
         //this.scene.getStylesheets().add("FX/DarkTheme.css");
-        //this.setUserAgentStylesheet(getClass().getResource("CSS.css").toExternalForm());
+        this.scene.getStylesheets().add(getClass().getResource("Styles.css").toExternalForm());
         stage.setScene(scene);
         stage.setTitle("Enchère");
 

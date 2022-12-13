@@ -1,0 +1,102 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : 4 déc. 2022, 14:10:03
+    Author     : jules
+*/
+
+#grille-annonce >.text-field .text{  -fx-font-size: 22px;  }
+
+   
+
+#vue-connexion-inscription{
+    -fx-background-color:#252525;
+    -fx-font-size: 22px;
+    
+}
+#vue-connexion-inscription>.label {-fx-text-fill: white;}
+
+#grand-texte{
+    -fx-font-size: 50px;
+}
+
+#vue-acceuil{
+    -fx-background-color:#c1d2ff;
+}
+
+#bouton-vert{
+    -fx-content-display : center;
+    -fx-alignment : center;
+    -fx-background-color: #32cd32; 
+    -fx-text-fill: white;
+    -fx-padding: 3 6 6 6;
+}
+#bouton-rouge{
+    -fx-content-display : center;
+    -fx-alignment : center;
+    -fx-background-color: #ff0000; 
+    -fx-text-fill: white;
+    -fx-padding: 3 6 6 6;
+}
+#bouton-bleu{
+    -fx-content-display : center;
+    -fx-alignment : center;
+    -fx-background-color:#00bfff ; 
+    -fx-text-fill: white;
+    -fx-padding: 3 6 6 6;
+}
+
+#topbar{
+    -fx-spacing:20;
+    -fx-background-color:#e2e2e2;
+}
+
+.text-area .scroll-bar:vertical:disabled {
+    -fx-opacity: 0;
+}
+
+
+.button {     
+   
+     -fx-font-size: 25px; 
+     
+     
+}/*
+
+.button:hover {
+  -fx-background-color: linear-gradient(#2a5058, #61a2b1);
+}*/
+/*
+.text{
+    -fx-backgroung-color : forestgreen;
+}
+
+.hbox  > .button {  -fx-text-fill: black;  }
+
+.root {
+  This applies styling for the root node
+  -fx-background-color: linear-gradient(
+    from 0% 0% to 100% 200%,
+    repeat,
+    #fbeee6 0%,
+    #cde0c9 50%
+  );
+  -fx-font-family: "Lucida Console";
+}
+
+.label {
+   Styling for all Control with the class of 'label' 
+  -fx-padding: -2px;
+  -fx-start-margin: 2px;
+  -fx-end-margin: 2pt;
+}
+
+.guide-link {
+  Unique class customized by user
+}
+
+#btn {
+  -fx-font-family: "Chilanka";
+}*/

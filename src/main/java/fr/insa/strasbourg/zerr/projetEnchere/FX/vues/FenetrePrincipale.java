@@ -22,7 +22,7 @@ import javafx.stage.Stage;
  *
  * @author jules
  */
-public class FenetrePrincipale extends BorderPane {
+ public class FenetrePrincipale extends BorderPane {
 
     private Stage fenetre;
     private ScrollPane mainPane;

@@ -42,6 +42,7 @@ public class VueInscription extends GridPane {
 
     public VueInscription(FenetrePrincipale main) {
         this.main = main;
+        this.setId("vue-connexion-inscription");
 
         this.tfNom = new TextField();
         this.tfPrenom = new TextField();
@@ -55,9 +56,13 @@ public class VueInscription extends GridPane {
         this.pfPass.setPromptText("Mot de passe");
 
         this.bInscription = new Button("Inscription");
+        this.bInscription.setId("bouton-bleu");
+        
         this.bLogin = new Button("Connection");
+        this.bLogin.setId("bouton-vert");
 
         this.lInscription = new Label("Inscription");
+        this.lInscription.setId("grand-texte");
 
         this.add(this.lInscription, 0, 5);
         this.add(this.tfNom, 0, 10);
@@ -78,11 +83,6 @@ public class VueInscription extends GridPane {
         JavaFXUtils.DesactiveAutoFocus(tfPrenom);
         JavaFXUtils.DesactiveAutoFocus(pfPass);
 
-        StylesCSS.DarkTheme(this);
-        StylesCSS.StyleBoutonBleu(bInscription);
-        StylesCSS.StyleBoutonVert(bLogin);
-        StylesCSS.StyleGrandTitre(lInscription);
-//        StylesCSS.StyleText(tInscription);
 
         this.bInscription.setOnAction((t) -> {
             doInscription();

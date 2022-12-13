@@ -15,6 +15,7 @@ public class VueAcceuil extends GridPane{
 
     public VueAcceuil(FenetrePrincipale main) {
         this.main = main;
+        this.setId("vue-acceuil");
     }
     
 }

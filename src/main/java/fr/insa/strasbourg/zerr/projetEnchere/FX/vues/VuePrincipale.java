@@ -5,27 +5,31 @@
 package fr.insa.strasbourg.zerr.projetEnchere.FX.vues;
 
 import fr.insa.strasbourg.zerr.projetEnchere.FX.StylesCSS;
-import fr.insa.strasbourg.zerr.projetEnchere.FX.composants.TopBar;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.GridPane;
 
 /**
  *
  * @author jules
  */
-public class VuePrincipale extends BorderPane {
+public class VuePrincipale extends ScrollPane {
     
     private FenetrePrincipale main;
+    private VueAnnonces vAnnonce;
     
-    private TopBar topBar;
+    
 
     public VuePrincipale(FenetrePrincipale main) {
         this.main = main;
+        this.setContent(new VueAnnonces(this.main));
         //this.topBar = new TopBar(main);
-        this.setTop(topBar);
+        
         
         //this.setStyle("-fx-border-color :red;");
-        StylesCSS.DarkTheme(this);
+        //StylesCSS.DarkTheme(this);
         //this.topBar.setStyle("-fx-background-color:#122e47;");
     }
+    
 
 }
+

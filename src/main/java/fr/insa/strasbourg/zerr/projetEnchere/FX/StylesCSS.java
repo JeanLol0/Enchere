@@ -4,6 +4,7 @@
  */
 package fr.insa.strasbourg.zerr.projetEnchere.FX;
 
+import fr.insa.strasbourg.zerr.projetEnchere.FX.vues.Annonce;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -89,6 +90,13 @@ public class StylesCSS {
                 + "-fx-text-fill: white;"
                 + "-fx-effect: dropshadow( one-pass-box , black , 8 , 0.0 , 2 , 0 );"
                 + "-fx-padding: 3 6 6 6;");
+    }
+
+    public static void ThemeAnnonce(GridPane pane) {
+pane.setStyle(""
+                + "-fx-background-color:#c1d2ff;"
+                + "-fx-font-size : 22 pt;"
+                + "");
     }
     
 }

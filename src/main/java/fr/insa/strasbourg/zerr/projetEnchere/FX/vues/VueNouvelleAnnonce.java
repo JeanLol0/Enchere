@@ -5,9 +5,11 @@
 package fr.insa.strasbourg.zerr.projetEnchere.FX.vues;
 
 import fr.insa.strasbourg.zerr.projetEnchere.FX.JavaFXUtils;
+import fr.insa.strasbourg.zerr.projetEnchere.FX.composants.SwitchButton;
 import fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD;
 
 import fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.SessionInfo;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -17,11 +19,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
@@ -45,10 +50,12 @@ public class VueNouvelleAnnonce extends GridPane {
     
     private TextField prixBase;
     private TextField categorie; //TODO
+    
+    private TextArea taDescription;
     private Integer proposerPar;
     private Button bCreerAnnonce;
     
-    private DateTimePicker dtPicker;
+   // private DateTimePicker dtPicker;
     
     private SessionInfo sessionInfo;
 
@@ -58,8 +65,11 @@ public class VueNouvelleAnnonce extends GridPane {
         this.sessionInfo = this.main.getSessionInfo();
         this.label = new Label("page nouvelle annonce ");
         this.tfTitre = new TextField("Titre de l'annonce");
-        
-        this.dtPicker = new DateTimePicker("dt");
+        this.taDescription = new TextArea("Dercription de l'objet");
+//        this.taDescription.setMaxHeight(120);
+//        this.taDescription.setPrefWidth(300);
+this.taDescription.setWrapText(true);
+//this.dtPicker = new DateTimePicker();
         
         
         this.dDebut = new DatePicker(LocalDate.MIN);
@@ -101,18 +111,25 @@ public class VueNouvelleAnnonce extends GridPane {
         });
         this.bCreerAnnonce = new Button("Mettre en ligne");
         this.categorie = new TextField("n° catégorie --> TODO");
+        
+        this.setVgap(20);
+        this.setHgap(20);
+        this.setAlignment(Pos.TOP_CENTER);
+        
         this.add(this.label, 0, 1);
         this.add(this.tfTitre, 0, 2);
         this.add(this.dDebut, 0, 3);
         this.add(this.tDebut, 1, 3);
-        this.add(this.dtPicker, 1, 7);
+        //this.add(this.dtPicker, 1, 7);
         this.add(this.dFin, 0, 4);
         this.add(this.tFin, 1, 4);
         this.add(this.prixBase, 0, 5);
         this.add(this.categorie, 0, 6);
-        this.add(this.bCreerAnnonce, 0, 7);
-        DurationPicker dur = new DurationPicker();
-        this.add(dur, 5, 10);
+        this.add(this.bCreerAnnonce, 0, 8);
+        this.add(this.taDescription, 0, 7);
+        this.add(new ToggleButton("duree"), 5, 8);
+        this.add(new SwitchButton(), 5, 8);
+        
 
         this.bCreerAnnonce.setOnAction((t) -> {
             doMiseEnLigne();
@@ -148,7 +165,7 @@ public class VueNouvelleAnnonce extends GridPane {
                         new Timestamp(yearF, monthF, dayF, heureF, minuteF, 0, 0), 
                         Integer.parseInt(this.prixBase.getText()), categorie, this.sessionInfo.getUserID());
                 System.out.println("annonce créé");
-                this.main.setCenter(new VueAcceuil(this.main));
+                this.main.setCenter(new VuePrincipale(this.main));
             }
         } 
         catch (SQLException ex) {

@@ -36,6 +36,7 @@ public class TopBar extends HBox {
     public TopBar(FenetrePrincipale main) {
            
         this.main = main;
+        this.setId("topbar");
         this.bNouvelleAnnonce = new Button("Déposer une annonce");
         this.bNouvelleAnnonce.setMaxWidth(Integer.MAX_VALUE);
         TopBar.setHgrow(this.bNouvelleAnnonce, Priority.SOMETIMES);
@@ -48,7 +49,7 @@ public class TopBar extends HBox {
         
         this.bRecherche = new BoutonIcon("icones/recherche.png", 20, 20);
         this.bRecherche.setText("RE");
-        //this.bRecherche.setStyle("-fx-background-color:#e2e2e2;");
+        
                 this.bRecherche.setStyle("-fx-content-display: top;");
 
         //this.bRecherche.setText("Rechercher");
@@ -60,10 +61,11 @@ public class TopBar extends HBox {
         
         this.bLogout = new Button("Déconnction");
         this.bLogout.setMaxWidth(Integer.MAX_VALUE);
+        this.bLogout.setId("bouton-rouge");
         TopBar.setHgrow(this.bLogout, Priority.SOMETIMES);
 
         JavaFXUtils.addSimpleBorder(region);
-        this.setStyle("-fx-border-color :red;");
+        
         
         this.setSpacing(10);
         this.setPadding(new Insets(10, 10, 10, 10));
@@ -71,11 +73,7 @@ public class TopBar extends HBox {
         
         this.getChildren().addAll(bNouvelleAnnonce, this.tfRecherche, this.bRecherche,region, this.bLogout);
 
-        
-        StylesCSS.StyleEntete(this);
-        StylesCSS.StyleBoutonRouge(bLogout);
-        StylesCSS.StyleBoutonVert(bNouvelleAnnonce);
-
+     
         this.bLogout.setOnAction((t) -> {
             doLogout();
         });

@@ -6,7 +6,6 @@ package fr.insa.strasbourg.zerr.projetEnchere.FX.vues;
 
 
 import fr.insa.strasbourg.zerr.projetEnchere.FX.JavaFXUtils;
-import fr.insa.strasbourg.zerr.projetEnchere.FX.StylesCSS;
 import fr.insa.strasbourg.zerr.projetEnchere.FX.composants.TopBar;
 import fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD;
 import fr.insa.strasbourg.zerr.projetEnchere.model.Utilisateur;
@@ -19,6 +18,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Text;
 
 /**
  *
@@ -38,7 +38,7 @@ public class VueLogin extends GridPane{
     
     
     public VueLogin (FenetrePrincipale fenetre){
-        
+        this.setId("vue-connexion-inscription");
         this.main = fenetre;
         
         this.tfEmail = new TextField();
@@ -48,10 +48,13 @@ public class VueLogin extends GridPane{
         this.pfPass.setPromptText("Mot de passe");
         
         this.bLogin =new Button("Se connecter");
+        this.bLogin.setId("bouton-vert");
         
         this.bInscription = new Button("Inscription");
+        this.bInscription.setId("bouton-bleu");
         
         this.tBienvenue = new Label("Bienvenue");
+        this.tBienvenue.setId("grand-texte");
         this.tInscription = new Label("Pas encore de compte ?");
         
         this.add(this.tBienvenue, 0, 5);
@@ -69,13 +72,13 @@ public class VueLogin extends GridPane{
         this.setHalignment(this.tBienvenue, HPos.CENTER);
         this.setHalignment(this.tInscription, HPos.CENTER);
         
-        this.getStylesheets().add(getClass().getResource("CSS.css").toExternalForm());
-        StylesCSS.DarkTheme(this);
-        //this.setStyle("-fx-border-color :red;");
-        StylesCSS.StyleBoutonVert(bLogin);
-        StylesCSS.StyleBoutonBleu(bInscription);
-        StylesCSS.StyleGrandTitre(tBienvenue);
-        StylesCSS.StyleText(tInscription);
+////////        //this.getStylesheets().add(getClass().getResource("CSS.css").toExternalForm());
+////////        //StylesCSS.DarkTheme(this);
+////////        //this.setStyle("-fx-border-color :red;");
+////////        //StylesCSS.StyleBoutonVert(bLogin);
+////////        //StylesCSS.StyleBoutonBleu(bInscription);
+////////        StylesCSS.StyleGrandTitre(tBienvenue);
+////////        StylesCSS.StyleText(tInscription);
         
         
         JavaFXUtils.DesactiveAutoFocus(pfPass);
@@ -103,7 +106,7 @@ public class VueLogin extends GridPane{
                 
             } else {
                 this.main.getSessionInfo().setCurUser(user);
-                this.main.setCenter(new VuePrincipale(this.main));
+                this.main.setCenter(new VueAcceuil(this.main));
                 this.main.setTop(new TopBar(this.main));
                 System.out.println(this.main.getBDD());
                 //this.main.setMainContent(new Label("vous êtes " + user));
