@@ -10,6 +10,7 @@ import fr.insa.strasbourg.zerr.projetEnchere.FX.composants.TopBar;
 import fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD;
 import fr.insa.strasbourg.zerr.projetEnchere.model.Utilisateur;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Optional;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;

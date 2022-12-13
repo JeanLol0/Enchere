@@ -17,6 +17,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -118,7 +119,7 @@ public class BDD {
                             prixbase integer not null,
                             categorie integer not null,
                             proposerpar integer not null, 
-                            image varchar(1000)
+                            image Text
                     )
                     """
             );
@@ -559,5 +560,31 @@ public class BDD {
         BufferedImage bImage2 = ImageIO.read(bis);
         Image Final = SwingFXUtils.toFXImage(bImage2, null);
         return Final;
+    }
+    
+    public static ArrayList<Integer> TriCategorie(int idCategorie) throws SQLException, ClassNotFoundException{
+        Connection con = defautConnect();
+        ArrayList<Integer> TriCat;
+        TriCat = new ArrayList<Integer>();
+        try (Statement st= con.createStatement()){
+            ResultSet res = st.executeQuery("select id from objet where categorie = ?");
+            while (res.next()){
+                TriCat.add(res.getInt("id"));
+            }
+        }
+        return TriCat;
+    }
+    
+    public static ArrayList<Integer> TriPrixCroissant() throws SQLException, ClassNotFoundException{
+        Connection con = defautConnect();
+        ArrayList<Integer> TriCat;
+        TriCat = new ArrayList<Integer>();
+        try (Statement st= con.createStatement()){
+            ResultSet res = st.executeQuery("select id from objet where categorie = ?");
+            while (res.next()){
+                TriCat.add(res.getInt("id"));
+            }
+        }
+        return TriCat;
     }
 }
