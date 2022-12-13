@@ -5,6 +5,7 @@
 package fr.insa.strasbourg.zerr.projetEnchere.FX.vues;
 
 import fr.insa.strasbourg.zerr.projetEnchere.FX.JavaFXUtils;
+import fr.insa.strasbourg.zerr.projetEnchere.FX.composants.Categories;
 import fr.insa.strasbourg.zerr.projetEnchere.FX.composants.SwitchButton;
 import fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD;
 
@@ -50,6 +51,7 @@ public class VueNouvelleAnnonce extends GridPane {
     
     private TextField prixBase;
     private TextField categorie; //TODO
+    private Categories categories;
     
     private TextArea taDescription;
     private Integer proposerPar;
@@ -111,6 +113,7 @@ this.taDescription.setWrapText(true);
         });
         this.bCreerAnnonce = new Button("Mettre en ligne");
         this.categorie = new TextField("n° catégorie --> TODO");
+        this.categories = new Categories();
         
         this.setVgap(20);
         this.setHgap(20);
@@ -125,6 +128,7 @@ this.taDescription.setWrapText(true);
         this.add(this.tFin, 1, 4);
         this.add(this.prixBase, 0, 5);
         this.add(this.categorie, 0, 6);
+        this.add(this.categories, 6, 6);
         this.add(this.bCreerAnnonce, 0, 8);
         this.add(this.taDescription, 0, 7);
         this.add(new ToggleButton("duree"), 5, 8);
