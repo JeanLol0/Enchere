@@ -6,6 +6,10 @@ package fr.insa.strasbourg.zerr.projetEnchere.gestionBDD;
 
 import fr.insa.beuvron.utils.ConsoleFdB;
 import fr.insa.strasbourg.zerr.projetEnchere.model.Utilisateur;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -13,16 +17,20 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.Base64;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.image.Image;
+import javax.imageio.ImageIO;
 
 /**
  *
  * @author jules
  */
 public class BDD {
-    
+
     public static Optional<Utilisateur> login(Connection con,
             String email, String pass) throws SQLException {
         try ( PreparedStatement pst = con.prepareStatement(
@@ -41,7 +49,6 @@ public class BDD {
             }
         }
     }
-    
 
     public static Connection connectGeneralPostGres(String host,
             int port, String database,
@@ -89,7 +96,7 @@ public class BDD {
                     ) 
                     """
             );
-System.out.println("2");
+            System.out.println("2");
             st.executeUpdate(//enchere
                     """
                     create table enchere(
@@ -110,7 +117,8 @@ System.out.println("2");
                             fin Timestamp not null,
                             prixbase integer not null,
                             categorie integer not null,
-                            proposerpar integer not null
+                            proposerpar integer not null, 
+                            image varchar(1000)
                     )
                     """
             );
@@ -133,7 +141,7 @@ System.out.println("2");
                             ON DELETE RESTRICT
                     """
             );
-            
+
             //clé externe objet
             st.executeUpdate(
                     """
@@ -291,9 +299,9 @@ System.out.println("2");
                 String lenom = res.getString("nom");
                 String pass = res.getString("pass");
                 String prenom = res.getString("prenom");
-                String mail  = res.getString("email");
+                String mail = res.getString("email");
                 System.out.println("utilisateur " + lenom + " " + prenom + " ("
-                        + pass + ")" + mail); 
+                        + pass + ")" + mail);
             }
         }
     }
@@ -351,8 +359,6 @@ System.out.println("2");
             con.setAutoCommit(true);
         }
     }
-    
-    
 
     public static void demandeNouvelUtilisateur(Connection con)
             throws SQLException {
@@ -360,18 +366,18 @@ System.out.println("2");
         String prenom = ConsoleFdB.entreeString("prenom?");
         String email = ConsoleFdB.entreeString("email?");
         String pass = ConsoleFdB.entreeString("pass ?");
-        int id = createUtilisateur(con, nom, pass,prenom,email);
+        int id = createUtilisateur(con, nom, pass, prenom, email);
         if (id == -1) {
             System.out.println("utilisateur existe déjà");
         } else {
             System.out.println("utilisateur N° " + id + "créé");
         }
     }
-    
+
     public static int createObjet(Connection con, String titre, Timestamp debut, Timestamp fin, int prixBase, int categorie, int proposerpar) throws SQLException {
         con.setAutoCommit(false);
         try ( PreparedStatement pst = con.prepareStatement(
-                            "insert into objet (titre,debut,fin,prixbase,categorie,proposerpar) values (?,?,?,?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS)){
+                "insert into objet (titre,debut,fin,prixbase,categorie,proposerpar) values (?,?,?,?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS)) {
             pst.setString(1, titre);
             pst.setTimestamp(2, debut);
             pst.setTimestamp(3, fin);
@@ -382,23 +388,23 @@ System.out.println("2");
             con.commit();
             System.out.println("objet créé");
             try ( ResultSet rid = pst.getGeneratedKeys()) {
-                        // et comme ici je suis sur qu'il y a une et une seule clé, je
-                        // fait un simple next 
-                        rid.next();
-                        // puis je récupère la valeur de la clé créé qui est dans la
-                        // première colonne du ResultSet
-                        int id = rid.getInt(1);
-                        return id;
-                    }
-        }
-        finally {
+                // et comme ici je suis sur qu'il y a une et une seule clé, je
+                // fait un simple next 
+                rid.next();
+                // puis je récupère la valeur de la clé créé qui est dans la
+                // première colonne du ResultSet
+                int id = rid.getInt(1);
+                return id;
+            }
+        } finally {
             con.setAutoCommit(true);
         }
     }
-    public static void demandeNouvelObjet(Connection con) throws SQLException{
+
+    public static void demandeNouvelObjet(Connection con) throws SQLException {
         String titre = ConsoleFdB.entreeString("titre ?");
         Timestamp debut = new Timestamp(System.currentTimeMillis());
-        Timestamp fin= new Timestamp(2022, 12, 25, 0, 0, 0, 0);
+        Timestamp fin = new Timestamp(2022, 12, 25, 0, 0, 0, 0);
         int prixbase = ConsoleFdB.entreeInt("prix?");
         int categorie = ConsoleFdB.entreeInt("categorie ?");
         int proposerpar = ConsoleFdB.entreeInt("proposer par id de qui?");
@@ -437,14 +443,11 @@ System.out.println("2");
                     demandeNouvelUtilisateur(con);
                 } else if (rep == 5) {
                     deleteSchema(con);
-                }
-                else if (rep == 6){
+                } else if (rep == 6) {
                     demandeNouvelObjet(con);
-                }
-                else if (rep==7){
-                    creerCategorie(con); 
-                }
-                else if(rep==8){
+                } else if (rep == 7) {
+                    creerCategorie(con);
+                } else if (rep == 8) {
                     demandeEnchere(con);
                 }
 //                else if (rep == 5) {
@@ -474,7 +477,7 @@ System.out.println("2");
 
     public static void main(String[] args) {
         try ( Connection con = defautConnect()) {
-           
+
             System.out.println("Connection ok!");
             menu(con);
             System.out.println("user créé");
@@ -486,56 +489,75 @@ System.out.println("2");
     public static int creerCategorie(Connection con) throws SQLException {
         con.setAutoCommit(false);
         try ( PreparedStatement pst = con.prepareStatement(
-                            "insert into categorie (id,nom) values (?,? )", PreparedStatement.RETURN_GENERATED_KEYS)){
+                "insert into categorie (id,nom) values (?,? )", PreparedStatement.RETURN_GENERATED_KEYS)) {
             pst.setInt(1, 1);
             pst.setString(2, "meuble");
             pst.executeUpdate();
             con.commit();
             System.out.println("categorie créé");
             try ( ResultSet rid = pst.getGeneratedKeys()) {
-                        // et comme ici je suis sur qu'il y a une et une seule clé, je
-                        // fait un simple next 
-                        rid.next();
-                        // puis je récupère la valeur de la clé créé qui est dans la
-                        // première colonne du ResultSet
-                        int id = rid.getInt(1);
-                        return id;
-                    }
-        }
-        finally {
+                // et comme ici je suis sur qu'il y a une et une seule clé, je
+                // fait un simple next 
+                rid.next();
+                // puis je récupère la valeur de la clé créé qui est dans la
+                // première colonne du ResultSet
+                int id = rid.getInt(1);
+                return id;
+            }
+        } finally {
             con.setAutoCommit(true);
         }
     }
-    
-    public static int createEnchere(Connection con, int sur, int de) throws SQLException{
+
+    public static int createEnchere(Connection con, int sur, int de) throws SQLException {
         con.setAutoCommit(false);
         try ( PreparedStatement pst = con.prepareStatement(
-                            "insert into enchere(sur,de) values (?,?)", PreparedStatement.RETURN_GENERATED_KEYS)){
+                "insert into enchere(sur,de) values (?,?)", PreparedStatement.RETURN_GENERATED_KEYS)) {
             pst.setInt(1, sur);
             pst.setInt(2, de);
             pst.executeUpdate();
             con.commit();
             System.out.println("enchere créé");
-             try ( ResultSet rid = pst.getGeneratedKeys()) {
-                        // et comme ici je suis sur qu'il y a une et une seule clé, je
-                        // fait un simple next 
-                        rid.next();
-                        // puis je récupère la valeur de la clé créé qui est dans la
-                        // première colonne du ResultSet
-                        int id = rid.getInt(1);
-                        return id;
-                    }
-        }
-        finally {
+            try ( ResultSet rid = pst.getGeneratedKeys()) {
+                // et comme ici je suis sur qu'il y a une et une seule clé, je
+                // fait un simple next 
+                rid.next();
+                // puis je récupère la valeur de la clé créé qui est dans la
+                // première colonne du ResultSet
+                int id = rid.getInt(1);
+                return id;
+            }
+        } finally {
             con.setAutoCommit(true);
         }
     }
-    
-    public static void demandeEnchere(Connection con) throws SQLException{
+
+    public static void demandeEnchere(Connection con) throws SQLException {
         int sur = ConsoleFdB.entreeInt("quel id objet ?");
         int de = ConsoleFdB.entreeInt("De QUI ?");
-            createEnchere(con, sur, de);
-            System.out.println("demande enchere faite");
+        createEnchere(con, sur, de);
+        System.out.println("demande enchere faite");
     }
 
+    public static String ImageEnTexte(Image img) {
+
+        BufferedImage bufi = SwingFXUtils.fromFXImage(img, null);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try {
+            ImageIO.write(bufi, "jpg", baos);
+        } catch (IOException ex) {
+            throw new Error("pb conv image ; ne devrait pas arriver");
+        }
+        byte[] bytes = baos.toByteArray();
+        String ImageTexte = Base64.getUrlEncoder().encodeToString(bytes);
+    return ImageTexte;
+    }
+
+    public static Image texteEnImage(String img) throws IOException {
+        byte[] result = Base64.getUrlDecoder().decode(img);
+        ByteArrayInputStream bis = new ByteArrayInputStream(result);
+        BufferedImage bImage2 = ImageIO.read(bis);
+        Image Final = SwingFXUtils.toFXImage(bImage2, null);
+        return Final;
+    }
 }
