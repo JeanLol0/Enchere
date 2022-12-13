@@ -80,6 +80,7 @@ public class BDD {
                         codepostal varchar(20)
                     )
                     """);
+            System.out.println("1");
             st.executeUpdate( // categorie
                     """
                     create table categorie (
@@ -88,7 +89,7 @@ public class BDD {
                     ) 
                     """
             );
-
+System.out.println("2");
             st.executeUpdate(//enchere
                     """
                     create table enchere(
@@ -98,6 +99,20 @@ public class BDD {
                             de integer not null
                     )
             """
+            );
+            st.executeUpdate(//objet 
+                    """
+                    create table objet(
+                            id integer not null primary key
+                            generated always as identity,
+                            titre varchar(100) not null,
+                            debut Timestamp not null,
+                            fin Timestamp not null,
+                            prixbase integer not null,
+                            categorie integer not null,
+                            proposerpar integer not null
+                    )
+                    """
             );
             //clé externes et liens
             st.executeUpdate(
@@ -118,20 +133,7 @@ public class BDD {
                             ON DELETE RESTRICT
                     """
             );
-            st.executeUpdate(//objet 
-                    """
-                    create table objet(
-                            id integer not null primary key
-                            generated always as identity,
-                            titre varchar(100) not null,
-                            debut Timestamp not null,
-                            fin Timestamp not null,
-                            prixbase integer not null,
-                            categorie integer not null,
-                            proposerpar integer not null
-                    )
-                    """
-            );
+            
             //clé externe objet
             st.executeUpdate(
                     """
