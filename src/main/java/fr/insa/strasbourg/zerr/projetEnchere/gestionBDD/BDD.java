@@ -17,6 +17,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.time.Period;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Optional;
@@ -31,7 +36,7 @@ import javax.imageio.ImageIO;
  * @author jules
  */
 public class BDD {
-
+    
     public static Optional<Utilisateur> login(Connection con,
             String email, String pass) throws SQLException {
         try ( PreparedStatement pst = con.prepareStatement(
@@ -546,7 +551,7 @@ public class BDD {
         BufferedImage bufi = SwingFXUtils.fromFXImage(img, null);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
-            ImageIO.write(bufi, "jpg", baos);
+            ImageIO.write(bufi, "png", baos);
         } catch (IOException ex) {
             throw new Error("pb conv image ; ne devrait pas arriver");
         }
@@ -625,5 +630,581 @@ public class BDD {
             }
         }
         return TriCat;
+    }
+
+public static int creerCategorie1(Connection con) throws SQLException {
+        con.setAutoCommit(false);
+        try ( PreparedStatement pst = con.prepareStatement(
+                "insert into categorie (id,nom) values (?,? )", PreparedStatement.RETURN_GENERATED_KEYS)) {
+            pst.setInt(1, 1);
+            pst.setString(2, "Voitures");
+            pst.executeUpdate();
+            con.commit();
+            System.out.println("categorie créé");
+            try ( ResultSet rid = pst.getGeneratedKeys()) {
+                // et comme ici je suis sur qu'il y a une et une seule clé, je
+                // fait un simple next 
+                rid.next();
+                // puis je récupère la valeur de la clé créé qui est dans la
+                // première colonne du ResultSet
+                int id = rid.getInt(1);
+                return id;
+            }
+        } finally {
+            con.setAutoCommit(true);
+        }
+    }
+
+public static int creerCategorie2(Connection con) throws SQLException {
+        con.setAutoCommit(false);
+        try ( PreparedStatement pst = con.prepareStatement(
+                "insert into categorie (id,nom) values (?,? )", PreparedStatement.RETURN_GENERATED_KEYS)) {
+            pst.setInt(1, 2);
+            pst.setString(2, "Motos");
+            pst.executeUpdate();
+            con.commit();
+            System.out.println("categorie créé");
+            try ( ResultSet rid = pst.getGeneratedKeys()) {
+                // et comme ici je suis sur qu'il y a une et une seule clé, je
+                // fait un simple next 
+                rid.next();
+                // puis je récupère la valeur de la clé créé qui est dans la
+                // première colonne du ResultSet
+                int id = rid.getInt(1);
+                return id;
+            }
+        } finally {
+            con.setAutoCommit(true);
+        }
+    }
+public static int creerCategorie3(Connection con) throws SQLException {
+        con.setAutoCommit(false);
+        try ( PreparedStatement pst = con.prepareStatement(
+                "insert into categorie (id,nom) values (?,? )", PreparedStatement.RETURN_GENERATED_KEYS)) {
+            pst.setInt(1, 3);
+            pst.setString(2, "Caravaing");
+            pst.executeUpdate();
+            con.commit();
+            System.out.println("categorie créé");
+            try ( ResultSet rid = pst.getGeneratedKeys()) {
+                // et comme ici je suis sur qu'il y a une et une seule clé, je
+                // fait un simple next 
+                rid.next();
+                // puis je récupère la valeur de la clé créé qui est dans la
+                // première colonne du ResultSet
+                int id = rid.getInt(1);
+                return id;
+            }
+        } finally {
+            con.setAutoCommit(true);
+        }
+    }
+public static int creerCategorie4(Connection con) throws SQLException {
+        con.setAutoCommit(false);
+        try ( PreparedStatement pst = con.prepareStatement(
+                "insert into categorie (id,nom) values (?,? )", PreparedStatement.RETURN_GENERATED_KEYS)) {
+            pst.setInt(1, 4);
+            pst.setString(2, "Appartement");
+            pst.executeUpdate();
+            con.commit();
+            System.out.println("categorie créé");
+            try ( ResultSet rid = pst.getGeneratedKeys()) {
+                // et comme ici je suis sur qu'il y a une et une seule clé, je
+                // fait un simple next 
+                rid.next();
+                // puis je récupère la valeur de la clé créé qui est dans la
+                // première colonne du ResultSet
+                int id = rid.getInt(1);
+                return id;
+            }
+        } finally {
+            con.setAutoCommit(true);
+        }
+    }
+public static int creerCategorie5(Connection con) throws SQLException {
+        con.setAutoCommit(false);
+        try ( PreparedStatement pst = con.prepareStatement(
+                "insert into categorie (id,nom) values (?,? )", PreparedStatement.RETURN_GENERATED_KEYS)) {
+            pst.setInt(1, 5);
+            pst.setString(2, "Maison");
+            pst.executeUpdate();
+            con.commit();
+            System.out.println("categorie créé");
+            try ( ResultSet rid = pst.getGeneratedKeys()) {
+                // et comme ici je suis sur qu'il y a une et une seule clé, je
+                // fait un simple next 
+                rid.next();
+                // puis je récupère la valeur de la clé créé qui est dans la
+                // première colonne du ResultSet
+                int id = rid.getInt(1);
+                return id;
+            }
+        } finally {
+            con.setAutoCommit(true);
+        }
+    }
+public static int creerCategorie6(Connection con) throws SQLException {
+        con.setAutoCommit(false);
+        try ( PreparedStatement pst = con.prepareStatement(
+                "insert into categorie (id,nom) values (?,? )", PreparedStatement.RETURN_GENERATED_KEYS)) {
+            pst.setInt(1, 6);
+            pst.setString(2, "Terrain");
+            pst.executeUpdate();
+            con.commit();
+            System.out.println("categorie créé");
+            try ( ResultSet rid = pst.getGeneratedKeys()) {
+                // et comme ici je suis sur qu'il y a une et une seule clé, je
+                // fait un simple next 
+                rid.next();
+                // puis je récupère la valeur de la clé créé qui est dans la
+                // première colonne du ResultSet
+                int id = rid.getInt(1);
+                return id;
+            }
+        } finally {
+            con.setAutoCommit(true);
+        }
+    }
+public static int creerCategorie7(Connection con) throws SQLException {
+        con.setAutoCommit(false);
+        try ( PreparedStatement pst = con.prepareStatement(
+                "insert into categorie (id,nom) values (?,? )", PreparedStatement.RETURN_GENERATED_KEYS)) {
+            pst.setInt(1, 7);
+            pst.setString(2, "Vetements");
+            pst.executeUpdate();
+            con.commit();
+            System.out.println("categorie créé");
+            try ( ResultSet rid = pst.getGeneratedKeys()) {
+                // et comme ici je suis sur qu'il y a une et une seule clé, je
+                // fait un simple next 
+                rid.next();
+                // puis je récupère la valeur de la clé créé qui est dans la
+                // première colonne du ResultSet
+                int id = rid.getInt(1);
+                return id;
+            }
+        } finally {
+            con.setAutoCommit(true);
+        }
+    }
+public static int creerCategorie8(Connection con) throws SQLException {
+        con.setAutoCommit(false);
+        try ( PreparedStatement pst = con.prepareStatement(
+                "insert into categorie (id,nom) values (?,? )", PreparedStatement.RETURN_GENERATED_KEYS)) {
+            pst.setInt(1, 8);
+            pst.setString(2, "Chaussures");
+            pst.executeUpdate();
+            con.commit();
+            System.out.println("categorie créé");
+            try ( ResultSet rid = pst.getGeneratedKeys()) {
+                // et comme ici je suis sur qu'il y a une et une seule clé, je
+                // fait un simple next 
+                rid.next();
+                // puis je récupère la valeur de la clé créé qui est dans la
+                // première colonne du ResultSet
+                int id = rid.getInt(1);
+                return id;
+            }
+        } finally {
+            con.setAutoCommit(true);
+        }
+    }
+public static int creerCategorie9(Connection con) throws SQLException {
+        con.setAutoCommit(false);
+        try ( PreparedStatement pst = con.prepareStatement(
+                "insert into categorie (id,nom) values (?,? )", PreparedStatement.RETURN_GENERATED_KEYS)) {
+            pst.setInt(1, 9);
+            pst.setString(2, "Montre & Bijoux");
+            pst.executeUpdate();
+            con.commit();
+            System.out.println("categorie créé");
+            try ( ResultSet rid = pst.getGeneratedKeys()) {
+                // et comme ici je suis sur qu'il y a une et une seule clé, je
+                // fait un simple next 
+                rid.next();
+                // puis je récupère la valeur de la clé créé qui est dans la
+                // première colonne du ResultSet
+                int id = rid.getInt(1);
+                return id;
+            }
+        } finally {
+            con.setAutoCommit(true);
+        }
+    }
+public static int creerCategorie10(Connection con) throws SQLException {
+        con.setAutoCommit(false);
+        try ( PreparedStatement pst = con.prepareStatement(
+                "insert into categorie (id,nom) values (?,? )", PreparedStatement.RETURN_GENERATED_KEYS)) {
+            pst.setInt(1, 10);
+            pst.setString(2, "Accessoires");
+            pst.executeUpdate();
+            con.commit();
+            System.out.println("categorie créé");
+            try ( ResultSet rid = pst.getGeneratedKeys()) {
+                // et comme ici je suis sur qu'il y a une et une seule clé, je
+                // fait un simple next 
+                rid.next();
+                // puis je récupère la valeur de la clé créé qui est dans la
+                // première colonne du ResultSet
+                int id = rid.getInt(1);
+                return id;
+            }
+        } finally {
+            con.setAutoCommit(true);
+        }
+    }
+public static int creerCategorie11(Connection con) throws SQLException {
+        con.setAutoCommit(false);
+        try ( PreparedStatement pst = con.prepareStatement(
+                "insert into categorie (id,nom) values (?,? )", PreparedStatement.RETURN_GENERATED_KEYS)) {
+            pst.setInt(1, 11);
+            pst.setString(2, "Ameublement");
+            pst.executeUpdate();
+            con.commit();
+            System.out.println("categorie créé");
+            try ( ResultSet rid = pst.getGeneratedKeys()) {
+                // et comme ici je suis sur qu'il y a une et une seule clé, je
+                // fait un simple next 
+                rid.next();
+                // puis je récupère la valeur de la clé créé qui est dans la
+                // première colonne du ResultSet
+                int id = rid.getInt(1);
+                return id;
+            }
+        } finally {
+            con.setAutoCommit(true);
+        }
+    }
+public static int creerCategorie12(Connection con) throws SQLException {
+        con.setAutoCommit(false);
+        try ( PreparedStatement pst = con.prepareStatement(
+                "insert into categorie (id,nom) values (?,? )", PreparedStatement.RETURN_GENERATED_KEYS)) {
+            pst.setInt(1, 12);
+            pst.setString(2, "Electroménager");
+            pst.executeUpdate();
+            con.commit();
+            System.out.println("categorie créé");
+            try ( ResultSet rid = pst.getGeneratedKeys()) {
+                // et comme ici je suis sur qu'il y a une et une seule clé, je
+                // fait un simple next 
+                rid.next();
+                // puis je récupère la valeur de la clé créé qui est dans la
+                // première colonne du ResultSet
+                int id = rid.getInt(1);
+                return id;
+            }
+        } finally {
+            con.setAutoCommit(true);
+        }
+    }
+public static int creerCategorie13(Connection con) throws SQLException {
+        con.setAutoCommit(false);
+        try ( PreparedStatement pst = con.prepareStatement(
+                "insert into categorie (id,nom) values (?,? )", PreparedStatement.RETURN_GENERATED_KEYS)) {
+            pst.setInt(1, 13);
+            pst.setString(2, "Décoration");
+            pst.executeUpdate();
+            con.commit();
+            System.out.println("categorie créé");
+            try ( ResultSet rid = pst.getGeneratedKeys()) {
+                // et comme ici je suis sur qu'il y a une et une seule clé, je
+                // fait un simple next 
+                rid.next();
+                // puis je récupère la valeur de la clé créé qui est dans la
+                // première colonne du ResultSet
+                int id = rid.getInt(1);
+                return id;
+            }
+        } finally {
+            con.setAutoCommit(true);
+        }
+    }
+public static int creerCategorie14(Connection con) throws SQLException {
+        con.setAutoCommit(false);
+        try ( PreparedStatement pst = con.prepareStatement(
+                "insert into categorie (id,nom) values (?,? )", PreparedStatement.RETURN_GENERATED_KEYS)) {
+            pst.setInt(1, 14);
+            pst.setString(2, "Bricolage");
+            pst.executeUpdate();
+            con.commit();
+            System.out.println("categorie créé");
+            try ( ResultSet rid = pst.getGeneratedKeys()) {
+                // et comme ici je suis sur qu'il y a une et une seule clé, je
+                // fait un simple next 
+                rid.next();
+                // puis je récupère la valeur de la clé créé qui est dans la
+                // première colonne du ResultSet
+                int id = rid.getInt(1);
+                return id;
+            }
+        } finally {
+            con.setAutoCommit(true);
+        }
+    }
+public static int creerCategorie15(Connection con) throws SQLException {
+        con.setAutoCommit(false);
+        try ( PreparedStatement pst = con.prepareStatement(
+                "insert into categorie (id,nom) values (?,? )", PreparedStatement.RETURN_GENERATED_KEYS)) {
+            pst.setInt(1, 15);
+            pst.setString(2, "Jardinage");
+            pst.executeUpdate();
+            con.commit();
+            System.out.println("categorie créé");
+            try ( ResultSet rid = pst.getGeneratedKeys()) {
+                // et comme ici je suis sur qu'il y a une et une seule clé, je
+                // fait un simple next 
+                rid.next();
+                // puis je récupère la valeur de la clé créé qui est dans la
+                // première colonne du ResultSet
+                int id = rid.getInt(1);
+                return id;
+            }
+        } finally {
+            con.setAutoCommit(true);
+        }
+    }
+public static int creerCategorie16(Connection con) throws SQLException {
+        con.setAutoCommit(false);
+        try ( PreparedStatement pst = con.prepareStatement(
+                "insert into categorie (id,nom) values (?,? )", PreparedStatement.RETURN_GENERATED_KEYS)) {
+            pst.setInt(1, 16);
+            pst.setString(2, "Informatique");
+            pst.executeUpdate();
+            con.commit();
+            System.out.println("categorie créé");
+            try ( ResultSet rid = pst.getGeneratedKeys()) {
+                // et comme ici je suis sur qu'il y a une et une seule clé, je
+                // fait un simple next 
+                rid.next();
+                // puis je récupère la valeur de la clé créé qui est dans la
+                // première colonne du ResultSet
+                int id = rid.getInt(1);
+                return id;
+            }
+        } finally {
+            con.setAutoCommit(true);
+        }
+    }
+public static int creerCategorie17(Connection con) throws SQLException {
+        con.setAutoCommit(false);
+        try ( PreparedStatement pst = con.prepareStatement(
+                "insert into categorie (id,nom) values (?,? )", PreparedStatement.RETURN_GENERATED_KEYS)) {
+            pst.setInt(1, 12);
+            pst.setString(2, "Consoles & jeux vidéo");
+            pst.executeUpdate();
+            con.commit();
+            System.out.println("categorie créé");
+            try ( ResultSet rid = pst.getGeneratedKeys()) {
+                // et comme ici je suis sur qu'il y a une et une seule clé, je
+                // fait un simple next 
+                rid.next();
+                // puis je récupère la valeur de la clé créé qui est dans la
+                // première colonne du ResultSet
+                int id = rid.getInt(1);
+                return id;
+            }
+        } finally {
+            con.setAutoCommit(true);
+        }
+    }
+public static int creerCategorie18(Connection con) throws SQLException {
+        con.setAutoCommit(false);
+        try ( PreparedStatement pst = con.prepareStatement(
+                "insert into categorie (id,nom) values (?,? )", PreparedStatement.RETURN_GENERATED_KEYS)) {
+            pst.setInt(1, 18);
+            pst.setString(2, "Image & Son");
+            pst.executeUpdate();
+            con.commit();
+            System.out.println("categorie créé");
+            try ( ResultSet rid = pst.getGeneratedKeys()) {
+                // et comme ici je suis sur qu'il y a une et une seule clé, je
+                // fait un simple next 
+                rid.next();
+                // puis je récupère la valeur de la clé créé qui est dans la
+                // première colonne du ResultSet
+                int id = rid.getInt(1);
+                return id;
+            }
+        } finally {
+            con.setAutoCommit(true);
+        }
+    }
+public static int creerCategorie19(Connection con) throws SQLException {
+        con.setAutoCommit(false);
+        try ( PreparedStatement pst = con.prepareStatement(
+                "insert into categorie (id,nom) values (?,? )", PreparedStatement.RETURN_GENERATED_KEYS)) {
+            pst.setInt(1, 19);
+            pst.setString(2, "Téléphonie");
+            pst.executeUpdate();
+            con.commit();
+            System.out.println("categorie créé");
+            try ( ResultSet rid = pst.getGeneratedKeys()) {
+                // et comme ici je suis sur qu'il y a une et une seule clé, je
+                // fait un simple next 
+                rid.next();
+                // puis je récupère la valeur de la clé créé qui est dans la
+                // première colonne du ResultSet
+                int id = rid.getInt(1);
+                return id;
+            }
+        } finally {
+            con.setAutoCommit(true);
+        }
+    }
+public static int creerCategorie20(Connection con) throws SQLException {
+        con.setAutoCommit(false);
+        try ( PreparedStatement pst = con.prepareStatement(
+                "insert into categorie (id,nom) values (?,? )", PreparedStatement.RETURN_GENERATED_KEYS)) {
+            pst.setInt(1, 20);
+            pst.setString(2, "DVD & CD");
+            pst.executeUpdate();
+            con.commit();
+            System.out.println("categorie créé");
+            try ( ResultSet rid = pst.getGeneratedKeys()) {
+                // et comme ici je suis sur qu'il y a une et une seule clé, je
+                // fait un simple next 
+                rid.next();
+                // puis je récupère la valeur de la clé créé qui est dans la
+                // première colonne du ResultSet
+                int id = rid.getInt(1);
+                return id;
+            }
+        } finally {
+            con.setAutoCommit(true);
+        }
+    }
+public static int creerCategorie21(Connection con) throws SQLException {
+        con.setAutoCommit(false);
+        try ( PreparedStatement pst = con.prepareStatement(
+                "insert into categorie (id,nom) values (?,? )", PreparedStatement.RETURN_GENERATED_KEYS)) {
+            pst.setInt(1, 21);
+            pst.setString(2, "Livres");
+            pst.executeUpdate();
+            con.commit();
+            System.out.println("categorie créé");
+            try ( ResultSet rid = pst.getGeneratedKeys()) {
+                // et comme ici je suis sur qu'il y a une et une seule clé, je
+                // fait un simple next 
+                rid.next();
+                // puis je récupère la valeur de la clé créé qui est dans la
+                // première colonne du ResultSet
+                int id = rid.getInt(1);
+                return id;
+            }
+        } finally {
+            con.setAutoCommit(true);
+        }
+    }
+public static int creerCategorie22(Connection con) throws SQLException {
+        con.setAutoCommit(false);
+        try ( PreparedStatement pst = con.prepareStatement(
+                "insert into categorie (id,nom) values (?,? )", PreparedStatement.RETURN_GENERATED_KEYS)) {
+            pst.setInt(1, 22);
+            pst.setString(2, "Vélos");
+            pst.executeUpdate();
+            con.commit();
+            System.out.println("categorie créé");
+            try ( ResultSet rid = pst.getGeneratedKeys()) {
+                // et comme ici je suis sur qu'il y a une et une seule clé, je
+                // fait un simple next 
+                rid.next();
+                // puis je récupère la valeur de la clé créé qui est dans la
+                // première colonne du ResultSet
+                int id = rid.getInt(1);
+                return id;
+            }
+        } finally {
+            con.setAutoCommit(true);
+        }
+    }
+public static int creerCategorie23(Connection con) throws SQLException {
+        con.setAutoCommit(false);
+        try ( PreparedStatement pst = con.prepareStatement(
+                "insert into categorie (id,nom) values (?,? )", PreparedStatement.RETURN_GENERATED_KEYS)) {
+            pst.setInt(1, 23);
+            pst.setString(2, "Sports & Hobbies");
+            pst.executeUpdate();
+            con.commit();
+            System.out.println("categorie créé");
+            try ( ResultSet rid = pst.getGeneratedKeys()) {
+                // et comme ici je suis sur qu'il y a une et une seule clé, je
+                // fait un simple next 
+                rid.next();
+                // puis je récupère la valeur de la clé créé qui est dans la
+                // première colonne du ResultSet
+                int id = rid.getInt(1);
+                return id;
+            }
+        } finally {
+            con.setAutoCommit(true);
+        }
+    }
+public static int creerCategorie24(Connection con) throws SQLException {
+        con.setAutoCommit(false);
+        try ( PreparedStatement pst = con.prepareStatement(
+                "insert into categorie (id,nom) values (?,? )", PreparedStatement.RETURN_GENERATED_KEYS)) {
+            pst.setInt(1, 24);
+            pst.setString(2, "Jeux & jouets");
+            pst.executeUpdate();
+            con.commit();
+            System.out.println("categorie créé");
+            try ( ResultSet rid = pst.getGeneratedKeys()) {
+                // et comme ici je suis sur qu'il y a une et une seule clé, je
+                // fait un simple next 
+                rid.next();
+                // puis je récupère la valeur de la clé créé qui est dans la
+                // première colonne du ResultSet
+                int id = rid.getInt(1);
+                return id;
+            }
+        } finally {
+            con.setAutoCommit(true);
+        }
+    }
+    public static void creationBase() throws ClassNotFoundException, SQLException{
+        Connection con = defautConnect(); 
+        creerCategorie1(con);
+        creerCategorie2(con);
+        creerCategorie3(con);
+        creerCategorie4(con);
+        creerCategorie5(con);
+        creerCategorie6(con);
+        creerCategorie7(con);
+        creerCategorie8(con);
+        creerCategorie9(con);
+        creerCategorie10(con);
+        creerCategorie11(con);
+        creerCategorie12(con);
+        creerCategorie13(con);
+        creerCategorie14(con);
+        creerCategorie15(con);
+        creerCategorie16(con);
+        creerCategorie17(con);
+        creerCategorie18(con);
+        creerCategorie19(con);
+        creerCategorie20(con);
+        creerCategorie21(con);
+        creerCategorie22(con);
+        creerCategorie23(con);
+        creerCategorie24(con);
+        createUtilisateur(con, "Auvray", "jojo", "Nicolat", "nicolas.auvray@gmail.com");
+        createUtilisateur(con, "Beauquis", "jojo", "Dorian", "dorian.beauquis@insa-strasbourg.fr");
+        createUtilisateur(con, "Lenglart", "jojo", "Louis", "louislebg@gmail.com");
+        createUtilisateur(con, "Mariannie", "jojo", "Alexandra", "alex.mariannie@hotmail.com");
+        createUtilisateur(con, "Lareyre", "jojo", "Jean-Laurent", "jlaurent.lareyre@gmail.com");
+        createUtilisateur(con, "Espinola", "jojo", "Sophia", "sophia.espi@outlook.fr");
+        createUtilisateur(con, "Doucet", "jojo", "Baptiste", "ladoucette@gmail.com");
+        createUtilisateur(con, "Zerr", "jojo", "Jules", "jules.zerr@gmail.com");
+//        Timestamp cur = new Timestamp(System.currentTimeMillis());
+//        LocalDateTime ldt = LocalDateTime.now();
+//        LocalDateTime ldt2 = ldt.plusDays(7);
+//        Timestamp conv = Timestamp.valueOf(ldt2);
+//        LocalDateTime ldt3 = LocalDateTime.of(2022, Month.MARCH, 12, 0, 0);
+//        long diff = ldt.until(ldt3, ChronoUnit.MINUTES);
+        Timestamp conv = Timestamp.valueOf(LocalDateTime.of(2022, 12, 14, 16, 8));
+        Timestamp conv1 = Timestamp.valueOf(LocalDateTime.of(2022, 12, 14, 16, 8).plusDays(9));
+        createObjet(con, "Babouches", conv,conv1, 10, 2, 1);
+        
+        
     }
 }
