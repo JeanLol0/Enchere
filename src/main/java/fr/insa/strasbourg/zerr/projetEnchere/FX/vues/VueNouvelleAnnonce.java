@@ -187,7 +187,8 @@ public class VueNouvelleAnnonce extends ScrollPane {
 
         this.bCreerAnnonce.setOnAction((t) -> {
             //System.out.println(this.categories.getTg().getSelectedToggle().getClass().getSimpleName());
-            doMiseEnLigne();
+            //doMiseEnLigne();
+            System.out.println(categories.getTg().getSelectedToggle().getClass().getName());
         });
         
         

@@ -1214,4 +1214,8 @@ public static int creerCategorie24(Connection con) throws SQLException {
         
         
     }
+    
+//    FileInputStream input = new FileInputStream("resources/images/iconmonstr-home-6-48.png");
+//Image image = new Image(input);
+//ImageView imageView = new ImageView(image);
 }

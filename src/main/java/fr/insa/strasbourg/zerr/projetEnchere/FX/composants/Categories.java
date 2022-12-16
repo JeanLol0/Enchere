@@ -138,6 +138,7 @@ public class Categories extends Accordion {
                 this.Informatique,this.ConsolesJV,this.ImageSon,this.Telephonie,
                 this.DVD_CD,this.Livres,this.Velos,this.SportsHobbies,this.JeuxJouets);
         
+        
        
        this.getPanes().addAll(this.TVehicule, this.TImmobilier,this.TMode,this.TMaison,this.TMultimedia,this.TLoisir);
     }
