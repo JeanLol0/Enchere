@@ -11,7 +11,10 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.animation.Animation;
@@ -29,6 +32,7 @@ import javax.management.timer.Timer;
  */
 public class Annonce extends GridPane {
 
+  
     private FenetrePrincipale main;
     private String titre;
     private Timestamp debut;
@@ -38,41 +42,70 @@ public class Annonce extends GridPane {
     private Integer categorie;
     private Integer idVendeur;
     private Integer id;
-
     public Annonce(FenetrePrincipale main, Integer id) {
         this.setId("grille-annonce");
         this.id = id;
         this.main = main;
+        
         try {
             recupereObjet(this.id);
         } catch (SQLException ex) {
             Logger.getLogger(Annonce.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        this.restant = tempsRestant(debut, fin);
-        long time = this.restant.getTime();
+        
+//        System.out.println("joure fin "+this.fin.getDay());
+//        System.out.println("heure fin "+this.fin.getHours());
+//        System.out.println("minutes fin "+this.fin.getMinutes());
+//        System.out.println("sec fin "+this.fin.getSeconds());
+//        
+        
+        Timestamp cur = new Timestamp(System.currentTimeMillis());
+        //LocalDateTime ldt = LocalDateTime.now();
+        //LocalDateTime ldt2 = ldt.plusDays(7);
+       // Timestamp conv = Timestamp.valueOf(ldt2);
+        //LocalDateTime ldt3 = LocalDateTime.of(2022, Month.MARCH, 12, 0, 0);
+        //long diff = ldt.until(ldt3, ChronoUnit.MINUTES);
+        //this.restant = tempsRestant(debut, fin);
+        //long time = this.restant.getTime();
         Timer ti = new Timer();
 
         Label timeLabel = new Label();
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
 
-        Timeline tempsRestant = new Timeline(new KeyFrame(Duration.seconds(1), (t) -> {
-            Timestamp mtn = new Timestamp(System.currentTimeMillis());
-
-            Timestamp sec = secRestant(debut, fin);
-            Timestamp min = minRestant(debut, fin);
-            Timestamp heure = hRestant(debut, fin);
-            Timestamp jour = jourRestant(debut, fin);
-            long secR = sec.getTime() - mtn.getSeconds();
-            long minR = min.getTime() - mtn.getMinutes();
-            long heureR = heure.getTime() - mtn.getHours();
-            long jourR = jour.getTime() - mtn.getDay();
-            timeLabel.setText("temps restant: " +jourR+" jours, "+heureR+" heures, "+minR+" minutes, "+ secR + " sec");
-        }));
+//        Timeline tempsRestant = new Timeline(new KeyFrame(Duration.seconds(1), (t) -> {
+//            Timestamp mtn = new Timestamp(System.currentTimeMillis());
+//
+//            Timestamp sec = secRestant(mtn, fin);
+//            Timestamp min = minRestant(mtn, fin);
+//            Timestamp heure = hRestant(mtn, fin);
+//            Timestamp jour = jourRestant(mtn, fin);
+//            long secR = sec.getTime();
+//            long minR = min.getTime() ;
+//            long heureR = heure.getTime() ;
+//            long jourR = jour.getTime() ;
+//            
+//            LocalDateTime ldt = LocalDateTime.now();
+//            LocalDateTime ldt3 = this.fin.toLocalDateTime();
+//            long diffH = ldt.until(ldt3, ChronoUnit.HOURS);
+//           timeLabel.setText("temps restant: " +jourR+" jours, "+heureR+" heures, "+minR+" minutes, "+ secR + " sec");
+//            //timeLabel.setText("temps restant: " );
+//            System.out.println();
+//        }));
+//        
+//        
+//        tempsRestant.setCycleCount(Animation.INDEFINITE);
+//        tempsRestant.play();
         
         
-        tempsRestant.setCycleCount(Animation.INDEFINITE);
-        tempsRestant.play();
+        
+        
+        
+        
+        
+        
+        
+        
+        
         this.add(new Text(this.titre), 0, 1);
         this.add(new Text(String.valueOf(this.prixDeBase)), 0, 2);
         this.add(new Text("Prix de base : "), 0, 3);
@@ -101,11 +134,11 @@ public class Annonce extends GridPane {
                 this.prixDeBase = res.getInt("prixbase");
                 this.categorie = res.getInt("categorie");
                 this.idVendeur = res.getInt("proposerpar");
-                System.out.println("debut recuperé" + debut);
+                //System.out.println("debut recuperé" + debut);
             }
         }
     }
-
+    
     private Timestamp tempsRestant(Timestamp debut, Timestamp fin) {
         long l1 = debut.getTime();
         long l2 = fin.getTime();
@@ -114,9 +147,9 @@ public class Annonce extends GridPane {
         return new Timestamp(l3);
 
     }
-
-    private Timestamp secRestant(Timestamp debut, Timestamp fin) {
-        long l1 = debut.getSeconds();
+    
+    private Timestamp secRestant(Timestamp mtn, Timestamp fin) {
+        long l1 = mtn.getSeconds();
         long l2 = fin.getSeconds();
         long l3 = l2 - l1;
         return new Timestamp(l3);
@@ -138,7 +171,7 @@ public class Annonce extends GridPane {
         return new Timestamp(l3);
 
     }
-
+    
     private Timestamp jourRestant(Timestamp debut, Timestamp fin) {
         long l1 = debut.getDay();
         long l2 = fin.getDay();

@@ -4,14 +4,16 @@
  */
 package fr.insa.strasbourg.zerr.projetEnchere.FX.composants;
 
-import java.awt.CheckboxGroup;
+import fr.insa.strasbourg.zerr.projetEnchere.FX.vues.FenetrePrincipale;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import javafx.scene.control.Accordion;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
 /**
@@ -19,6 +21,9 @@ import javafx.scene.layout.VBox;
  * @author jules
  */
 public class Categories extends Accordion {
+    private FenetrePrincipale main;
+    private ToggleGroup tg;
+            
 
     private TitledPane TVehicule;
     private VBox content1;
@@ -64,7 +69,8 @@ public class Categories extends Accordion {
     private RadioButton SportsHobbies;
     private RadioButton JeuxJouets;
 
-    public Categories() {
+    public Categories(FenetrePrincipale main) {
+        this.main = main;
 
         this.Voiture = new RadioButton("Voitures");
         this.Motos = new RadioButton("Motos");
@@ -102,6 +108,8 @@ public class Categories extends Accordion {
         this.content4 = new VBox(this.Ameublement,this.Electromenager,this.Decoration,this.Bricolage,this.Jardinage);
         this.TMaison.setContent(content4);
         
+        
+        
         this.Informatique = new RadioButton("Informatique");
         this.ConsolesJV = new RadioButton("Consoles & jeux vidéo");
         this.ImageSon = new RadioButton("Image & Son");
@@ -122,7 +130,7 @@ public class Categories extends Accordion {
         this.TLoisir.setContent(content6);
         
         
-        ToggleGroup tg = new ToggleGroup();
+        this.tg = new ToggleGroup();
         tg.getToggles().addAll(this.Voiture, this.Motos,this.Caravaning,
                 this.Maison,this.Appartement,this.Terrain,
                 this.Vetements,this.Chaussures,this.Accessoires,this.MontreBijoux,
@@ -130,8 +138,18 @@ public class Categories extends Accordion {
                 this.Informatique,this.ConsolesJV,this.ImageSon,this.Telephonie,
                 this.DVD_CD,this.Livres,this.Velos,this.SportsHobbies,this.JeuxJouets);
         
-
+        this.tg.getSelectedToggle().
         this.getPanes().addAll(this.TVehicule, this.TImmobilier,this.TMode,this.TMaison,this.TMultimedia,this.TLoisir);
     }
 
+    public ToggleGroup getTg() {
+        return tg;
+    }
+    
+    public String getString(){
+        return this.getTg().getSelectedToggle().getProperties().getClass().getName();
+        
+    }
+    
+    
 }

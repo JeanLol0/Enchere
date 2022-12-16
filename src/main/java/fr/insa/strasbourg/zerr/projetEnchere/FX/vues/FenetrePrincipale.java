@@ -44,6 +44,7 @@ import javafx.stage.Stage;
             this.setCenter(new VueLogin(this));
             
             //recreeTout(con);
+            //BDD.creationBase();
             
         } catch (ClassNotFoundException ex) {
             Alert alert = new Alert(Alert.AlertType.ERROR);

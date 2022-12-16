@@ -12,6 +12,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.geometry.Pos;
 import javafx.scene.layout.GridPane;
 
 /**
@@ -38,6 +39,8 @@ public class VueAnnonces extends GridPane {
         } catch (SQLException ex) {
             Logger.getLogger(VueAnnonces.class.getName()).log(Level.SEVERE, null, ex);
         }
+        this.setAlignment(Pos.CENTER);
+        this.setHgap(30);
 
     }
 
@@ -62,7 +65,7 @@ public class VueAnnonces extends GridPane {
             ResultSet res = st.executeQuery("select id from objet");
             while (res.next()) {
                 this.idAnnonce.add(res.getInt("id"));
-                System.out.println("ids recupéré nb:" + this.idAnnonce.size());
+                //System.out.println("ids recupéré nb:" + this.idAnnonce.size());
             }
         }
     }

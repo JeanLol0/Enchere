@@ -437,6 +437,7 @@ public class BDD {
             System.out.println("6) ajouter objet");
             System.out.println("0) quitter");
             System.out.println("5) Supprimer table");
+            System.out.println("9) Création base");
             rep = ConsoleFdB.entreeEntier("Votre choix : ");
             try {
                 if (rep == 1) {
@@ -455,7 +456,13 @@ public class BDD {
                 } else if (rep == 7) {
                     creerCategorie(con);
                 } else if (rep == 8) {
-                    demandeEnchere(con);
+                    demandeEnchere(con);                
+                } else if (rep == 9) {
+                    try {
+                        creationBase(con);
+                    } catch (ClassNotFoundException ex) {
+                        Logger.getLogger(BDD.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
 //                else if (rep == 5) {
 //                    demandeNouvelAime(con);
@@ -989,7 +996,7 @@ public static int creerCategorie17(Connection con) throws SQLException {
         con.setAutoCommit(false);
         try ( PreparedStatement pst = con.prepareStatement(
                 "insert into categorie (id,nom) values (?,? )", PreparedStatement.RETURN_GENERATED_KEYS)) {
-            pst.setInt(1, 12);
+            pst.setInt(1, 17);
             pst.setString(2, "Consoles & jeux vidéo");
             pst.executeUpdate();
             con.commit();
@@ -1161,8 +1168,8 @@ public static int creerCategorie24(Connection con) throws SQLException {
             con.setAutoCommit(true);
         }
     }
-    public static void creationBase() throws ClassNotFoundException, SQLException{
-        Connection con = defautConnect(); 
+    public static void creationBase(Connection con) throws ClassNotFoundException, SQLException{
+        //Connection con = defautConnect(); 
         creerCategorie1(con);
         creerCategorie2(con);
         creerCategorie3(con);
