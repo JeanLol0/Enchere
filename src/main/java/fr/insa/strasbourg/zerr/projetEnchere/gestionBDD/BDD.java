@@ -575,69 +575,7 @@ public class BDD {
         return Final;
     }
     
-    public static ArrayList<Integer> TriCategorie(int idCategorie) throws SQLException, ClassNotFoundException{
-        Connection con = defautConnect();
-        ArrayList<Integer> TriCat;
-        TriCat = new ArrayList<>();
-        try (Statement st= con.createStatement()){
-            ResultSet res = st.executeQuery("select id from objet where categorie = ?");
-            while (res.next()){
-                TriCat.add(res.getInt("id"));
-            }
-        }
-        return TriCat;
-    }
     
-    public static ArrayList<Integer> TriPrixCroissant() throws SQLException, ClassNotFoundException{
-        Connection con = defautConnect();
-        ArrayList<Integer> TriCat;
-        TriCat = new ArrayList<>();
-        try (Statement st= con.createStatement()){
-            ResultSet res = st.executeQuery("select id from objet order by prix asc");
-            while (res.next()){
-                TriCat.add(res.getInt("id"));
-            }
-        }
-        return TriCat;
-    }
-    
-    public static ArrayList<Integer> TriPrixDecroissant() throws SQLException, ClassNotFoundException{
-        Connection con = defautConnect();
-        ArrayList<Integer> TriCat;
-        TriCat = new ArrayList<>();
-        try (Statement st= con.createStatement()){
-            ResultSet res = st.executeQuery("select id from objet order by prix desc");
-            while (res.next()){
-                TriCat.add(res.getInt("id"));
-            }
-        }
-        return TriCat;
-    }
-    public static ArrayList<Integer> TriDateDecroissant() throws SQLException, ClassNotFoundException{
-        Connection con = defautConnect();
-        ArrayList<Integer> TriCat;
-        TriCat = new ArrayList<>();
-        try (Statement st= con.createStatement()){
-            ResultSet res = st.executeQuery("select id from objet order by debut desc");
-            while (res.next()){
-                TriCat.add(res.getInt("id"));
-            }
-        }
-        return TriCat;
-    }
-    
-    public static ArrayList<Integer> TriDateCroissant() throws SQLException, ClassNotFoundException{
-        Connection con = defautConnect();
-        ArrayList<Integer> TriCat;
-        TriCat = new ArrayList<>();
-        try (Statement st= con.createStatement()){
-            ResultSet res = st.executeQuery("select id from objet order by debut asc");
-            while (res.next()){
-                TriCat.add(res.getInt("id"));
-            }
-        }
-        return TriCat;
-    }
 
 public static int creerCategorie1(Connection con) throws SQLException {
         con.setAutoCommit(false);
@@ -1216,6 +1154,7 @@ public static int creerCategorie24(Connection con) throws SQLException {
     }
     
 //    FileInputStream input = new FileInputStream("resources/images/iconmonstr-home-6-48.png");
+    //InputStream is = this.getClass().getResourceAsStream("ressources/addImage.png"); --> ca marche mieux ca
 //Image image = new Image(input);
 //ImageView imageView = new ImageView(image);
 }

@@ -186,9 +186,7 @@ public class VueNouvelleAnnonce extends ScrollPane {
         this.setContent(this.gridMain);
 
         this.bCreerAnnonce.setOnAction((t) -> {
-            //System.out.println(this.categories.getTg().getSelectedToggle().getClass().getSimpleName());
-            //doMiseEnLigne();
-            System.out.println(categories.getTg().getSelectedToggle().getClass().getName());
+            doMiseEnLigne();
         });
         
         
@@ -227,7 +225,7 @@ public class VueNouvelleAnnonce extends ScrollPane {
                 int dayF = dFin.getValue().getDayOfMonth();
                 int heureF = tFin.getHeure();
                 int minuteF = tFin.getMinute();
-                int categorie = 5;//getIdCategorie(this.categories.getTg().getSelectedToggle().toString());
+                int categorie = getIdCategorie(this.categories.getTextCategorieSelected());
 
                 BDD.createObjet(con, titre,
                         new Timestamp(yearD, monthD, dayD, heureD, minuteD, 0, 0),
@@ -246,8 +244,15 @@ public class VueNouvelleAnnonce extends ScrollPane {
         try ( PreparedStatement st = con.prepareCall("select id from categorie where nom = ?")) {
             st.setString(1, textCat);
             ResultSet res = st.executeQuery();
+            if (res.next()) {
             return res.getInt("id");
-        }
+            } else {
+            JavaFXUtils.showErrorInAlert("Erreur", "Selectionner une catégorie", "blabla"); 
+            return -1;
+            }
+        
+    }
+        
     }
 
     private void insererLigne( int pos,int count) {

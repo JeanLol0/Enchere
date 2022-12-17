@@ -23,6 +23,7 @@ import javafx.scene.layout.VBox;
 public class Categories extends Accordion {
     private FenetrePrincipale main;
     private ToggleGroup tg;
+    private String categorieSelected;
             
 
     private TitledPane TVehicule;
@@ -71,7 +72,7 @@ public class Categories extends Accordion {
 
     public Categories(FenetrePrincipale main) {
         this.main = main;
-
+        this.categorieSelected = null;
         this.Voiture = new RadioButton("Voitures");
         this.Motos = new RadioButton("Motos");
         this.Caravaning = new RadioButton("Caravaning");
@@ -131,16 +132,96 @@ public class Categories extends Accordion {
         
         
         this.tg = new ToggleGroup();
-        tg.getToggles().addAll(this.Voiture, this.Motos,this.Caravaning,
+        this.tg.getToggles().addAll(this.Voiture, this.Motos,this.Caravaning,
                 this.Maison,this.Appartement,this.Terrain,
                 this.Vetements,this.Chaussures,this.Accessoires,this.MontreBijoux,
                 this.Ameublement,this.Electromenager,this.Decoration, this.Bricolage,this.Jardinage,
                 this.Informatique,this.ConsolesJV,this.ImageSon,this.Telephonie,
                 this.DVD_CD,this.Livres,this.Velos,this.SportsHobbies,this.JeuxJouets);
         
-        
        
        this.getPanes().addAll(this.TVehicule, this.TImmobilier,this.TMode,this.TMaison,this.TMultimedia,this.TLoisir);
+       
+       this.Accessoires.setOnAction((t) -> {
+           this.setCategorieSelected("Accessoires");
+       });
+       this.Ameublement.setOnAction((t) -> {
+           this.setCategorieSelected("Ameublement");
+       });
+       this.Appartement.setOnAction((t) -> {
+           this.setCategorieSelected("Appartement");
+       });
+       this.Bricolage.setOnAction((t) -> {
+           this.setCategorieSelected("Bricolage");
+       });
+       this.Caravaning.setOnAction((t) -> {
+           this.setCategorieSelected("Caravaning");
+       });
+       this.Chaussures.setOnAction((t) -> {
+           this.setCategorieSelected("Chaussures");
+       });
+       this.ConsolesJV.setOnAction((t) -> {
+           this.setCategorieSelected("Consoles & jeux vidéo");
+       });
+       this.DVD_CD.setOnAction((t) -> {
+           this.setCategorieSelected("DVD & CD");
+       });
+       this.Decoration.setOnAction((t) -> {
+           this.setCategorieSelected("Décoraion");
+       });
+       this.Electromenager.setOnAction((t) -> {
+           this.setCategorieSelected("Electroménager");
+       });
+       this.ImageSon.setOnAction((t) -> {
+           this.setCategorieSelected("Image & Son");
+       });
+       this.Informatique.setOnAction((t) -> {
+           this.setCategorieSelected("Informatique");
+       });
+       this.Jardinage.setOnAction((t) -> {
+           this.setCategorieSelected("Jardinage");
+       });
+       this.JeuxJouets.setOnAction((t) -> {
+           this.setCategorieSelected("Jeux & jouets");
+       });
+       this.Livres.setOnAction((t) -> {
+           this.setCategorieSelected("Livres");
+       });
+       this.Maison.setOnAction((t) -> {
+           this.setCategorieSelected("Maison");
+       });
+       this.MontreBijoux.setOnAction((t) -> {
+           this.setCategorieSelected("Montre & Bijoux");
+       });
+       this.Motos.setOnAction((t) -> {
+           this.setCategorieSelected("Motos");
+       });
+       this.SportsHobbies.setOnAction((t) -> {
+           this.setCategorieSelected("Sport & Hobbies");
+       });
+       this.Telephonie.setOnAction((t) -> {
+           this.setCategorieSelected("Téléphonie");
+       });
+       this.Terrain.setOnAction((t) -> {
+           this.setCategorieSelected("Terrain");
+       });
+       this.Velos.setOnAction((t) -> {
+           this.setCategorieSelected("Vélos");
+       });
+       this.Vetements.setOnAction((t) -> {
+           this.setCategorieSelected("Vetements");
+       });
+       this.Voiture.setOnAction((t) -> {
+           this.setCategorieSelected("Voitures");
+       });
+    }
+
+    public String getTextCategorieSelected() {
+        return categorieSelected;
+    }
+
+    public void setCategorieSelected(String categorieSelected) {
+        this.categorieSelected = categorieSelected;
     }
 
     public ToggleGroup getTg() {

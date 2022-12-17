@@ -5,6 +5,8 @@
 package fr.insa.strasbourg.zerr.projetEnchere.FX.composants;
 
 import fr.insa.strasbourg.zerr.projetEnchere.FX.JavaFXUtils;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -12,6 +14,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,16 +33,27 @@ import javax.imageio.ImageIO;
  *
  * @author jules
  */
-public class VueImage extends BorderPane{
+public class VueImage extends BorderPane {
+
     private ImageView contentImage;
     private StackPane contentPane;
+    private double width;
 
     public VueImage() {
+        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+        this.width = gd.getDisplayMode().getWidth() / 2;
+        int height = gd.getDisplayMode().getHeight() / 2;
         this.contentPane = new StackPane();
-        this.setPrefSize(200, 200);
+        this.contentPane.setPrefSize(width, width);
         JavaFXUtils.addSimpleBorder(this);
         this.getChildren().size();
         this.setCenter(this.contentPane);
+        try {
+            setDefautImage();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(VueImage.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     public StackPane getContentPane() {
@@ -49,16 +63,26 @@ public class VueImage extends BorderPane{
     public void setContentPane(StackPane contentPane) {
         this.contentPane = contentPane;
     }
-    
-    void addImage(Image i, StackPane pane){
 
-       contentImage = new ImageView();
-       contentImage.setImage(i);
-       pane.getChildren().add(contentImage);
+    void addImage(Image i, StackPane pane) {
+
+        contentImage = new ImageView();
+        contentImage.setImage(i);
+        contentImage.setFitHeight(width);
+        contentImage.setFitWidth(width);
+        pane.getChildren().add(contentImage);
+    }
+    void addDefautImage(Image i, StackPane pane) {
+
+        contentImage = new ImageView();
+        contentImage.setImage(i);
+        contentImage.setFitHeight(200);
+        contentImage.setFitWidth(200);
+        pane.getChildren().add(contentImage);
     }
 
     public void mouseDragDropped(final DragEvent e) {
-        final Dragboard db = e.getDragboard();
+        Dragboard db = e.getDragboard();
         boolean success = false;
         if (db.hasFiles()) {
             success = true;
@@ -69,10 +93,10 @@ public class VueImage extends BorderPane{
                 public void run() {
                     System.out.println(file.getAbsolutePath());
                     try {
-                        if(!contentPane.getChildren().isEmpty()){
+                        if (!contentPane.getChildren().isEmpty()) {
                             contentPane.getChildren().remove(0);
                         }
-                        Image img = new Image(new FileInputStream(file.getAbsolutePath()));  
+                        Image img = new Image(new FileInputStream(file.getAbsolutePath()));
 
                         addImage(img, contentPane);
                     } catch (FileNotFoundException ex) {
@@ -85,8 +109,8 @@ public class VueImage extends BorderPane{
         e.consume();
     }
 
-    public  void mouseDragOver(final DragEvent e) {
-        final Dragboard db = e.getDragboard();
+    public void mouseDragOver(final DragEvent e) {
+        Dragboard db = e.getDragboard();
 
         final boolean isAccepted = db.getFiles().get(0).getName().toLowerCase().endsWith(".png")
                 || db.getFiles().get(0).getName().toLowerCase().endsWith(".jpeg")
@@ -95,21 +119,21 @@ public class VueImage extends BorderPane{
         if (db.hasFiles()) {
             if (isAccepted) {
                 contentPane.setStyle("-fx-border-color: red;"
-              + "-fx-border-width: 5;"
-              + "-fx-background-color: #C6C6C6;"
-              + "-fx-border-style: solid;");
+                        + "-fx-border-width: 5;"
+                        + "-fx-background-color: #C6C6C6;"
+                        + "-fx-border-style: solid;");
                 e.acceptTransferModes(TransferMode.COPY);
             }
         } else {
             e.consume();
         }
     }
-    
+
     public static String ImageEnTexte(Image img) {
 
         BufferedImage bufi = SwingFXUtils.fromFXImage(img, null);
-        
-         System.out.println("1");
+
+        System.out.println("1");
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
             ImageIO.write(bufi, "jpg", baos);
@@ -120,7 +144,7 @@ public class VueImage extends BorderPane{
         byte[] bytes = baos.toByteArray();
         System.out.println("3");
         String ImageTexte = Base64.getUrlEncoder().encodeToString(bytes);
-    return ImageTexte;
+        return ImageTexte;
     }
 
     public static Image texteEnImage(String img) throws IOException {
@@ -130,5 +154,12 @@ public class VueImage extends BorderPane{
         Image Final = SwingFXUtils.toFXImage(bImage2, null);
         return Final;
     }
-    
+
+    private void setDefautImage() throws FileNotFoundException {
+        //FileInputStream input = new FileInputStream("addImage.png");
+        InputStream is = this.getClass().getResourceAsStream("ressources/addImage.png");
+        Image image = new Image(is);
+        addDefautImage(image, contentPane);
+    }
+
 }

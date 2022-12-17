@@ -57,6 +57,13 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-opacity: 0;
 }
 
+.text-field{
+    -fx-font-size: 25px; 
+}
+
+.combo-box{
+    -fx-font-size: 25px; 
+}
 
 .button {     
    
