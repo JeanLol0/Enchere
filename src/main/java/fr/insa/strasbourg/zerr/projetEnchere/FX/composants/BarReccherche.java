@@ -41,7 +41,7 @@ public class BarReccherche extends HBox {
         
         this.categorieCombo = new ComboBox();
         ObservableList<String> listTrie = FXCollections.observableArrayList(c1,c2,c3,c4,c5);
-        this.trieCombo.getItems().add(listTrie);
+        this.trieCombo.setItems(listTrie);
         ObservableList<String> listCategorie = getCategorieList();
         this.categorieCombo.setItems(listCategorie);
         
