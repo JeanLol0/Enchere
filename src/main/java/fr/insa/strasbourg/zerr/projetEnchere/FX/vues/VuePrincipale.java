@@ -5,6 +5,7 @@
 package fr.insa.strasbourg.zerr.projetEnchere.FX.vues;
 
 import fr.insa.strasbourg.zerr.projetEnchere.FX.StylesCSS;
+import java.sql.SQLException;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
 
@@ -19,7 +20,7 @@ public class VuePrincipale extends ScrollPane {
     
     
 
-    public VuePrincipale(FenetrePrincipale main) {
+    public VuePrincipale(FenetrePrincipale main) throws SQLException {
         this.main = main;
         this.setContent(new VueAnnonces(this.main));
         //this.topBar = new TopBar(main);

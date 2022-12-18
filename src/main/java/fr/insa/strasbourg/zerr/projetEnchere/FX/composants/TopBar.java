@@ -12,7 +12,9 @@ import java.io.InputStream;
 import java.util.Optional;
 import javafx.geometry.Insets;
 import javafx.geometry.Side;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
@@ -53,7 +55,19 @@ public class TopBar extends HBox {
         this.miAnnonce = new MenuItem("Mes Annonces");
         this.miEnchere = new MenuItem("Mes Encheres");
         this.milogout.setOnAction((t) -> {
-            doLogout();
+                t.consume();
+                Alert confirmer = new Alert(Alert.AlertType.CONFIRMATION);
+                ButtonType oui = new ButtonType("Oui");
+                ButtonType non = new ButtonType("Non");
+                confirmer.setTitle("Attention");
+                confirmer.setHeaderText("Etes-vous sur de vous déconnecter ? ");
+                confirmer.getButtonTypes().clear();
+                confirmer.getButtonTypes().addAll(oui, non);
+                Optional<ButtonType> select = confirmer.showAndWait();
+                if (select.get() == oui){
+                               doLogout();
+                } else if (select.get() == non){
+                }
         });
 
         ContextMenu cm = new ContextMenu();
@@ -70,7 +84,7 @@ public class TopBar extends HBox {
         this.menuUser.setOpacity(0);
         this.menuUser.setStyle("-fx-background-color: #ff0000; ");
         Circle cr = new Circle(30, 30, 30);
-        cr.setFill(new ImagePattern(getImage("user1.png")));
+        cr.setFill(new ImagePattern(getImage("user.png")));
         cm.getItems().addAll(miAnnonce, miEnchere, milogout);
         cr.setOnMouseClicked((t) -> {
             System.out.println("bib bib");
@@ -116,9 +130,7 @@ public class TopBar extends HBox {
         sp.getChildren().addAll(cr,menuUser);
         this.getChildren().addAll(bNouvelleAnnonce, this.tfRecherche, this.bRecherche, region, sp);
 
-        this.bLogout.setOnAction((t) -> {
-            doLogout();
-        });
+        
 
         this.bNouvelleAnnonce.setOnAction((t) -> {
             this.main.setCenter(new VueNouvelleAnnonce(this.main));

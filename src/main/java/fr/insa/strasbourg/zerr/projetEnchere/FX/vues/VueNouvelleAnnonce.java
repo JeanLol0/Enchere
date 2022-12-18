@@ -17,6 +17,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -215,7 +216,7 @@ public class VueNouvelleAnnonce extends ScrollPane {
         Connection con = this.main.getBDD();
         try {
             if (this.tfTitre.getText().isEmpty()) {
-                JavaFXUtils.showErrorInAlert("Erreur", "Competez les infos necessaires", "");
+                JavaFXUtils.showErrorInAlert("Erreur", "Completez les infos necessaires", "");
 
             } else {
                 String titre = this.tfTitre.getText();

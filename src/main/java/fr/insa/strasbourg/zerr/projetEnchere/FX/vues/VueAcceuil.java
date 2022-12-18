@@ -4,6 +4,9 @@
  */
 package fr.insa.strasbourg.zerr.projetEnchere.FX.vues;
 
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 
@@ -18,10 +21,14 @@ public class VueAcceuil extends GridPane{
     public VueAcceuil(FenetrePrincipale main) {
         this.main = main;
         this.setId("vue-acceuil"); 
-        this.bAfficheAnnonce = new Button("Afficher les annoces en cours ");
+        this.bAfficheAnnonce = new Button("Afficher les annonces en cours ");
         this.add(this.bAfficheAnnonce, 0, 0);
         this.bAfficheAnnonce.setOnAction((t) -> {
-            this.main.setCenter(new VuePrincipale(this.main));
+            try {
+                this.main.setCenter(new VuePrincipale(this.main));
+            } catch (SQLException ex) {
+                Logger.getLogger(VueAcceuil.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
     }
     

@@ -22,14 +22,14 @@ import javafx.scene.text.Text;
  *
  * @author jules
  */
-public class BarReccherche extends HBox {
+public class BarRecherche extends HBox {
     private Button bRecherche;
     private HBox center;
     private ComboBox trieCombo;
     private ComboBox categorieCombo;
     private TextField tfRecherche;
 
-    public BarReccherche(FenetrePrincipale main) {
+    public BarRecherche(FenetrePrincipale main) {
         String c1 = "Prix croissant";
         String c2 = "Prix décroissant";
         String c3 = "Dates croissante";
