@@ -39,7 +39,7 @@ public class VueImage extends BorderPane {
     private StackPane contentPane;
     private double width;
 
-    public VueImage() {
+    public VueImage() throws IOException {
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         this.width = gd.getDisplayMode().getWidth() / 2;
         int height = gd.getDisplayMode().getHeight() / 2;
@@ -72,7 +72,7 @@ public class VueImage extends BorderPane {
         contentImage.setFitWidth(width);
         pane.getChildren().add(contentImage);
     }
-    void addDefautImage(Image i, StackPane pane) {
+    void addDefautImage(Image i, StackPane pane) throws IOException {
 
         contentImage = new ImageView();
         contentImage.setImage(i);
@@ -80,7 +80,7 @@ public class VueImage extends BorderPane {
         contentImage.setFitWidth(200);
         pane.getChildren().add(contentImage);
     }
-
+    
     public void mouseDragDropped(final DragEvent e) {
         Dragboard db = e.getDragboard();
         boolean success = false;
@@ -96,10 +96,13 @@ public class VueImage extends BorderPane {
                         if (!contentPane.getChildren().isEmpty()) {
                             contentPane.getChildren().remove(0);
                         }
+                        
                         Image img = new Image(new FileInputStream(file.getAbsolutePath()));
 
                         addImage(img, contentPane);
                     } catch (FileNotFoundException ex) {
+                        Logger.getLogger(VueImage.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IOException ex) {
                         Logger.getLogger(VueImage.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
@@ -107,6 +110,13 @@ public class VueImage extends BorderPane {
         }
         e.setDropCompleted(success);
         e.consume();
+    }
+     public static Image texteEnImage(String img) throws IOException {
+        byte[] result = Base64.getUrlDecoder().decode(img);
+        ByteArrayInputStream bis = new ByteArrayInputStream(result);
+        BufferedImage bImage2 = ImageIO.read(bis);
+        Image Final = SwingFXUtils.toFXImage(bImage2, null);
+        return Final;
     }
 
     public void mouseDragOver(final DragEvent e) {
@@ -147,15 +157,8 @@ public class VueImage extends BorderPane {
         return ImageTexte;
     }
 
-    public static Image texteEnImage(String img) throws IOException {
-        byte[] result = Base64.getUrlDecoder().decode(img);
-        ByteArrayInputStream bis = new ByteArrayInputStream(result);
-        BufferedImage bImage2 = ImageIO.read(bis);
-        Image Final = SwingFXUtils.toFXImage(bImage2, null);
-        return Final;
-    }
 
-    private void setDefautImage() throws FileNotFoundException {
+    private void setDefautImage() throws FileNotFoundException, IOException {
         //FileInputStream input = new FileInputStream("addImage.png");
         InputStream is = this.getClass().getResourceAsStream("ressources/addImage.png");
         Image image = new Image(is);

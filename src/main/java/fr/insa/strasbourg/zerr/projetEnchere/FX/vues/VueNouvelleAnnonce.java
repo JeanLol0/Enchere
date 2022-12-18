@@ -11,6 +11,7 @@ import fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD;
 
 import fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.SessionInfo;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -50,6 +51,9 @@ public class VueNouvelleAnnonce extends ScrollPane {
     private Text titre;
     private TextField tfTitre;
     
+    
+    
+    
     private VueImage image;
     
     private RadioButton rbDuree;
@@ -72,7 +76,7 @@ public class VueNouvelleAnnonce extends ScrollPane {
     // private DateTimePicker dtPicker;
     private SessionInfo sessionInfo;
 
-    public VueNouvelleAnnonce(FenetrePrincipale main) {
+    public VueNouvelleAnnonce(FenetrePrincipale main) throws IOException {
         this.main = main;
         this.gridMain =new GridPane();
         this.gridMain.setAlignment(Pos.CENTER);
