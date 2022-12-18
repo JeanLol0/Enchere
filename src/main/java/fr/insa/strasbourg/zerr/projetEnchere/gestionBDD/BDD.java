@@ -9,6 +9,8 @@ import fr.insa.strasbourg.zerr.projetEnchere.model.Utilisateur;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -18,11 +20,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.time.Month;
-import java.time.Period;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
-import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -124,8 +121,9 @@ public class BDD {
                             prixbase integer not null,
                             categorie integer not null,
                             proposerpar integer not null,
-                            bio Text,
-                            image Text
+                            bio Text not null,
+                            image Text, 
+                            prixactuel integer not null
                     )
                     """
             );
@@ -168,29 +166,7 @@ public class BDD {
                             ON DELETE RESTRICT
                     """
             );
-//            st.executeUpdate(
-//                    """
-//                    create table aime1 (
-//                        u1 integer not null,
-//                        u2 integer not null
-//                    )
-//                    """);
-            // je defini les liens entre les clés externes et les clés primaires
-            // correspondantes
-//            st.executeUpdate(
-//                    """
-//                    alter table aime
-//                        add constraint fk_aime_u1
-//                        foreign key (u1) references utilisateur(id)
-//                    """);
-//            st.executeUpdate(
-//                    """
-//                    alter table aime
-//                        add constraint fk_aime_u2
-//                        foreign key (u2) references utilisateur(id)
-//                    """);
-            // si j'arrive jusqu'ici, c'est que tout s'est bien passé
-            // je confirme (commit) la transaction
+
             con.commit();
             // je retourne dans le mode par défaut de gestion des transaction :
             // chaque ordre au SGBD sera considéré comme une transaction indépendante
@@ -381,16 +357,29 @@ public class BDD {
         }
     }
 
-    public static int createObjet(Connection con, String titre, Timestamp debut, Timestamp fin, int prixBase, int categorie, int proposerpar) throws SQLException {
+    public static int createObjet(Connection con, String titre, Timestamp debut, Timestamp fin, int prixBase, int categorie, int proposerpar, String bio, Image image) throws SQLException, FileNotFoundException {
         con.setAutoCommit(false);
         try ( PreparedStatement pst = con.prepareStatement(
-                "insert into objet (titre,debut,fin,prixbase,categorie,proposerpar) values (?,?,?,?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS)) {
+                "insert into objet (titre,debut,fin,prixbase,categorie,proposerpar, bio, image, prixactuel) values (?,?,?,?,?,?,?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS)) {
             pst.setString(1, titre);
             pst.setTimestamp(2, debut);
             pst.setTimestamp(3, fin);
             pst.setInt(4, prixBase);
             pst.setInt(5, categorie);
             pst.setInt(6, proposerpar);
+            pst.setString(7, bio);
+            if (image==null){
+                String imag2;
+                FileInputStream input = new FileInputStream("resources/image.png");
+                Image image3 = new Image(input);
+                imag2= ImageEnTexte(image3);
+                 pst.setString(8, imag2);
+            }
+            else{
+                String conv = ImageEnTexte(image);
+                pst.setString(8, conv);
+            }
+           pst.setInt(9, prixBase);
             pst.executeUpdate();
             con.commit();
             System.out.println("objet créé");
@@ -408,14 +397,15 @@ public class BDD {
         }
     }
 
-    public static void demandeNouvelObjet(Connection con) throws SQLException {
+    public static void demandeNouvelObjet(Connection con) throws SQLException, FileNotFoundException {
         String titre = ConsoleFdB.entreeString("titre ?");
         Timestamp debut = new Timestamp(System.currentTimeMillis());
         Timestamp fin = new Timestamp(2022, 12, 25, 0, 0, 0, 0);
         int prixbase = ConsoleFdB.entreeInt("prix?");
         int categorie = ConsoleFdB.entreeInt("categorie ?");
         int proposerpar = ConsoleFdB.entreeInt("proposer par id de qui?");
-        createObjet(con, titre, debut, fin, prixbase, categorie, proposerpar);
+        String bio = ConsoleFdB.entreeString("bio?");
+        createObjet(con, titre, debut, fin, prixbase, categorie, proposerpar,bio,null);
         System.out.println("objet est bien entrée");
     }
 
@@ -424,7 +414,7 @@ public class BDD {
         creeSchema(con);
     }
 
-    public static void menu(Connection con) {
+    public static void menu(Connection con) throws FileNotFoundException {
         int rep = -1;
         while (rep != 0) {
             System.out.println("Menu BdD Aime");
@@ -489,7 +479,7 @@ public class BDD {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         try ( Connection con = defautConnect()) {
 
             System.out.println("Connection ok!");
@@ -1106,7 +1096,7 @@ public static int creerCategorie24(Connection con) throws SQLException {
             con.setAutoCommit(true);
         }
     }
-    public static void creationBase(Connection con) throws ClassNotFoundException, SQLException{
+    public static void creationBase(Connection con) throws ClassNotFoundException, SQLException, FileNotFoundException{
         //Connection con = defautConnect(); 
         creerCategorie1(con);
         creerCategorie2(con);
@@ -1148,7 +1138,8 @@ public static int creerCategorie24(Connection con) throws SQLException {
 //        long diff = ldt.until(ldt3, ChronoUnit.MINUTES);
         Timestamp conv = Timestamp.valueOf(LocalDateTime.of(2022, 12, 14, 16, 8));
         Timestamp conv1 = Timestamp.valueOf(LocalDateTime.of(2022, 12, 14, 16, 8).plusDays(9));
-        createObjet(con, "Babouches", conv,conv1, 10, 2, 1);
+        createObjet(con, "Babouches", conv,conv1, 10, 2, 1,"S'est facile à utliser",null);
+        createObjet(con, "Vélo Tout Terrain", conv,conv1, 10, 2, 1,"S'est facile à utliser",null);
         
         
     }

@@ -10,6 +10,7 @@ import fr.insa.strasbourg.zerr.projetEnchere.FX.composants.VueImage;
 import fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD;
 
 import fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.SessionInfo;
+import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -186,7 +187,11 @@ public class VueNouvelleAnnonce extends ScrollPane {
         this.setContent(this.gridMain);
 
         this.bCreerAnnonce.setOnAction((t) -> {
-            doMiseEnLigne();
+            try {
+                doMiseEnLigne();
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(VueNouvelleAnnonce.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
         
         
@@ -205,7 +210,7 @@ public class VueNouvelleAnnonce extends ScrollPane {
 
     }
 
-    private void doMiseEnLigne() {
+    private void doMiseEnLigne() throws FileNotFoundException {
 
         Connection con = this.main.getBDD();
         try {
@@ -226,11 +231,11 @@ public class VueNouvelleAnnonce extends ScrollPane {
                 int heureF = tFin.getHeure();
                 int minuteF = tFin.getMinute();
                 int categorie = getIdCategorie(this.categories.getTextCategorieSelected());
-
                 BDD.createObjet(con, titre,
                         new Timestamp(yearD, monthD, dayD, heureD, minuteD, 0, 0),
                         new Timestamp(yearF, monthF, dayF, heureF, minuteF, 0, 0),
-                        Integer.parseInt(this.prixBase.getText()), categorie, this.sessionInfo.getUserID());
+                        Integer.parseInt(this.prixBase.getText()), categorie, this.sessionInfo.getUserID(),"Texte",null);
+                //ici à la place cu null il faut mettre l'image en format image
                 System.out.println("annonce créé");
                 this.main.setCenter(new VuePrincipale(this.main));
             }
