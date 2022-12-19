@@ -46,7 +46,8 @@ public class VueAnnonces extends BorderPane {
         this.setCenter(this.gridPane);
         this.barRe.getTrieCombo().setOnAction((t) -> {
             String typeTri = this.barRe.getTrieCombo().getValue().toString();
-            if("Prix croissant".equals(typeTri)){
+            System.out.println(this.barRe.getTrieCombo().getValue().toString());
+            if ("Prix croissant".equals(typeTri)) {
                 try {
                     this.idAnnonce = TriPrixCroissant();
                     afficheAnnonce();
@@ -55,18 +56,17 @@ public class VueAnnonces extends BorderPane {
                 } catch (ClassNotFoundException ex) {
                     Logger.getLogger(VueAnnonces.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            }if("Prix décroissant".equals(typeTri)){
+            }
+            if ("Prix décroissant".equals(typeTri)) {
                 System.out.println("Desc");
                 try {
-                    this.idAnnonce = TriPrixDecroissant();
-                    afficheAnnonce();
+                    afficheAnnoncePrixDecroissante();
                 } catch (SQLException ex) {
                     System.out.println("Erreur SQL");
                     Logger.getLogger(VueAnnonces.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(VueAnnonces.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            }if("Dates croissante".equals(typeTri)){
+            }
+            if ("Dates croissante".equals(typeTri)) {
                 try {
                     this.idAnnonce = TriDateDecroissant();
                     afficheAnnonce();
@@ -75,19 +75,19 @@ public class VueAnnonces extends BorderPane {
                 } catch (ClassNotFoundException ex) {
                     Logger.getLogger(VueAnnonces.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            }if("Dates decroissante".equals(typeTri)){
+            }
+            if ("Dates decroissante".equals(typeTri)) {
                 try {
-                    this.idAnnonce = TriDateDecroissant();
+                    //this.idAnnonce = TriDateDecroissant();
                     afficheAnnonce();
                 } catch (SQLException ex) {
                     Logger.getLogger(VueAnnonces.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(VueAnnonces.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            }if("Catégorie".equals(typeTri)){
-                String categorie =this.barRe.getCategorieCombo().getValue().toString();
+            }
+            if ("Catégorie".equals(typeTri)) {
+                String categorie = this.barRe.getCategorieCombo().getValue().toString();
                 try {
-                    int idCat = getIdCategorie(categorie);                
+                    int idCat = getIdCategorie(categorie);
                     this.idAnnonce = TriCategorie(idCat);
                     afficheAnnonce();
                 } catch (SQLException ex) {
@@ -126,100 +126,124 @@ public class VueAnnonces extends BorderPane {
         }
     }
 
+    private void afficheAnnoncePrixDecroissante() throws SQLException {
+        try {
+            System.out.println("idAnnonce1"+this.idAnnonce);
+            this.idAnnonce.clear();
+            System.out.println("idAnnonce2"+this.idAnnonce);
+            this.idAnnonce = TriDateDecroissant();
+            System.out.println("idAnnonce3"+this.idAnnonce);
+            this.gridPane.getChildren().clear();
+            System.out.println(this.gridPane.getChildren());
+            int nbAnnonce = this.idAnnonce.size();
+            for (int i = 0; i < nbAnnonce; i++) {
+                this.gridPane.add(new Annonce(this.main, this.idAnnonce.get(i)), 0, i);
+                System.out.println(this.idAnnonce.get(i));
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(VueAnnonces.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     private void afficheAnnonce() throws SQLException {
+        this.idAnnonce.clear();
+        //this.idAnnonce = TriDateDecroissant();
+        this.gridPane.getChildren().clear();
         int nbAnnonce = this.idAnnonce.size();
         for (int i = 0; i < nbAnnonce; i++) {
             this.gridPane.add(new Annonce(this.main, i), 0, i);
             System.out.println(this.idAnnonce.get(i));
         }
     }
-     private void afficheAnnonceSansTri() throws SQLException {
-         recupereIdAnnnce();
+
+    private void afficheAnnonceSansTri() throws SQLException {
+        recupereIdAnnnce();
         int nbAnnonce = this.idAnnonce.size();
         for (int i = 0; i < nbAnnonce; i++) {
-            this.gridPane.add(new Annonce(this.main, i), 0, i+1);
+            this.gridPane.add(new Annonce(this.main, i), 0, i + 1);
         }
     }
-    public static ArrayList<Integer> TriCategorie(int idCategorie) throws SQLException, ClassNotFoundException{
+
+    public static ArrayList<Integer> TriCategorie(int idCategorie) throws SQLException, ClassNotFoundException {
         Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
         ArrayList<Integer> TriCat;
         TriCat = new ArrayList<>();
-        try (PreparedStatement st= con.prepareStatement("select id from objet where categorie = ?")){
+        try (PreparedStatement st = con.prepareStatement("select id from objet where categorie = ?")) {
             st.setInt(1, idCategorie);
             ResultSet res = st.executeQuery();
-            while (res.next()){
+            while (res.next()) {
                 TriCat.add(res.getInt("id"));
             }
         }
         return TriCat;
     }
-        
-    
-    public static ArrayList<Integer> TriPrixCroissant() throws SQLException, ClassNotFoundException{
+
+    public static ArrayList<Integer> TriPrixCroissant() throws SQLException, ClassNotFoundException {
         Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
         ArrayList<Integer> TriCat;
         TriCat = new ArrayList<>();
-        try (PreparedStatement st = con.prepareStatement("select id from objet order by prixactuel asc")){
+        try (PreparedStatement st = con.prepareStatement("select id from objet order by prixactuel asc")) {
             ResultSet res = st.executeQuery();
-            while (res.next()){
+            while (res.next()) {
                 TriCat.add(res.getInt("id"));
             }
         }
         return TriCat;
     }
-    
-    public static ArrayList<Integer> TriPrixDecroissant() throws SQLException, ClassNotFoundException{
+
+    public static ArrayList<Integer> TriPrixDecroissant() throws SQLException, ClassNotFoundException {
         Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
         ArrayList<Integer> TriCat;
         TriCat = new ArrayList<>();
-        try (PreparedStatement st = con.prepareStatement("select id from objet order by prixactuel desc")){
+        try (PreparedStatement st = con.prepareStatement("select id from objet order by prixactuel desc")) {
             ResultSet res = st.executeQuery();
-            while (res.next()){
+            while (res.next()) {
                 TriCat.add(res.getInt("id"));
             }
         }
         return TriCat;
     }
-    public static ArrayList<Integer> TriDateDecroissant() throws SQLException, ClassNotFoundException{
+
+    public static ArrayList<Integer> TriDateDecroissant() throws SQLException, ClassNotFoundException {
         Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
         ArrayList<Integer> TriCat;
         TriCat = new ArrayList<>();
-        try (Statement st= con.createStatement()){
+        try (Statement st = con.createStatement()) {
             ResultSet res = st.executeQuery("select id from objet order by fin desc");
-            while (res.next()){
+            while (res.next()) {
                 TriCat.add(res.getInt("id"));
             }
         }
         return TriCat;
     }
-    
-    public static ArrayList<Integer> TriDateCroissant() throws SQLException, ClassNotFoundException{
+
+    public static ArrayList<Integer> TriDateCroissant() throws SQLException, ClassNotFoundException {
         Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
         ArrayList<Integer> TriCat;
         TriCat = new ArrayList<>();
-        try (Statement st= con.createStatement()){
+        try (Statement st = con.createStatement()) {
             ResultSet res = st.executeQuery("select id from objet order by fin asc");
-            while (res.next()){
+            while (res.next()) {
                 TriCat.add(res.getInt("id"));
             }
         }
         return TriCat;
     }
-    
-    public int getIdCategorie(String textCat) throws SQLException, ClassNotFoundException{
-        Connection con =connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
-        try ( PreparedStatement st = con.prepareCall("select id from categorie where nom = ?")) {
+
+    public int getIdCategorie(String textCat) throws SQLException, ClassNotFoundException {
+        Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
+        try (PreparedStatement st = con.prepareCall("select id from categorie where nom = ?")) {
             st.setString(1, textCat);
             ResultSet res = st.executeQuery();
             if (res.next()) {
-            return res.getInt("id");
+                return res.getInt("id");
             } else {
-            JavaFXUtils.showErrorInAlert("Erreur", "Selectionner une catégorie", "blabla"); 
-            return -1;
+                JavaFXUtils.showErrorInAlert("Erreur", "Selectionner une catégorie", "blabla");
+                return -1;
             }
-        
-    }
-        
+
+        }
+
     }
 
 }
