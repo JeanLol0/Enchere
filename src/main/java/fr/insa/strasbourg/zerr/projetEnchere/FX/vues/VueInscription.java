@@ -39,6 +39,8 @@ public class VueInscription extends GridPane {
     private Button bLogin;
 
     private Label lInscription;
+    
+    private VueCarte carte;
 
     public VueInscription(FenetrePrincipale main) {
         this.main = main;
@@ -47,6 +49,8 @@ public class VueInscription extends GridPane {
         this.tfNom = new TextField();
         this.tfPrenom = new TextField();
         this.tfEmail = new TextField();
+        
+        this.carte = new VueCarte();
 
         this.tfNom.setPromptText("Nom");
         this.tfPrenom.setPromptText("Prenom");
@@ -69,8 +73,9 @@ public class VueInscription extends GridPane {
         this.add(this.tfPrenom, 0, 11);
         this.add(this.tfEmail, 0, 12);
         this.add(this.pfPass, 0, 13);
-        this.add(this.bInscription, 0, 14);
-        this.add(this.bLogin, 0, 15);
+        this.add(this.carte, 0, 14);
+        this.add(this.bInscription, 0, 15);
+        this.add(this.bLogin, 0, 16);
 
         this.setVgap(20);
         this.setAlignment(Pos.TOP_CENTER);
