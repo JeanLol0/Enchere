@@ -1211,7 +1211,7 @@ public class BDD {
         while (diffHeures >= 8760) {
             diffHeures = diffHeures - 8760;
         }
-        while (diffHeures >= 730) {
+        while (diffHeures >= 730) {idAnnonce
             diffHeures = diffHeures - 730;
         }
         while (diffHeures >= 24) {
