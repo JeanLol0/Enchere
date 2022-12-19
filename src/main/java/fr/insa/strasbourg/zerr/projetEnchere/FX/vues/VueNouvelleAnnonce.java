@@ -10,6 +10,8 @@ import fr.insa.strasbourg.zerr.projetEnchere.FX.composants.VueImage;
 import fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD;
 
 import fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.SessionInfo;
+import static java.awt.SystemColor.window;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Connection;
@@ -34,10 +36,12 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.input.DragEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.util.Callback;
 
 /**
@@ -211,6 +215,12 @@ public class VueNouvelleAnnonce extends ScrollPane {
          this.image.setOnDragExited((final DragEvent event) -> {
              this.image.getContentPane().setStyle("-fx-border-color: #C6C6C6;");
         });
+         this.image.setOnMouseClicked(e->{
+             FileChooser fileChooser = new FileChooser();
+             fileChooser.setTitle("Open Resource File");
+             File file = fileChooser.showOpenDialog(getContextMenu());
+             this.image.mouseClicked(file);
+         });
         
 
     }
@@ -235,11 +245,13 @@ public class VueNouvelleAnnonce extends ScrollPane {
                 int dayF = dFin.getValue().getDayOfMonth();
                 int heureF = tFin.getHeure();
                 int minuteF = tFin.getMinute();
+                System.out.println(categorie);
                 int categorie = getIdCategorie(this.categories.getTextCategorieSelected());
+                Image img = image.getImage();
                 BDD.createObjet(con, titre,
                         new Timestamp(yearD, monthD, dayD, heureD, minuteD, 0, 0),
                         new Timestamp(yearF, monthF, dayF, heureF, minuteF, 0, 0),
-                        Integer.parseInt(this.prixBase.getText()), categorie, this.sessionInfo.getUserID(),"Texte",null);
+                        Integer.parseInt(this.prixBase.getText()), categorie, this.sessionInfo.getUserID(),"Texte",img);
                 //ici à la place cu null il faut mettre l'image en format image
                 System.out.println("annonce créé");
                 this.main.setCenter(new VuePrincipale(this.main));

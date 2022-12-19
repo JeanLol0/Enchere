@@ -92,7 +92,8 @@ public class BDD {
                         pass varchar(30) not null,
                         prenom varchar(50) not null,
                         email varchar(100) not null unique,
-                        codepostal varchar(20)
+                        codepostal varchar(20),
+                        image Text 
                     )
                     """);
             System.out.println("1");
@@ -312,7 +313,7 @@ public class BDD {
         }
     }
 
-    public static int createUtilisateur(Connection con, String nom, String pass, String prenom, String email)
+    public static int createUtilisateur(Connection con, String nom, String pass, String prenom, String email, Image image)
             throws SQLException {
         // lors de la creation du PreparedStatement, il faut que je précise
         // que je veux qu'il conserve les clés générées
@@ -323,11 +324,21 @@ public class BDD {
             ResultSet existe = pst2.executeQuery();
             if (!existe.next()) {
                 try ( PreparedStatement pst = con.prepareStatement(
-                        " insert into utilisateur (nom,pass,prenom,email) values (?,?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS)) {
+                        " insert into utilisateur (nom,pass,prenom,email,image) values (?,?,?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS)) {
                     pst.setString(1, nom);
                     pst.setString(2, pass);
                     pst.setString(3, prenom);
                     pst.setString(4, email);
+                    if (image == null) {
+                        //Photo pour objet qui n'a pas de photo donnée
+
+                       String imag2 = "iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAAAN0UlEQVR4Xu2de3AV9RXHg1qrndFOZ9pq1T60-l_bfzpj26nt1Fdba3XaePcmJMLuJjFilVI77ZQ6Lb_dm_AKCEqiCL4hBAgQoD5AyPuBsbkhL0wgJIGQx819ihCDPJL0d5JIydnN-97dszf7nfmMwd27-_udc3b39_7FxESZGGNXxcrsDkFUH3bK6rNOSVnLyRUkpYLzsSCxTs4Z_vfgFVzg_y8kiEoH_7uJU8L_vc0hKy86JHWhY776kJDM7oRr4_vZMlmxKew27rAE7rAXBJkd4v_tQ84NH6JyllM2HBhKPL_XzTg9tiKshxau-zI8kQ6JZQnDT6vWUcbS5JTYOkFSHxQEdi1Or60w6FeMXeOU1EccIsvhBv9UxwlU-JQHQzYEKKQZ58PWFPWYlHaXU1ZWc8P26BibOl7-iciIE9O-j_Nla3zNcYjKr7kB3-P06xjWavTzssn7Tpk9gDNqa7Tm8NL6H_hT49YxYnQgKlW87BILecWZn9UaeeJrNAaLWiDI1QexHWad4pKVH3Bj7NcaaLbA9kObBbZL1EsQ1lzPS8sKN8J5rVFmG6xvyBazpQrpFJVf8oyf0Bpi1lMnzGd3Y3tFjaBezAtALh7xl3QybzNMP7RoQmMXtp-lJcxj34EmVJ0M2-hTLcxLux3b0ZIaaTM_rZNJm3FhAaes_gbb00qaM1LQ08mczSQZ4J_NFZbrhYQSLa_bb9bJkM30-A_UnLCdSerRpJU38ATv08mEzcwoSUxkN2J7k1J8ErtFmFUtekbD3HNTla9ju5PQiPNbtYm2CSsyaxTmp9-K7W-qICqFoeFWOgk2n_MJKa7jC_665sN_L3u9OGPdtsJ1G3cWbdz0TunW3YUVAPwN_w-OwTlw7tyUtBb4rc71KNAKI6GwH0wRfJeI9eB9lvKX1R-99Mbu4uqG5pZOn_-iJxAcnA7wW3fdsZbM13cXpyzKqIJr69zPLOpMLxM8kqp8hTu_VCdxhpOYurTxrW37Szt6fOewI8PFKY-v742cfWWJqelH8f1NQVQOpqZu-BL2iyGCuilPxLuaRBkMOGN_cdVh7KxI837Bfw8nPJHWjNNjNE5ZeTvGjPEFgqyoODHGwvpe2LCzcCav-JnS6fVfeP6l7cU8Pee06TMO6GPB_omohsbJmzhcy5mk-osra2uwQ8yisLzmiFNWgzidRuKQVAH7KSKKl9j3-A1Ny2x8kqu7rqm1HTvBbGoaW07y17EXp9c4WAg63bC_wipJYtfBuDbtzQ1CZGcPuT9uwManQoW74ahTUns16TYK6HEVcq_GfgubhidA6NzYIDblHijDRqfGm1v3leN0Gwn_FDDst7AoTmI_FUz87ictzKjCxqZItz8wmLxw5WGcfsMQlYtCErsH-29Ggrom_8bUa25mHAOVhxsbsbGpUlF15JhOHoykJayjihyy-k-dmxhGskWe_isx9S3AAZ9hP05LMC0a6tz4BkayJa-gHBuYOptyP4Dp6Jq8GMhnYakV8At9oHNxIzl_sstzFhuYOq2dnjND32NtfgwDJqpif05JMCYNX9Ro5i1YRrbaNxGJTy41u89gAIbhY79OVnMEGJ2qvaih_H3J-mJsWKvw7HNZplYJhxCVKvAldu6EcorqY5qLmUBG1vZCbFirsHxtDvQTaPJkOKL6MPbvhDK1xe8KMl_bU4QNaxVe3LCrBOfHHFgl9u-4GlruRHMRc3h187sl2LBW4ZVN75AYKzGErNyH_TymBEKjejNf3V2EDWsV6LwBFAiAvdjPuoIlTQQTm3wxa9fvKMKGtQpr1-fSCQDu00ktVzOyJg_-sWnYARA-YJYR9vcowQxegdiCTHYAhJWucbuLnRL7nc6PTMUOgPAy7oRTfsIW_AOzsQMgvDgk5S3s9yFB96GgXUPXdOwACDuf6C5HQ6HdXw87AMKP7pqFgqhk4hMpYAdA-IEV1LH_4ftv9igWXewAiASsfpTzYx9f-i3tSTSwAyAiDIDPLwfA8Do-mpNIYAdAZBg1kQQ2QMAnUMEOgMjgEJVVlwOAfxPMH7igQ3yyq_1o2ykPNqxVaGo91cPzcArniwasdNj5Qu7V_B_mzWYZm4HC8sNk5v9Nl_yyahhOP6CTP3MRlbMxMFIINmXQHCSA_MwKw6d8RwrpqRW1OH8kgFHDFNv_Af79LMKGtCrPv5xLY2gYYqhfwCkqf8YHKJCzu6ACG9Kq5OTlH8L5owBsiQcFwBfwAQrseqfkQ2xIq7Lz3dJKnD8KOGVlJVQBt-MDFLADwBC2QBMwybqqHQBGwIohAChsvqjBDgAjYLUQAF3aA-ZjB4AhnIAA-ETngOnYAWAELAQBQHI5VDsAjID1QjWQ5B4-dgAYwjmyb4DsXflR0xC0La_wQ5w_IpyHN4Cpq3-Mxaqs6GkKXrN-B8mmYPA9BAC5kcCA-NTyOmxIqyI_TbQzSGI-CIBO7QEaFJRXWz4IRrqDNXmjAWuDACCbwLgkV-fRtg4vNqpVaGo56Y1PdnXgfNGB1UMAEP0-DROXpHbVNraexMalzoFSdy2kHeeHGPkwH2CHzgFSpK_ZXIQNTJUuX-BS0jPmrhE4BTbFwOBAnQOkmP_ksiPY0FR572Alpe1zJmI5LAb1tM4BavQ3t3f6sbEpsnBxJskBtnqA72NgBSl8gCKvZb9Hfq2gE12eXqIDbHVxiOr9MbEyuwMfoIi4YHk9Njg1Ml_LIzm2Yixgr0cYGT5HsMju3rANHDY6FaDwF59EdQ6AHuz0FRNDaI4Kwix2bSS7auiOvSVUO3z0kZXCKwKA5sBQLay3ub0jgI1vNt3-QD-BdYGnxKgFo6gsCzsZ0tdkk1s6dvMO05eGnzI8AGIvB8Af5ynfFChOX9JDVs80n-gk0zzc0eM_z7_9ZPtTxmBgbsrSmy4HAEigu_mzhsUqnbLAiswcS5SfEDWjnA-CZUN0TqTKhcrqxqPYGUbjrm9u42n5XCd9pBmaEILlnK_ei0-kzOOpSz_u8PkvYKcYBRT8xD8tJ9uTOi56C0ePrBJq2o6g0wH27cWOMQp-byu--gdhEAj4Gvt_SLATtfYHlGF97rpjrdg5keZAsbvG7P2Apgsv_W_Efr8sWD8O_4A6CU-kH4fXMXZSpGhr7_rEKas-nA7roD6I_X5ZjLGr-FNloebMYYwsC1TXN7fi-1sGUekYd7FokFNkyzQ_JI4dAJNEVlTsb41ik9O_KxCdLDIWdgBMin7wLfa3rvjJu3QuQBY7ACaBzPKwn8cUbDaouQBh7ACYGKfo-jn287jinwE6O15NgB0AE_IR9u-EorR13ETYATA-sBIc9u-kJBBdQRTR3-0PXMKOihTuhmPQ_o_TQBdRKcN-nbQckusXmgsSI05WO7GTIgnM9sFpoAz4EPt1SnJKSi6-KCWSF62qwk6KJPxtM-CU1BBOB0mmUvIfS_Fy-rf5xT7TXJwIW_MKDmEnRZrF6qsW6AhifcK8tNuxP6clQWRLtDcwn_iUtLZOr3EFwC843NhyknpnkENSGfbjtAW7TPEMN-CbmAl_DfdW1R47jp1jFFmv76H8FmiSJHYd9uOM9Jjs-gmVJmKYNl5UUWv6fEElY1MRTpv5sEvgK-y_sMj0jiL-2v3bkvWl0CWLnWEWez-oqEpISSfTNjDh_sAz0cioIVOGQCc9k1FdWdPUjB1AARiPsH1P0SHTA0FUqnQ3hQynoGRp5FSyeQuWNeSXuy2xc0iXL9CfvbOg0pxAYKdhnif2V0TkkNnv-U37tYkIH3OTXSfhqYJ6NzY0dUwIhIFREz2MkFNiz-kkZMY4ZSUIgz07vL7PsWGthmGfBl5Nx_4xQnOckrJVk5hpw3pdq9_Ob-vq-RQb0upE8o0A-z2AL7BzDNHwjuNKPk7UlOAl-2f_9XIRbLGGDRdthD8QWKkgrLke-8VQPZq08gaekGmti0O5ZB9JwvNpYPUJCcu_hv1hioYml06hpdBKJftIMv03Amvm3Iz9YKoEedk3eOLqtIn9P_HJrhNWLdlHkqm9EdhRYX76rdj-JDQUBDLTrJHnlNXA-jf3lpjRcWMlYJmZ7J0HyueOGQisXjOtm5oSE9mN_HNw8ItEL3ouq-x4e1cQZ9ZmbDp9_ouw4BR_cK5ocGOlZL75EwmaI-Nk19tv5Owrw5mzmTxHjrV1wSKZMCgn7L17kdbg4OBVnmBwCc-IYfP2opCBUx6vC6bsYftaRh6__16ekaiv40eAgMcXmt5oXmrqDAZv4xkyfOiWhXH3nD4dnuFcVHRkcPBaTyCwgmfuok6GbYa5xD-bq8BW2H5RI28o9COeUUNH8loCf7COPyB3Y3tFpXgB8ZqeYHARz3ivxhCzj3Pc-UpUP_Vjyefz3cUNsIMzG1sGB3oCwTxugzuxXWadekKhH3KD5OoYKSrp8QfLu32hmc3YiUb1BAL3cQNFzY6hOhyCajHOty2kbr__x7yMsIEbrE_HiFbjPCeXB_cDOJ-2JpDX673JEwj9gxuwXcew1PFAtRfaQHC-bE1RvNZw9fDnIZTFDdulY2wq8LQFXuJpvR9qOjgftsIg6GPwBoM_8wSDq7nBYRsZM_sa4N4NPC0ZkCZIG06vrQgrFAp9tTsY_C2vS6vcGfmcszqOChdnugPBg3AvuCfcG6fHFgH5_f5bukKhe_jrWARn8VdyNndeAcfNaeLATqQhDgxQAeBvKGfAMX5OqJD_ZvNwUAVEqLLBNfF9okH_AzM7OhApx3TaAAAAAElFTkSuQmCC";
+                       pst.setString(5, imag2);
+                    } else {
+                        String conv = ImageEnTexte(image);
+                        System.out.println("Ici ?????");
+                        pst.setString(5, conv);
+                    }
                     pst.executeUpdate();
                     con.commit();
 
@@ -356,7 +367,7 @@ public class BDD {
         String prenom = ConsoleFdB.entreeString("prenom?");
         String email = ConsoleFdB.entreeString("email?");
         String pass = ConsoleFdB.entreeString("pass ?");
-        int id = createUtilisateur(con, nom, pass, prenom, email);
+        int id = createUtilisateur(con, nom, pass, prenom, email, null);
         if (id == -1) {
             System.out.println("utilisateur existe déjà");
         } else {
@@ -383,6 +394,7 @@ public class BDD {
                 pst.setString(8, imag2);
             } else {
                 String conv = ImageEnTexte(image);
+                System.out.println("Ici ?????");
                 pst.setString(8, conv);
             }
             pst.setInt(9, prixBase);
@@ -1165,15 +1177,15 @@ public class BDD {
         creerCategorie22Velos(con);
         creerCategorie23SportsHobbies(con);
         creerCategorie24Jeux(con);
-        createUtilisateur(con, "Auvray", "jojo", "Nicolas", "nicolas.auvray@gmail.com");
-        createUtilisateur(con, "test", "test", "test", "test");
-        createUtilisateur(con, "Beauquis", "jojo", "Dorian", "dorian.beauquis@insa-strasbourg.fr");
-        createUtilisateur(con, "Lenglart", "jojo", "Louis", "louislebg@gmail.com");
-        createUtilisateur(con, "Mariannie", "jojo", "Alexandra", "alex.mariannie@hotmail.com");
-        createUtilisateur(con, "Lareyre", "jojo", "Jean-Laurent", "jlaurent.lareyre@gmail.com");
-        createUtilisateur(con, "Espinola", "jojo", "Sophia", "sophia.espi@outlook.fr");
-        createUtilisateur(con, "Doucet", "jojo", "Baptiste", "ladoucette@gmail.com");
-        createUtilisateur(con, "Zerr", "jojo", "Jules", "jules.zerr@gmail.com");
+        createUtilisateur(con, "Auvray", "jojo", "Nicolas", "nicolas.auvray@gmail.com",null);
+        createUtilisateur(con, "test", "test", "test", "test",null);
+        createUtilisateur(con, "Beauquis", "jojo", "Dorian", "dorian.beauquis@insa-strasbourg.fr",null);
+        createUtilisateur(con, "Lenglart", "jojo", "Louis", "louislebg@gmail.com",null);
+        createUtilisateur(con, "Mariannie", "jojo", "Alexandra", "alex.mariannie@hotmail.com",null);
+        createUtilisateur(con, "Lareyre", "jojo", "Jean-Laurent", "jlaurent.lareyre@gmail.com",null);
+        createUtilisateur(con, "Espinola", "jojo", "Sophia", "sophia.espi@outlook.fr",null);
+        createUtilisateur(con, "Doucet", "jojo", "Baptiste", "ladoucette@gmail.com",null);
+        createUtilisateur(con, "Zerr", "jojo", "Jules", "jules.zerr@gmail.com",null);
 //        Timestamp cur = new Timestamp(System.currentTimeMillis());
 //        LocalDateTime ldt = LocalDateTime.now();
 //        LocalDateTime ldt2 = ldt.plusDays(7);
@@ -1302,13 +1314,14 @@ public class BDD {
             int IdUtil = 0;
             while (res.next()) {
                 List.add(res.getInt("id"));
-                System.out.println("Valeurs"+res.getInt("id"));
+                System.out.println("Valeurs" + res.getInt("id"));
             }
             System.out.println(IdUtil);
             return List;
         }
     }
 //retourne la liste des id de enchere fait sur un objet
+
     public static ArrayList<Integer> EnchereParUtilisateur(int idUtil) throws ClassNotFoundException, SQLException {
         Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
         ArrayList<Integer> List = new ArrayList<>();
@@ -1318,27 +1331,28 @@ public class BDD {
             int IdUtil = 0;
             while (res.next()) {
                 List.add(res.getInt("sur"));
-                System.out.println("Valeurs"+res.getInt("sur"));
+                System.out.println("Valeurs" + res.getInt("sur"));
             }
             System.out.println(IdUtil);
             return List;
         }
     }
-    public static boolean ValiditeDateEnchere(int idObjet) throws ClassNotFoundException, SQLException{
+
+    public static boolean ValiditeDateEnchere(int idObjet) throws ClassNotFoundException, SQLException {
         Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
         try ( PreparedStatement st = con.prepareStatement("select fin from objet where id = ? ")) {
             st.setInt(1, idObjet);
             ResultSet res = st.executeQuery();
             Timestamp fin2 = null;
             while (res.next()) {
-                fin2= res.getTimestamp("fin");
+                fin2 = res.getTimestamp("fin");
             }
-            LocalDateTime fin3= fin2.toLocalDateTime();
+            LocalDateTime fin3 = fin2.toLocalDateTime();
             return LocalDateTime.now().isAfter(fin3);
         }
     }
     //revoit vrai si la date n'est pas passé et renvoit faux si l'enchere n'est plus valide: 
-    
+
     public static ArrayList<Integer> EnchereParUtilisateurPlusHautEnCours(int idUtil) throws ClassNotFoundException, SQLException {
         Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
         ArrayList<Integer> List = new ArrayList<>();
@@ -1347,18 +1361,18 @@ public class BDD {
             ResultSet res = st.executeQuery();
             int IdUtil = 0;
             while (res.next()) {
-                int resultat= res.getInt("sur");
-                if(ValiditeDateEnchere(resultat)==true){
+                int resultat = res.getInt("sur");
+                if (ValiditeDateEnchere(resultat) == true) {
                     List.add(res.getInt("id"));
-                System.out.println("Valeurs"+res.getInt("sur"));
-                }
-                else {
+                    System.out.println("Valeurs" + res.getInt("sur"));
+                } else {
                 }
             }
             System.out.println(IdUtil);
             return List;
         }
     }
+
     public static ArrayList<Integer> EnchereParUtilisateurPlusHautFini(int idUtil) throws ClassNotFoundException, SQLException {
         Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
         ArrayList<Integer> List = new ArrayList<>();
@@ -1367,19 +1381,17 @@ public class BDD {
             ResultSet res = st.executeQuery();
             int IdUtil = 0;
             while (res.next()) {
-                int resultat= res.getInt("sur");
-                if(ValiditeDateEnchere(resultat)==false){
+                int resultat = res.getInt("sur");
+                if (ValiditeDateEnchere(resultat) == false) {
                     List.add(res.getInt("id"));
-                System.out.println("Valeurs"+res.getInt("sur"));
-                }
-                else {
+                    System.out.println("Valeurs" + res.getInt("sur"));
+                } else {
                 }
             }
             System.out.println(IdUtil);
             return List;
         }
     }
-    
-    //retourne la liste des id de objet ou l'utilisateur à fait une enchere
 
+    //retourne la liste des id de objet ou l'utilisateur à fait une enchere
 }

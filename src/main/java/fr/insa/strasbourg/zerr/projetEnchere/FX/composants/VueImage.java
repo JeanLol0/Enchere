@@ -38,6 +38,7 @@ public class VueImage extends BorderPane {
     private ImageView contentImage;
     private StackPane contentPane;
     private double width;
+    private Image image;
 
     public VueImage() throws IOException {
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
@@ -89,6 +90,7 @@ public class VueImage extends BorderPane {
             // Only get the first file from the list
             final File file = db.getFiles().get(0);
             Platform.runLater(new Runnable() {
+                private Image image;
                 @Override
                 public void run() {
                     System.out.println(file.getAbsolutePath());
@@ -97,8 +99,9 @@ public class VueImage extends BorderPane {
                             contentPane.getChildren().remove(0);
                         }
                         
-                        Image img = new Image(new FileInputStream(file.getAbsolutePath()));
-
+                        Image img = new Image(new FileInputStream(file.getAbsolutePath())); 
+                        setImage(img);
+                        System.out.println("on est la");
                         addImage(img, contentPane);
                     } catch (FileNotFoundException ex) {
                         Logger.getLogger(VueImage.class.getName()).log(Level.SEVERE, null, ex);
@@ -110,6 +113,31 @@ public class VueImage extends BorderPane {
         }
         e.setDropCompleted(success);
         e.consume();
+    }
+    public void mouseClicked(File file) {
+            // Only get the first file from the list
+            Platform.runLater(new Runnable() {
+                private Image image;
+                @Override
+                public void run() {
+                    System.out.println(file.getAbsolutePath());
+                    try {
+                        if (!contentPane.getChildren().isEmpty()) {
+                            contentPane.getChildren().remove(0);
+                        }
+                        
+                        Image img = new Image(new FileInputStream(file.getAbsolutePath())); 
+                        setImage(img);
+                        System.out.println("on est la");
+                        addImage(img, contentPane);
+                    } catch (FileNotFoundException ex) {
+                        Logger.getLogger(VueImage.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IOException ex) {
+                        Logger.getLogger(VueImage.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            });
+  
     }
      public static Image texteEnImage(String img) throws IOException {
         byte[] result = Base64.getUrlDecoder().decode(img);
@@ -164,5 +192,15 @@ public class VueImage extends BorderPane {
         Image image = new Image(is);
         addDefautImage(image, contentPane);
     }
+    public Image getImage(){
+        return this.image;
+    }
 
+    public void setImage(Image image) {
+        this.image = image;
+    }
+
+    public void setOnMouseClicked() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }
