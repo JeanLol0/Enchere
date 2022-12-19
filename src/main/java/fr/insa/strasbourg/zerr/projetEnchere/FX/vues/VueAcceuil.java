@@ -4,6 +4,7 @@
  */
 package fr.insa.strasbourg.zerr.projetEnchere.FX.vues;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,6 +28,10 @@ public class VueAcceuil extends GridPane{
             try {
                 this.main.setCenter(new VuePrincipale(this.main));
             } catch (SQLException ex) {
+                Logger.getLogger(VueAcceuil.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(VueAcceuil.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
                 Logger.getLogger(VueAcceuil.class.getName()).log(Level.SEVERE, null, ex);
             }
         });

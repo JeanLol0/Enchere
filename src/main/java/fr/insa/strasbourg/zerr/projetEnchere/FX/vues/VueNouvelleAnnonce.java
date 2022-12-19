@@ -200,6 +200,10 @@ public class VueNouvelleAnnonce extends ScrollPane {
                 doMiseEnLigne();
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(VueNouvelleAnnonce.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(VueNouvelleAnnonce.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(VueNouvelleAnnonce.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
         
@@ -225,7 +229,7 @@ public class VueNouvelleAnnonce extends ScrollPane {
 
     }
 
-    private void doMiseEnLigne() throws FileNotFoundException {
+    private void doMiseEnLigne() throws FileNotFoundException, ClassNotFoundException, IOException {
 
         Connection con = this.main.getBDD();
         try {

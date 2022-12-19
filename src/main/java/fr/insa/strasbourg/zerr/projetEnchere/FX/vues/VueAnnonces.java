@@ -8,6 +8,7 @@ import fr.insa.strasbourg.zerr.projetEnchere.FX.JavaFXUtils;
 import fr.insa.strasbourg.zerr.projetEnchere.FX.composants.BarRecherche;
 import static fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD.connectGeneralPostGres;
 import static fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD.defautConnect;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -33,7 +34,7 @@ public class VueAnnonces extends BorderPane {
     private Connection con;
     private BarRecherche barRe;
 
-    public VueAnnonces(FenetrePrincipale main) throws SQLException {
+    public VueAnnonces(FenetrePrincipale main) throws SQLException, ClassNotFoundException, IOException {
         this.main = main;
         this.gridPane = new GridPane();
         this.barRe = new BarRecherche(this.main);
@@ -55,6 +56,8 @@ public class VueAnnonces extends BorderPane {
                     Logger.getLogger(VueAnnonces.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (ClassNotFoundException ex) {
                     Logger.getLogger(VueAnnonces.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(VueAnnonces.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
             if ("Prix décroissant".equals(typeTri)) {
@@ -63,6 +66,8 @@ public class VueAnnonces extends BorderPane {
                     afficheAnnoncePrixDecroissante();
                 } catch (SQLException ex) {
                     System.out.println("Erreur SQL");
+                    Logger.getLogger(VueAnnonces.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
                     Logger.getLogger(VueAnnonces.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
@@ -74,6 +79,8 @@ public class VueAnnonces extends BorderPane {
                     Logger.getLogger(VueAnnonces.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (ClassNotFoundException ex) {
                     Logger.getLogger(VueAnnonces.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(VueAnnonces.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
             if ("Dates decroissante".equals(typeTri)) {
@@ -81,6 +88,10 @@ public class VueAnnonces extends BorderPane {
                     //this.idAnnonce = TriDateDecroissant();
                     afficheAnnonce();
                 } catch (SQLException ex) {
+                    Logger.getLogger(VueAnnonces.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(VueAnnonces.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
                     Logger.getLogger(VueAnnonces.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
@@ -93,6 +104,8 @@ public class VueAnnonces extends BorderPane {
                 } catch (SQLException ex) {
                     Logger.getLogger(VueAnnonces.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(VueAnnonces.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
                     Logger.getLogger(VueAnnonces.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
@@ -126,7 +139,7 @@ public class VueAnnonces extends BorderPane {
         }
     }
 
-    private void afficheAnnoncePrixDecroissante() throws SQLException {
+    private void afficheAnnoncePrixDecroissante() throws SQLException, IOException {
         try {
             System.out.println("idAnnonce1"+this.idAnnonce);
             this.idAnnonce.clear();
@@ -145,22 +158,22 @@ public class VueAnnonces extends BorderPane {
         }
     }
 
-    private void afficheAnnonce() throws SQLException {
+    private void afficheAnnonce() throws SQLException, ClassNotFoundException, IOException {
         this.idAnnonce.clear();
         //this.idAnnonce = TriDateDecroissant();
         this.gridPane.getChildren().clear();
         int nbAnnonce = this.idAnnonce.size();
         for (int i = 0; i < nbAnnonce; i++) {
-            this.gridPane.add(new Annonce(this.main, i), 0, i);
+            this.gridPane.add(new Annonce(this.main, i+1), 0, i);
             System.out.println(this.idAnnonce.get(i));
         }
     }
 
-    private void afficheAnnonceSansTri() throws SQLException {
+    private void afficheAnnonceSansTri() throws SQLException, ClassNotFoundException, IOException {
         recupereIdAnnnce();
         int nbAnnonce = this.idAnnonce.size();
         for (int i = 0; i < nbAnnonce; i++) {
-            this.gridPane.add(new Annonce(this.main, i), 0, i + 1);
+            this.gridPane.add(new Annonce(this.main, i+1), 0, i);
         }
     }
 
