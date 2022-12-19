@@ -4,6 +4,7 @@
  */
 package fr.insa.strasbourg.zerr.projetEnchere.FX.vues;
 
+import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 
 /**
@@ -11,10 +12,18 @@ import javafx.scene.layout.BorderPane;
  * @author jules
  */
 public class VueCarte extends BorderPane{
+    private FenetrePrincipale main;
+    private Button bRetour;
 
-    public VueCarte() {
-        this.setPrefSize(200, 200);
+    public VueCarte(FenetrePrincipale main) {
+        this.main = main ;
+        this.bRetour = new Button("Retour à l'inscription");
+        this.setPrefSize(500, 400);
         this.setStyle("-fx-background-color:white");
+        this.bRetour.setOnAction((t) -> {
+            this.main.setCenter(new VueInscription(this.main));
+        });
+        this.setTop(this.bRetour);
     }
     
     

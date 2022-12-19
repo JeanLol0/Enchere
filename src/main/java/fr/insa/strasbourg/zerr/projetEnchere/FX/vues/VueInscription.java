@@ -37,11 +37,11 @@ public class VueInscription extends GridPane {
     
     private Button bInscription;
     private Button bLogin;
+    private Button bChoixPos;
 
     private Label lInscription;
     
-    private VueCarte carte;
-
+   
     public VueInscription(FenetrePrincipale main) {
         this.main = main;
         this.setId("vue-connexion-inscription");
@@ -50,7 +50,7 @@ public class VueInscription extends GridPane {
         this.tfPrenom = new TextField();
         this.tfEmail = new TextField();
         
-        this.carte = new VueCarte();
+       
 
         this.tfNom.setPromptText("Nom");
         this.tfPrenom.setPromptText("Prenom");
@@ -64,6 +64,11 @@ public class VueInscription extends GridPane {
         
         this.bLogin = new Button("Connection");
         this.bLogin.setId("bouton-vert");
+        
+        this.bChoixPos = new Button("Choisir ma position");
+        this.bChoixPos.setOnAction((t) -> {
+            this.main.setCenter(new VueCarte(this.main));
+        });
 
         this.lInscription = new Label("Inscription");
         this.lInscription.setId("grand-texte");
@@ -73,7 +78,7 @@ public class VueInscription extends GridPane {
         this.add(this.tfPrenom, 0, 11);
         this.add(this.tfEmail, 0, 12);
         this.add(this.pfPass, 0, 13);
-        this.add(this.carte, 0, 14);
+        this.add(this.bChoixPos, 0, 14);
         this.add(this.bInscription, 0, 15);
         this.add(this.bLogin, 0, 16);
 
