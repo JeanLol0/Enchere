@@ -1204,9 +1204,9 @@ public class BDD {
 
     }
 
-    public static long getHeuresRestantes(Timestamp debut, Timestamp fin) {
-        LocalDateTime debut1 = debut.toLocalDateTime();
-        LocalDateTime fin1 = debut.toLocalDateTime();
+    public static long getHeuresRestantes( Timestamp fin) {
+        LocalDateTime debut1 = LocalDateTime.now();
+        LocalDateTime fin1 = fin.toLocalDateTime();
         long diffHeures = fin1.until(debut1, ChronoUnit.HOURS);
         while (diffHeures >= 8760) {
             diffHeures = diffHeures - 8760;
@@ -1220,9 +1220,9 @@ public class BDD {
         return diffHeures;
     }
 
-    public static long getMinutesRestantes(Timestamp debut, Timestamp fin) {
-        LocalDateTime debut1 = debut.toLocalDateTime();
-        LocalDateTime fin1 = debut.toLocalDateTime();
+    public static long getMinutesRestantes(Timestamp fin) {
+        LocalDateTime debut1 = LocalDateTime.now();
+        LocalDateTime fin1 = fin.toLocalDateTime();
         long diffMinutes = fin1.until(debut1, ChronoUnit.MINUTES);
         while (diffMinutes >= 525600) {
             diffMinutes = diffMinutes - 525600;
@@ -1239,9 +1239,9 @@ public class BDD {
         return diffMinutes;
     }
 
-    public static long getJoursRestants(Timestamp debut, Timestamp fin) {
-        LocalDateTime debut1 = debut.toLocalDateTime();
-        LocalDateTime fin1 = debut.toLocalDateTime();
+    public static long getJoursRestants(Timestamp fin) {
+        LocalDateTime debut1 = LocalDateTime.now();
+        LocalDateTime fin1 = fin.toLocalDateTime();
         long diffJours = fin1.until(debut1, ChronoUnit.MINUTES);
         while (diffJours >= 365) {
             diffJours = diffJours - 365;
@@ -1252,9 +1252,9 @@ public class BDD {
         return diffJours;
     }
 
-    public static long getSecondesRestantes(Timestamp debut, Timestamp fin) {
-        LocalDateTime debut1 = debut.toLocalDateTime();
-        LocalDateTime fin1 = debut.toLocalDateTime();
+    public static long getSecondesRestantes(Timestamp fin) {
+        LocalDateTime debut1 = LocalDateTime.now();
+        LocalDateTime fin1 = fin.toLocalDateTime();
         long diffSecondes = fin1.until(debut1, ChronoUnit.SECONDS);
         while (diffSecondes >= 31536008) {
             diffSecondes = diffSecondes - 31536008;
