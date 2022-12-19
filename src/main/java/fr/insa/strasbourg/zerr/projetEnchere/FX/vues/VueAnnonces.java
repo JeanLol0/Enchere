@@ -20,6 +20,7 @@ import java.util.logging.Logger;
 import javafx.geometry.Pos;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Text;
 
 /**
  *
@@ -58,7 +59,7 @@ public class VueAnnonces extends BorderPane {
                     Logger.getLogger(VueAnnonces.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (IOException ex) {
                     Logger.getLogger(VueAnnonces.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                } 
             }
             if ("Prix décroissant".equals(typeTri)) {
                 System.out.println("Desc");
@@ -128,10 +129,10 @@ public class VueAnnonces extends BorderPane {
         }
     }
 
-    private void recupereIdAnnnce()
+    private void recupereIdAnnonce()
             throws SQLException {
-        try (Statement st = this.con.createStatement()) {
-            ResultSet res = st.executeQuery("select id from objet");
+        try (PreparedStatement st = this.con.prepareStatement("select id from objet")) {
+            ResultSet res = st.executeQuery();
             while (res.next()) {
                 this.idAnnonce.add(res.getInt("id"));
                 //System.out.println("ids recupéré nb:" + this.idAnnonce.size());
@@ -170,10 +171,11 @@ public class VueAnnonces extends BorderPane {
     }
 
     private void afficheAnnonceSansTri() throws SQLException, ClassNotFoundException, IOException {
-        recupereIdAnnnce();
+        recupereIdAnnonce();
         int nbAnnonce = this.idAnnonce.size();
         for (int i = 0; i < nbAnnonce; i++) {
             this.gridPane.add(new Annonce(this.main, i+1), 0, i);
+            System.out.println(this.idAnnonce.get(i));
         }
     }
 

@@ -56,12 +56,10 @@ public class Annonce extends HBox {
         recupereObjet(this.id);
         System.out.println(this.stringImage);
         System.out.println(this.id);
-        if (this.image != null) {
             this.image = texteEnImage(this.stringImage);
             this.imageV= new ImageView(this.image);
-            
-
-//        System.out.println("joure fin "+this.fin.getDay());
+            System.out.println("1");
+            //        System.out.println("joure fin "+this.fin.getDay());
 //        System.out.println("heure fin "+this.fin.getHours());
 //        System.out.println("minutes fin "+this.fin.getMinutes());
 //        System.out.println("sec fin "+this.fin.getSeconds());
@@ -75,34 +73,14 @@ public class Annonce extends HBox {
             //this.restant = tempsRestant(debut, fin);
             //long time = this.restant.getTime();
             Timer ti = new Timer();
+            System.out.println("2");
 
             Label timeLabel = new Label();
             DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
 
-//        Timeline tempsRestant = new Timeline(new KeyFrame(Duration.seconds(1), (t) -> {
-//            Timestamp mtn = new Timestamp(System.currentTimeMillis());
-//
-//            Timestamp sec = secRestant(mtn, fin);
-//            Timestamp min = minRestant(mtn, fin);
-//            Timestamp heure = hRestant(mtn, fin);
-//            Timestamp jour = jourRestant(mtn, fin);
-//            long secR = sec.getTime();
-//            long minR = min.getTime() ;
-//            long heureR = heure.getTime() ;
-//            long jourR = jour.getTime() ;
-//            
-//            LocalDateTime ldt = LocalDateTime.now();
-//            LocalDateTime ldt3 = this.fin.toLocalDateTime();
-//            long diffH = ldt.until(ldt3, ChronoUnit.HOURS);
-//           timeLabel.setText("temps restant: " +jourR+" jours, "+heureR+" heures, "+minR+" minutes, "+ secR + " sec");
-//            //timeLabel.setText("temps restant: " );
-//            System.out.println();
-//        }));
-//        
-//        
-//        tempsRestant.setCycleCount(Animation.INDEFINITE);
-//        tempsRestant.play();
+
             this.grid.add(new Text(this.titre), 0, 0);
+            System.out.println(this.titre);
             this.grid.add(new Text("Prix de base : "), 0, 2);
             this.grid.add(new Text(String.valueOf(this.prixDeBase)), 1, 2);
             this.grid.add(new Text("Catégorie : "), 0, 3);
@@ -112,7 +90,7 @@ public class Annonce extends HBox {
             //this.add(timeLabel, 0, 6);
             this.getChildren().addAll(this.imageV,this.grid);
             //StylesCSS.ThemeAnnonce(this);
-        }
+        
     }
 
     private void recupereObjet(int id)
@@ -187,3 +165,26 @@ public class Annonce extends HBox {
     }
 
 }
+//        Timeline tempsRestant = new Timeline(new KeyFrame(Duration.seconds(1), (t) -> {
+//            Timestamp mtn = new Timestamp(System.currentTimeMillis());
+//
+//            Timestamp sec = secRestant(mtn, fin);
+//            Timestamp min = minRestant(mtn, fin);
+//            Timestamp heure = hRestant(mtn, fin);
+//            Timestamp jour = jourRestant(mtn, fin);
+//            long secR = sec.getTime();
+//            long minR = min.getTime() ;
+//            long heureR = heure.getTime() ;
+//            long jourR = jour.getTime() ;
+//            
+//            LocalDateTime ldt = LocalDateTime.now();
+//            LocalDateTime ldt3 = this.fin.toLocalDateTime();
+//            long diffH = ldt.until(ldt3, ChronoUnit.HOURS);
+//           timeLabel.setText("temps restant: " +jourR+" jours, "+heureR+" heures, "+minR+" minutes, "+ secR + " sec");
+//            //timeLabel.setText("temps restant: " );
+//            System.out.println();
+//        }));
+//        
+//        
+//        tempsRestant.setCycleCount(Animation.INDEFINITE);
+//        tempsRestant.play();
