@@ -4,16 +4,16 @@
  */
 package fr.insa.strasbourg.zerr.projetEnchere.FX;
 
-import fr.insa.strasbourg.zerr.projetEnchere.FX.vues.VueInscription;
-import fr.insa.strasbourg.zerr.projetEnchere.FX.vues.VueLogin;
 import fr.insa.strasbourg.zerr.projetEnchere.FX.vues.FenetrePrincipale;
+import fr.insa.strasbourg.zerr.projetEnchere.FX.vues.VueLogin;
 import java.io.InputStream;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
 /**
@@ -34,6 +34,7 @@ public class MainFX extends Application {
         if (complet != null) {
             stage.getIcons().add(new Image(complet));
         }
+        
         
         this.mainVue = new FenetrePrincipale(stage);
          

@@ -49,6 +49,8 @@ public class TopBar extends HBox {
     private MenuItem miAnnonce;
 
     private MenuButton menuUser;
+    
+    
 
     public TopBar(FenetrePrincipale main) {
         ImageView imageView = this.getIcon("ressources/user.png",25,25);

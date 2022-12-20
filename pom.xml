@@ -14,7 +14,7 @@
 
 
     <dependencies>
-   
+        
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
@@ -107,7 +107,7 @@
                     <noHeaderFiles>true</noHeaderFiles>
                     <stripDebug>true</stripDebug>
                     <noManPages>true</noManPages>
-                    <mainClass>fr.insa.strasbourg.zerr.projetEnchere.FX.MainFX</mainClass>
+                    <mainClass>fr.insa.strasbourg.zerr.projetEnchere.FX.test</mainClass>
                     <launcher>TutoVideoDessin</launcher>
                     <jlinkImageName>amourFX</jlinkImageName>
                     <!-- pour zipper le dossier image
