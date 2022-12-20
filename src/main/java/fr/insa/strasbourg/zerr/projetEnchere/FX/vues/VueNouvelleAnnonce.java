@@ -10,7 +10,6 @@ import fr.insa.strasbourg.zerr.projetEnchere.FX.composants.VueImage;
 import fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD;
 
 import fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.SessionInfo;
-import static java.awt.SystemColor.window;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -21,11 +20,11 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.temporal.ChronoUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.value.ObservableValue;
-import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -54,12 +53,9 @@ public class VueNouvelleAnnonce extends ScrollPane {
     private GridPane gridMain;
     private Text titre;
     private TextField tfTitre;
-    
-    
-    
-    
+
     private VueImage image;
-    
+
     private RadioButton rbDuree;
     private RadioButton rbProgramme;
 
@@ -77,19 +73,25 @@ public class VueNouvelleAnnonce extends ScrollPane {
     private Integer proposerPar;
     private Button bCreerAnnonce;
 
-    // private DateTimePicker dtPicker;
+    private Text tTitre;
+    private Text tPrix;
+    private Text tCategorie;
+    private Text tPhoto;
+    private Text tDescr;
+
     private SessionInfo sessionInfo;
 
     public VueNouvelleAnnonce(FenetrePrincipale main) throws IOException {
         this.main = main;
-        this.gridMain =new GridPane();
+        this.gridMain = new GridPane();
+        this.gridMain.setId("vue-nouvelle-annonce");
         this.gridMain.setAlignment(Pos.CENTER);
         this.setFitToWidth(true);
         this.rbDuree = new RadioButton("Définir la durée de l'enchère");
         this.rbProgramme = new RadioButton("Programmer le début et la fin de la vente");
         this.bCreerAnnonce = new Button("Mettre en ligne");
         this.rbProgramme.setOnAction((t) -> {
-            insererLigne(9,2);
+            insererLigne(9, 2);
             this.gridMain.add(this.dDebut, 0, 9);
             this.gridMain.add(this.tDebut, 1, 9);
             this.gridMain.add(this.dFin, 0, 10);
@@ -97,32 +99,24 @@ public class VueNouvelleAnnonce extends ScrollPane {
             this.rbProgramme.setDisable(true);
         });
         this.rbDuree.setOnAction((t) -> {
-            if(this.rbProgramme.isSelected()){
-            insererLigne(12,1);
-            this.gridMain.add(new Label("TODO"), 0, 12);
-            
-            this.rbDuree.setDisable(true);
+            if (this.rbProgramme.isSelected()) {
+                insererLigne(12, 1);
+                this.gridMain.add(new Label("TODO"), 0, 12);
+
+                this.rbDuree.setDisable(true);
             }
         });
 
         this.sessionInfo = this.main.getSessionInfo();
         this.tfTitre = new TextField("Titre de l'annonce");
         this.taDescription = new TextArea("Dercription de l'objet");
-//        this.taDescription.setMaxHeight(120);
-//        this.taDescription.setPrefWidth(300);
         this.taDescription.setWrapText(true);
-//this.dtPicker = new DateTimePicker();
-
-        this.dDebut = new DatePicker(LocalDate.MIN);
-        this.dFin = new DatePicker(LocalDate.MIN);
+        this.dDebut = new DatePicker(LocalDate.now());
+        this.dFin = new DatePicker(LocalDate.now());
         this.tDebut = new TimePicker();
         this.tFin = new TimePicker();
-        
 
-        this.dDebut.setValue(LocalDate.now());
-
-        final Callback<DatePicker, DateCell> dayCellFactory
-                = (final DatePicker datePicker) -> new DateCell() {
+        final Callback<DatePicker, DateCell> dayCellFactory = (final DatePicker datePicker) -> new DateCell() {
 
             public void updateItem(LocalDate item, boolean empty) {
                 super.updateItem(item, empty);
@@ -130,9 +124,9 @@ public class VueNouvelleAnnonce extends ScrollPane {
                     setDisable(true);
                     setStyle("-fx-background-color: #ffc0cb;");
                 }
-                long p = ChronoUnit.DAYS.between(dDebut.getValue(), item);//temps entre les deux dates 
-                //todo 
+                long p = ChronoUnit.DAYS.between(dDebut.getValue(), item);//temps entre les deux dates
 
+                //todo 
             }
         };
 
@@ -147,34 +141,39 @@ public class VueNouvelleAnnonce extends ScrollPane {
                 prixBase.setText(oldValue);
             }
         });
+        
+        this.tTitre = new Text("Définir le titre");
+        this.tCategorie = new Text("Ajouter une photo");
+        this.tDescr = new Text("Ajouter une déscription");
+        this.tPrix = new Text("Définir le prix de départ");
+        this.tPhoto = new Text("Définir une catégorie");
+        this.tTitre.setId("grand-text-annonce");
+        this.tCategorie.setId("grand-text-annonce");
+        this.tDescr.setId("grand-text-annonce");
+        this.tPrix.setId("grand-text-annonce");
+        this.tPhoto.setId("grand-text-annonce");
+        
         this.bCreerAnnonce = new Button("Mettre en ligne");
-        this.categorie = new TextField("n° catégorie --> TODO");
         this.categories = new Categories(this.main);
         this.image = new VueImage();
-        
-        Pane re = new Pane();
-        re.getChildren().add(this.categories);
-        re.setPrefHeight(200);
 
         gridMain.setVgap(20);
         gridMain.setHgap(20);
         gridMain.setAlignment(Pos.TOP_CENTER);
 
-        
-        
-          this.gridMain.add(new Label("Titre"), 0, 0, 2, 1);
-          this.gridMain.add(this.tfTitre, 0, 1, 2, 1);
-          this.gridMain.add(new Label("Ajouter une photo"), 0,2, 2, 1);
-          this.gridMain.add(this.image, 0, 3);
-          this.gridMain.add(new Label("Ajouter une déscription"), 0, 4, 2, 1);
-          this.gridMain.add(this.taDescription, 0, 5, 2, 1);
-          this.gridMain.add(new Label("Définir le prix de départ"), 0, 6, 2, 1);
-          this.gridMain.add(this.prixBase, 0, 7, 2, 1);
-          this.gridMain.add(this.rbProgramme, 0, 8, 2, 1);
-          this.gridMain.add(this.rbDuree, 0, 9, 2, 1);
-          this.gridMain.add(new Label("Définir une catégorie"), 0, 10, 2, 1);
-          this.gridMain.add(this.categories, 0, 11, 2, 1);
-          this.gridMain.add(this.bCreerAnnonce, 0, 12);
+        this.gridMain.add(this.tTitre, 0, 0, 2, 1);
+        this.gridMain.add(this.tfTitre, 0, 1, 2, 1);
+        this.gridMain.add(this.tPhoto, 0, 2, 2, 1);
+        this.gridMain.add(this.image, 0, 3, 2, 1);
+        this.gridMain.add(this.tDescr, 0, 4, 2, 1);
+        this.gridMain.add(this.taDescription, 0, 5, 2, 1);
+        this.gridMain.add(this.tPrix, 0, 6, 2, 1);
+        this.gridMain.add(this.prixBase, 0, 7, 2, 1);
+        this.gridMain.add(this.rbProgramme, 0, 8, 2, 1);
+        this.gridMain.add(this.rbDuree, 0, 9, 2, 1);
+        this.gridMain.add(this.tCategorie, 0, 10, 2, 1);
+        this.gridMain.add(this.categories, 0, 11, 2, 1);
+        this.gridMain.add(this.bCreerAnnonce, 0, 12);
 //        gridMain.add(this.tfTitre, 0, 0);
 //        gridMain.add(new Text("Début de l'enchère"), 0, 1);
 //        gridMain.add(this.dDebut, 1, 1);
@@ -192,10 +191,15 @@ public class VueNouvelleAnnonce extends ScrollPane {
 //        gridMain.add(new Text("Définir une catégorie"), 3, 0);
 //        gridMain.add(re, 3  , 1);
 //        gridMain.add(this.bCreerAnnonce, 3, 6);
-        
+
         this.setContent(this.gridMain);
 
         this.bCreerAnnonce.setOnAction((t) -> {
+            LocalDateTime ldt = LocalDateTime.now();
+            LocalDate d1 = LocalDate.of(2014, Month.JULY, 4);
+            LocalDate d2 = LocalDate.of(2014, Month.DECEMBER, 25);
+            System.out.println(ChronoUnit.DAYS.between(d1, d2));//temps entre les deux dates);
+            System.out.println(this.dFin.getValue().getYear());//temps entre les deux dates);
             try {
                 doMiseEnLigne();
             } catch (FileNotFoundException ex) {
@@ -206,26 +210,24 @@ public class VueNouvelleAnnonce extends ScrollPane {
                 Logger.getLogger(VueNouvelleAnnonce.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
-        
-        
+
         this.image.setOnDragOver((final DragEvent event) -> {
             this.image.mouseDragOver(event);
         });
-        
+
         this.image.setOnDragDropped((final DragEvent event) -> {
             this.image.mouseDragDropped(event);
         });
 
-         this.image.setOnDragExited((final DragEvent event) -> {
-             this.image.getContentPane().setStyle("-fx-border-color: #C6C6C6;");
+        this.image.setOnDragExited((final DragEvent event) -> {
+            this.image.getContentPane().setStyle("-fx-border-color: #C6C6C6;");
         });
-         this.image.setOnMouseClicked(e->{
-             FileChooser fileChooser = new FileChooser();
-             fileChooser.setTitle("Open Resource File");
-             File file = fileChooser.showOpenDialog(getContextMenu());
-             this.image.mouseClicked(file);
-         });
-        
+        this.image.setOnMouseClicked(e -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Open Resource File");
+            File file = fileChooser.showOpenDialog(getContextMenu());
+            this.image.mouseClicked(file);
+        });
 
     }
 
@@ -249,15 +251,11 @@ public class VueNouvelleAnnonce extends ScrollPane {
                 int dayF = dFin.getValue().getDayOfMonth();
                 int heureF = tFin.getHeure();
                 int minuteF = tFin.getMinute();
-                System.out.println(categorie);
-                int categorie = getIdCategorie(this.categories.getTextCategorieSelected());
+                int idcategorie = getIdCategorie(this.categories.getTextCategorieSelected());
                 Image img = image.getImage();
-                BDD.createObjet(con, titre,
-                        new Timestamp(yearD, monthD, dayD, heureD, minuteD, 0, 0),
-                        new Timestamp(yearF, monthF, dayF, heureF, minuteF, 0, 0),
-                        Integer.parseInt(this.prixBase.getText()), categorie, this.sessionInfo.getUserID(),"Texte",img);
-                //ici à la place cu null il faut mettre l'image en format image
-                System.out.println("annonce créé");
+                Timestamp t1 = Timestamp.valueOf(LocalDateTime.of(yearD, monthD, dayD, heureD, minuteD));
+                Timestamp t2 = Timestamp.valueOf(LocalDateTime.of(yearF, monthF, dayF, heureF, minuteF));
+                BDD.createObjet(con, titre, t1, t2, Integer.parseInt(this.prixBase.getText()), idcategorie, this.sessionInfo.getUserID(), "Texte", img);
                 this.main.setCenter(new VuePrincipale(this.main));
             }
         } catch (SQLException ex) {
@@ -265,35 +263,31 @@ public class VueNouvelleAnnonce extends ScrollPane {
         }
 
     }
-    public int getIdCategorie(String textCat) throws SQLException{
-        Connection con =this.main.getBDD();
-        try ( PreparedStatement st = con.prepareCall("select id from categorie where nom = ?")) {
+
+    public int getIdCategorie(String textCat) throws SQLException {
+        Connection con = this.main.getBDD();
+        try (PreparedStatement st = con.prepareCall("select id from categorie where nom = ?")) {
             st.setString(1, textCat);
             ResultSet res = st.executeQuery();
             if (res.next()) {
-            return res.getInt("id");
+                return res.getInt("id");
             } else {
-            JavaFXUtils.showErrorInAlert("Erreur", "Selectionner une catégorie", "blabla"); 
-            return -1;
+                JavaFXUtils.showErrorInAlert("Erreur", "Selectionner une catégorie", "blabla");
+                return -1;
             }
-        
-    }
-        
-    }
 
-    private void insererLigne( int pos,int count) {
-        for (Node child : this.gridMain.getChildren()) {
-          if(GridPane.getRowIndex(child) >=pos){ 
-        Integer rowIndex = GridPane.getRowIndex(child);
-        GridPane.setRowIndex(child, rowIndex  == null ? count : count + rowIndex );
-    }
         }
 
     }
 
-    
-    
-    
-   
-}
+    private void insererLigne(int pos, int count) {
+        for (Node child : this.gridMain.getChildren()) {
+            if (GridPane.getRowIndex(child) >= pos) {
+                Integer rowIndex = GridPane.getRowIndex(child);
+                GridPane.setRowIndex(child, rowIndex == null ? count : count + rowIndex);
+            }
+        }
 
+    }
+
+}

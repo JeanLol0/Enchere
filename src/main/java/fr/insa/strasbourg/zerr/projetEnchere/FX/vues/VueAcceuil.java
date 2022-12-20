@@ -8,8 +8,10 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Text;
 
 /**
  *
@@ -17,14 +19,24 @@ import javafx.scene.layout.GridPane;
  */
 public class VueAcceuil extends GridPane{
     private FenetrePrincipale main;
-    private Button bAfficheAnnonce;
+    private Button bAffAnnonce;
+    private Button bAffMesAnnonces;
+    private Button bAffMesEnchere;
+    private Text tBienvenue;
 
     public VueAcceuil(FenetrePrincipale main) {
+        this.setAlignment(Pos.TOP_CENTER);
         this.main = main;
         this.setId("vue-acceuil"); 
-        this.bAfficheAnnonce = new Button("Afficher les annonces en cours ");
-        this.add(this.bAfficheAnnonce, 0, 0);
-        this.bAfficheAnnonce.setOnAction((t) -> {
+        this.bAffAnnonce = new Button("Afficher les annonces en cours ");
+        this.bAffMesAnnonces = new Button("Afficher mes annonces en cours ");
+        this.bAffMesEnchere = new Button("Afficher mes encheres en cours ");
+        this.tBienvenue = new Text("Bienvenue");
+        this.add(this.tBienvenue, 0, 0);
+        this.add(this.bAffAnnonce, 0, 4);
+        this.add(this.bAffMesAnnonces, 0, 6);
+        this.add(this.bAffMesEnchere, 0, 8);
+        this.bAffAnnonce.setOnAction((t) -> {
             try {
                 this.main.setCenter(new VuePrincipale(this.main));
             } catch (SQLException ex) {

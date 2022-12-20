@@ -24,6 +24,7 @@ public class VuePrincipale extends ScrollPane {
     public VuePrincipale(FenetrePrincipale main) throws SQLException, ClassNotFoundException, IOException {
         this.main = main;
         this.setContent(new VueAnnonces(this.main));
+        this.setFitToWidth(true);
         //this.topBar = new TopBar(main);
         
         

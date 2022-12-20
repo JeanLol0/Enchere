@@ -30,6 +30,7 @@ public class BarRecherche extends HBox {
     private TextField tfRecherche;
 
     public BarRecherche(FenetrePrincipale main) {
+        this.setId("bar-recherche");
         String c1 = "Prix croissant";
         String c2 = "Prix décroissant";
         String c3 = "Dates croissante";
@@ -57,7 +58,7 @@ public class BarRecherche extends HBox {
         this.tfRecherche.setPrefWidth(200);
         
         this.center = new HBox();
-        this.center.getChildren().addAll(new Text("Catégorie"),this.categorieCombo,this.tfRecherche,this.bRecherche,new Label("Trier par :"),this.trieCombo);
+        this.center.getChildren().addAll(new Label("Catégorie"),this.categorieCombo,this.tfRecherche,this.bRecherche,new Label("Trier par :"),this.trieCombo);
         
         this.getChildren().addAll(this.center);
         JavaFXUtils.addSimpleBorder(this);

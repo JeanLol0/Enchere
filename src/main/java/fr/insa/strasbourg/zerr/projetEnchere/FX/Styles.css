@@ -7,23 +7,73 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     Author     : jules
 */
 
-#grille-annonce >.text-field .text{  -fx-font-size: 22px;  }
+/*#grille-annonce >.text-field .text{  -fx-font-size: 22px;  }*/
 
-   
+
 
 #vue-connexion-inscription{
     -fx-background-color:#252525;
     -fx-font-size: 22px;
     
 }
+#annonce {
+    -fx-font-family: Segoe UI;
+    -fx-font-size: 25px;
+    -fx-letter-spacing: 1px;
+    -fx-word-spacing: 4px;
+    -fx-color: #241f31;
+    -fx-font-weight: bold;
+    -fx-text-decoration: none;
+    -fx-font-style: normal;
+    -fx-font-variant: normal;
+    -fx-text-transform: none;
+    -fx-vgap: 10px;
+    -fx-hgap: 30px;
+    -fx-border-insets: 30 ;
+    -fx-border:2px double black;
+    -fx-border-color: blue ;
+    -fx-border-width: 3 ; 
+    -fx-border-radius:10px;
+    -fx-spacing: 10;
+    -fx-padding: 10 30 10 30;
+}
+
+
+#grand-text-annonce {
+    -fx-font-size: 40px;
+    -fx-text-fill: red;
+}
+#vue-nouvelle-annonce {
+    -fx-font-family: Segoe UI;
+    -fx-font-size: 25px;
+    -fx-letter-spacing: 1px;
+    -fx-word-spacing: 4px;
+    -fx-color: #241f31;
+    -fx-font-weight: bold;
+    -fx-text-decoration: none;
+    -fx-font-style: normal;
+    -fx-font-variant: normal;
+    -fx-text-transform: none;
+    -fx-background-color:#c1d2ff;
+    
+}
+
+
 #vue-connexion-inscription>.label {-fx-text-fill: white;}
 
 #grand-texte{
     -fx-font-size: 50px;
 }
 
+
 #vue-acceuil{
     -fx-background-color:#c1d2ff;
+}
+
+#bar-recherche{
+    -fx-background-color:#c1d2ff;
+    -fx-font-size: 25px;
+    -fx-padding: 9 9 9 9;
 }
 
 #bouton-vert{
@@ -68,42 +118,4 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 .button {     
    
      -fx-font-size: 25px; 
-     
-     
-}/*
-
-.button:hover {
-  -fx-background-color: linear-gradient(#2a5058, #61a2b1);
-}*/
-/*
-.text{
-    -fx-backgroung-color : forestgreen;
 }
-
-.hbox  > .button {  -fx-text-fill: black;  }
-
-.root {
-  This applies styling for the root node
-  -fx-background-color: linear-gradient(
-    from 0% 0% to 100% 200%,
-    repeat,
-    #fbeee6 0%,
-    #cde0c9 50%
-  );
-  -fx-font-family: "Lucida Console";
-}
-
-.label {
-   Styling for all Control with the class of 'label' 
-  -fx-padding: -2px;
-  -fx-start-margin: 2px;
-  -fx-end-margin: 2pt;
-}
-
-.guide-link {
-  Unique class customized by user
-}
-
-#btn {
-  -fx-font-family: "Chilanka";
-}*/

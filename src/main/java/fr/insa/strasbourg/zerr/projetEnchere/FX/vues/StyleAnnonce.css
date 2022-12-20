@@ -1,0 +1,21 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : 19 déc. 2022, 22:50:13
+    Author     : jules
+*/
+
+#text-annonce  {
+font-family: Segoe UI;
+font-size: 25px;
+letter-spacing: 1px;
+word-spacing: 4px;
+color: #000000;
+font-weight: bold;
+text-decoration: none;
+font-style: normal;
+font-variant: normal;
+text-transform: none;
+}

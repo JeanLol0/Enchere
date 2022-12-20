@@ -5,8 +5,9 @@
 package fr.insa.strasbourg.zerr.projetEnchere.FX.vues;
 
 import fr.insa.strasbourg.zerr.projetEnchere.FX.JavaFXUtils;
-import fr.insa.strasbourg.zerr.projetEnchere.FX.StylesCSS;
 import static fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD.createUtilisateur;
+import java.io.File;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -17,8 +18,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 
 /**
  *
@@ -41,6 +46,8 @@ public class VueInscription extends GridPane {
 
     private Label lInscription;
     
+    private Circle avatar;
+    
    
     public VueInscription(FenetrePrincipale main) {
         this.main = main;
@@ -49,8 +56,9 @@ public class VueInscription extends GridPane {
         this.tfNom = new TextField();
         this.tfPrenom = new TextField();
         this.tfEmail = new TextField();
+        this.avatar = new Circle(40, 40, 40);
+        this.avatar.setFill(new ImagePattern(getImage("ressources/user.png")));
         
-       
 
         this.tfNom.setPromptText("Nom");
         this.tfPrenom.setPromptText("Prenom");
@@ -66,6 +74,8 @@ public class VueInscription extends GridPane {
         this.bLogin.setId("bouton-vert");
         
         this.bChoixPos = new Button("Choisir ma position");
+        this.bChoixPos.setId("bouton-rouge");
+        
         this.bChoixPos.setOnAction((t) -> {
             this.main.setCenter(new VueCarte(this.main));
         });
@@ -73,20 +83,24 @@ public class VueInscription extends GridPane {
         this.lInscription = new Label("Inscription");
         this.lInscription.setId("grand-texte");
 
-        this.add(this.lInscription, 0, 5);
-        this.add(this.tfNom, 0, 10);
-        this.add(this.tfPrenom, 0, 11);
-        this.add(this.tfEmail, 0, 12);
-        this.add(this.pfPass, 0, 13);
-        this.add(this.bChoixPos, 0, 14);
-        this.add(this.bInscription, 0, 15);
-        this.add(this.bLogin, 0, 16);
+        this.add(this.lInscription, 0, 0);
+        this.add(this.avatar, 0, 4);
+        this.add(this.tfNom, 0, 5);
+        this.add(this.tfPrenom, 0, 6);
+        this.add(this.tfEmail, 0, 7);
+        this.add(this.pfPass, 0, 8);
+        this.add(this.bChoixPos, 0, 9);
+        this.add(this.bInscription, 0, 10);
+        this.add(this.bLogin, 0, 11);
 
         this.setVgap(20);
-        this.setAlignment(Pos.TOP_CENTER);
+        this.setAlignment(Pos.CENTER);
         this.bInscription.setMaxWidth(Double.MAX_VALUE);
         this.bLogin.setMaxWidth(Double.MAX_VALUE);
+        this.bChoixPos.setMaxWidth(Double.MAX_VALUE);
         this.setHalignment(this.lInscription, HPos.CENTER);
+        this.setHalignment(this.avatar, HPos.CENTER);
+        
 
         JavaFXUtils.DesactiveAutoFocus(tfNom);
         JavaFXUtils.DesactiveAutoFocus(tfEmail);
@@ -100,6 +114,11 @@ public class VueInscription extends GridPane {
         
         this.bLogin.setOnAction((t) -> {
             this.main.setCenter(new VueLogin(main));
+        });
+        this.avatar.setOnMouseClicked((t) -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Open Resource File");
+            
         });
 
     }
@@ -121,5 +140,12 @@ public class VueInscription extends GridPane {
         }
 
     }
+    private Image getImage(String resourcePath) {
+        InputStream input //
+                = this.getClass().getResourceAsStream(resourcePath);
+        Image image = new Image(input);
+        return image;
+    }
+    
 
 }
