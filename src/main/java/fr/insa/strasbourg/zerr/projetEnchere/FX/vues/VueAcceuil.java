@@ -36,6 +36,7 @@ public class VueAcceuil extends GridPane{
         this.add(this.bAffAnnonce, 0, 4);
         this.add(this.bAffMesAnnonces, 0, 6);
         this.add(this.bAffMesEnchere, 0, 8);
+        
         this.bAffAnnonce.setOnAction((t) -> {
             try {
                 this.main.setCenter(new VuePrincipale(this.main));
@@ -46,6 +47,14 @@ public class VueAcceuil extends GridPane{
             } catch (IOException ex) {
                 Logger.getLogger(VueAcceuil.class.getName()).log(Level.SEVERE, null, ex);
             }
+        });
+        
+        this.bAffMesAnnonces.setOnAction((t) -> {
+            this.main.setCenter(new VueMesAnnonces(this.main));
+        });
+        
+        this.bAffMesEnchere.setOnAction((t) -> {
+            this.main.setCenter(new VueMesEnchere(this.main));
         });
     }
     

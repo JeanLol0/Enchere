@@ -40,7 +40,7 @@ public class test extends Application {
             public void handle(ActionEvent event) {
                 String url = "https://www.google.fr/maps/@48.0446971,7.1368704,14z?hl=fr&authuser=0";
                 // Load a page from remote url.
-                webEngine.load(url);
+                webEngine.load(getClass().getResource("carte.html").toString());
             }
         });
 

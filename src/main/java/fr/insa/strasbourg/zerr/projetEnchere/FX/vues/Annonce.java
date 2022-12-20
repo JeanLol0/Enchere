@@ -26,7 +26,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.text.Text;
 import javax.imageio.ImageIO;
 
 /**
@@ -108,6 +107,12 @@ public class Annonce extends HBox {
         }));
         tempsRestant.setCycleCount(Animation.INDEFINITE);
         tempsRestant.play();
+        
+        this.tTitre.setOnMouseClicked((t) -> {
+            //this.main.setCenter(new VueAnnonceDetaille(this.main, this.id, tTitre, tTempsR, tPrix, categorie, tVendeur, tTempsR, imageV));
+            this.main.setCenter(new VueAnnonceDetaille(main, grid, this.id,this.imageV));
+        });
+        
     }
 
     private void recupereObjet(int id)
