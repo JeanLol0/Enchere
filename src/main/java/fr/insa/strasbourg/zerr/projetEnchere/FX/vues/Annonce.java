@@ -17,6 +17,8 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Base64;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -76,10 +78,10 @@ public class Annonce extends HBox {
         this.tVendeur = new Label("Nom du vendeur :");
         this.tTitre = new Label(this.titre);
         this.tTempsR = new Label("Temps restant :");
-        
+
         this.tTitre.setId("grand-text-annonce");
-        
-        this.grid.add(this.tTitre, 0, 0,2,1);
+
+        this.grid.add(this.tTitre, 0, 0, 2, 1);
         this.grid.add(tPrix, 0, 2);
         this.grid.add(prixActuel, 1, 2);
         this.grid.add(tCategorie, 0, 3);
@@ -90,34 +92,19 @@ public class Annonce extends HBox {
         this.grid.add(tTime, 1, 5);
         this.getChildren().addAll(this.imageV, this.grid);
 
-        Timeline tempsRestant = new Timeline(new KeyFrame(javafx.util.Duration.seconds(1), (t) -> {
-            Timestamp mtn = new Timestamp(System.currentTimeMillis());
-            long secR = secRestant(this.fin);
-            long minR = minRestant(this.fin);
-            long heureR = hRestant(this.fin);
-            long jourR = jourRestant(this.fin);
-//            LocalDateTime ldt = LocalDateTime.now();
-//            LocalDateTime ldt3 = this.fin.toLocalDateTime();
-//            long diffH = ldt.until(ldt3, ChronoUnit.HOURS);
-                if(secR<0){
-                    tTime.setText("Enchere terminée");
-                }else{
-                    tTime.setText(jourR + " j " + heureR + " h " + minR + " m " + secR + " s");
-                }
-        }));
-        tempsRestant.setCycleCount(Animation.INDEFINITE);
-        tempsRestant.play();
-        
+        ActualisationTempsRestant();
+        ActualisePrix();
+
         this.tTitre.setOnMouseClicked((t) -> {
             //this.main.setCenter(new VueAnnonceDetaille(this.main, this.id, tTitre, tTempsR, tPrix, categorie, tVendeur, tTempsR, imageV));
-            this.main.setCenter(new VueAnnonceDetaille(main, grid, this.id,this.imageV));
+            this.main.setCenter(new VueAnnonceDetaille(main, grid, this.id, this.imageV));
         });
-        
+
     }
 
     private void recupereObjet(int id)
             throws SQLException, ClassNotFoundException {
-        Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
+        Connection con = this.main.getBDD();
 
         try (PreparedStatement st = con.prepareStatement("select * from objet where id = ?")) {
             st.setInt(1, id);
@@ -312,27 +299,47 @@ public class Annonce extends HBox {
 
     }
 
-}
-//        Timeline tempsRestant = new Timeline(new KeyFrame(Duration.seconds(1), (t) -> {
-//            Timestamp mtn = new Timestamp(System.currentTimeMillis());
-//
-//            Timestamp sec = secRestant(mtn, fin);
-//            Timestamp min = minRestant(mtn, fin);
-//            Timestamp heure = hRestant(mtn, fin);
-//            Timestamp jour = jourRestant(mtn, fin);
-//            long secR = sec.getTime();
-//            long minR = min.getTime() ;
-//            long heureR = heure.getTime() ;
-//            long jourR = jour.getTime() ;
-//            
+    private void ActualisationTempsRestant() {
+        Timeline tempsRestant = new Timeline(new KeyFrame(javafx.util.Duration.seconds(1), (t) -> {
+            Timestamp mtn = new Timestamp(System.currentTimeMillis());
+            long secR = secRestant(this.fin);
+            long minR = minRestant(this.fin);
+            long heureR = hRestant(this.fin);
+            long jourR = jourRestant(this.fin);
 //            LocalDateTime ldt = LocalDateTime.now();
 //            LocalDateTime ldt3 = this.fin.toLocalDateTime();
 //            long diffH = ldt.until(ldt3, ChronoUnit.HOURS);
-//           timeLabel.setText("temps restant: " +jourR+" jours, "+heureR+" heures, "+minR+" minutes, "+ secR + " sec");
-//            //timeLabel.setText("temps restant: " );
-//            System.out.println();
-//        }));
-//        
-//        
-//        tempsRestant.setCycleCount(Animation.INDEFINITE);
-//        tempsRestant.play();
+            if (secR < 0) {
+                tTime.setText("Enchere terminée");
+            } else {
+                tTime.setText(jourR + " j " + heureR + " h " + minR + " m " + secR + " s");
+            }
+        }));
+        tempsRestant.setCycleCount(Animation.INDEFINITE);
+        tempsRestant.play();
+    }
+
+    private void ActualisePrix() {
+        Timeline Prix = new Timeline(new KeyFrame(javafx.util.Duration.seconds(1), (t) -> {
+            int prixActu = Integer.parseInt(this.prixActuel.getText());
+            Connection con = this.main.getBDD();
+
+            try (PreparedStatement st = con.prepareStatement("select * from objet where id = ?")) {
+                st.setInt(1, this.id);
+                ResultSet res = st.executeQuery();
+                while (res.next()) {
+                    int prix = res.getInt("prixactuel");
+                    if (prixActu != prix) {
+                this.prixActuel.setText(String.valueOf(prix));
+                        System.out.println("Prix actualisé");
+            }
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(Annonce.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }));
+        Prix.setCycleCount(Animation.INDEFINITE);
+        Prix.play();
+    }
+
+}
