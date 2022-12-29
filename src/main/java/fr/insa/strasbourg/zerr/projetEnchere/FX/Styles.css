@@ -83,6 +83,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-text-fill: white;
     -fx-padding: 3 6 6 6;
 }
+
 #bouton-rouge{
     -fx-content-display : center;
     -fx-alignment : center;

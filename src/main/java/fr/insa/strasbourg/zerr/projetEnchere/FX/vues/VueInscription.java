@@ -130,8 +130,7 @@ public class VueInscription extends GridPane {
                 
             } else {
              Connection con = this.main.getBDD();
-            createUtilisateur(con, this.tfNom.getText(), this.pfPass.getText(), this.tfPrenom.getText(), this.tfEmail.getText(),null);
-            System.out.println("utilisateur créé");
+            createUtilisateur(con, this.tfNom.getText(), this.pfPass.getText(), this.tfPrenom.getText(), this.tfEmail.getText(),null,48.69060664200385, 7.579645983737555);
             this.main.setCenter(new VueLogin(main));
             }
             

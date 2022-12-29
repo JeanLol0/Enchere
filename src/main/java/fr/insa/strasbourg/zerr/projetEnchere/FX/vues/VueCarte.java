@@ -7,6 +7,10 @@ package fr.insa.strasbourg.zerr.projetEnchere.FX.vues;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -23,6 +27,8 @@ import javafx.scene.web.WebView;
 public class VueCarte extends BorderPane{
     private FenetrePrincipale main;
     private Button bRetour;
+    
+
 
     public VueCarte(FenetrePrincipale main) {
         this.main = main ;
@@ -53,6 +59,5 @@ public class VueCarte extends BorderPane{
         root.getChildren().addAll(buttonURL, browser);
         this.setCenter(root);
     }
-    
     
 }
