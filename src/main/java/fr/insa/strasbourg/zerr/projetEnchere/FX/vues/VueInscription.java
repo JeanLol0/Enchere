@@ -36,6 +36,8 @@ public class VueInscription extends GridPane {
     private TextField tfNom;
     private TextField tfPrenom;
     private TextField tfEmail;
+    private TextField tfCodePostal;
+    
     private PasswordField pfPass;
 
     private Text tInscription;
@@ -56,6 +58,7 @@ public class VueInscription extends GridPane {
         this.tfNom = new TextField();
         this.tfPrenom = new TextField();
         this.tfEmail = new TextField();
+        this.tfCodePostal = new TextField();
         this.avatar = new Circle(40, 40, 40);
         this.avatar.setFill(new ImagePattern(getImage("ressources/user.png")));
         
@@ -63,6 +66,7 @@ public class VueInscription extends GridPane {
         this.tfNom.setPromptText("Nom");
         this.tfPrenom.setPromptText("Prenom");
         this.tfEmail.setPromptText("Adresse e-mail");
+        this.tfCodePostal.setPromptText("Code postal");
 
         this.pfPass = new PasswordField();
         this.pfPass.setPromptText("Mot de passe");
@@ -89,9 +93,10 @@ public class VueInscription extends GridPane {
         this.add(this.tfPrenom, 0, 6);
         this.add(this.tfEmail, 0, 7);
         this.add(this.pfPass, 0, 8);
-        this.add(this.bChoixPos, 0, 9);
-        this.add(this.bInscription, 0, 10);
-        this.add(this.bLogin, 0, 11);
+        this.add(this.tfCodePostal, 0, 9);
+        this.add(this.bChoixPos, 0, 10);
+        this.add(this.bInscription, 0, 11);
+        this.add(this.bLogin, 0, 12);
 
         this.setVgap(20);
         this.setAlignment(Pos.CENTER);
@@ -104,6 +109,7 @@ public class VueInscription extends GridPane {
 
         JavaFXUtils.DesactiveAutoFocus(tfNom);
         JavaFXUtils.DesactiveAutoFocus(tfEmail);
+        JavaFXUtils.DesactiveAutoFocus(tfCodePostal);
         JavaFXUtils.DesactiveAutoFocus(tfPrenom);
         JavaFXUtils.DesactiveAutoFocus(pfPass);
 
