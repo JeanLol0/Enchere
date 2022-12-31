@@ -40,21 +40,25 @@ public class VueAcceuil extends GridPane{
         this.bAffAnnonce.setOnAction((t) -> {
             try {
                 this.main.setCenter(new VuePrincipale(this.main));
-            } catch (SQLException ex) {
-                Logger.getLogger(VueAcceuil.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(VueAcceuil.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
+            } catch (SQLException | ClassNotFoundException | IOException ex) {
                 Logger.getLogger(VueAcceuil.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
         
         this.bAffMesAnnonces.setOnAction((t) -> {
-            this.main.setCenter(new VueMesAnnonces(this.main));
+            try {
+                this.main.setCenter(new VueMesAnnonces(this.main));
+            } catch (ClassNotFoundException | SQLException ex) {
+                Logger.getLogger(VueAcceuil.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
         
         this.bAffMesEnchere.setOnAction((t) -> {
-            this.main.setCenter(new VueMesEnchere(this.main));
+            try {
+                this.main.setCenter(new VueMesEnchere(this.main));
+            } catch (SQLException | ClassNotFoundException ex) {
+                Logger.getLogger(VueAcceuil.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
     }
     

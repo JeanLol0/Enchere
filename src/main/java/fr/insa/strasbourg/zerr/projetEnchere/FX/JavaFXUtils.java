@@ -25,7 +25,7 @@ import javafx.stage.Stage;
  */
 public class JavaFXUtils {
     public static void addSimpleBorder(Region c) {
-        c.setBorder(new Border(new BorderStroke(Color.BLACK,
+        c.setBorder(new Border(new BorderStroke(Color.RED,
                 BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
     }
 
