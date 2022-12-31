@@ -1234,14 +1234,15 @@ public class BDD {
 //        LocalDateTime ldt3 = LocalDateTime.of(2022, Month.MARCH, 12, 0, 0);
 //        long diff = ldt.until(ldt3, ChronoUnit.MINUTES);
         Timestamp conv = Timestamp.valueOf(LocalDateTime.of(2022, 12, 19, 16, 8));
-        Timestamp conv1 = Timestamp.valueOf(LocalDateTime.of(2022, 12, 19, 16, 8).plusDays(9));
+        Timestamp conv1 = Timestamp.valueOf(LocalDateTime.of(2022, 12, 19, 16, 8).plusDays(45));
+        Timestamp conv2 = Timestamp.valueOf(LocalDateTime.of(2022, 12, 19, 16, 8).plusDays(9));
         createObjet(con, "Babouches", conv, conv1, 10, 24, 1, "S'est facile à utliser", null);
         createObjet(con, "Vélo Tout Terrain", conv, conv1, 100, 23, 1, "Vélo tout neuf", null);
         createObjet(con, "Collier plaqué or", conv, conv1, 1000, 9, 1, "Bijou de ma grand-mère décédée", null);
         createObjet(con, "Princesse de Clèves", conv, conv1, 3, 21, 1, "Livre utilisé au lycée. Livre très interessant", null);
         createObjet(con, "Micro ondes", conv, conv1, 70, 12, 1, "Marque Samsung - état neuf", null);
         createObjet(con, "AIRFORCE 1 Blanc", conv, conv1, 110, 2, 1, "Taille 43 - propre - etat neuf", null);
-        createObjet(con, "Grande Pelle", conv, conv1, 15, 15, 1, "Bien utile dans cette période pour votre jardin", null);
+        createObjet(con, "Grande Pelle", conv, conv2, 15, 15, 1, "Bien utile dans cette période pour votre jardin", null);
 
     }
 
@@ -1500,19 +1501,17 @@ public class BDD {
         try ( PreparedStatement st = con.prepareStatement("select id,sur from enchere where de = ? ")) {
             st.setInt(1, idUtil);
             ResultSet res = st.executeQuery();
-            int IdUtil = 0;
             while (res.next()) {
                 int resultat = res.getInt("sur");
                 if (ValiditeDateEnchere(resultat) == false) {
                     List.add(res.getInt("id"));
                     System.out.println("Valeurs" + res.getInt("sur"));
-                } else {
-                }
+                } 
             }
-            System.out.println(IdUtil);
             return List;
         }
     } // renvoit l'id des encheres que l'utilsateurs a fait qui sont fini
+    
     public static ArrayList<Integer> EncheresUtilisateurEnCours(int idUtil) throws ClassNotFoundException, SQLException {
         Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
         ArrayList<Integer> List = new ArrayList<>();
@@ -1525,11 +1524,13 @@ public class BDD {
                 if (ValiditeDateEnchere(resultat) == true) {
                     List.add(res.getInt("id"));
                     System.out.println("Valeurs" + res.getInt("sur"));
-                } else {
-                }
+                } 
             }
             System.out.println(IdUtil);
             return List;
         }
     }
+    
+     //retourne la liste des objets par rapport à la recherche des objets en cours de validité 
+    
 }

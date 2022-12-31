@@ -6,6 +6,7 @@ package fr.insa.strasbourg.zerr.projetEnchere.FX.vues;
 
 import fr.insa.strasbourg.zerr.projetEnchere.FX.JavaFXUtils;
 import fr.insa.strasbourg.zerr.projetEnchere.FX.composants.BarRecherche;
+import static fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD.ValiditeDateEnchere;
 import static fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD.connectGeneralPostGres;
 import static fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD.defautConnect;
 import java.io.IOException;
@@ -41,11 +42,25 @@ public class VueAnnonces extends BorderPane {
         this.barRe = new BarRecherche(this.main);
         this.idAnnonce = new ArrayList<Integer>();
         this.con = this.main.getBDD();
-        afficheAnnonceSansTri();
+        recupereIdAnnonce();
+        afficheAnnonce();
         this.gridPane.setAlignment(Pos.CENTER);
         this.gridPane.setVgap(15);
         this.setTop(this.barRe);
         this.setCenter(this.gridPane);
+        this.barRe.getButtonRecherche().setOnAction((t) ->{
+            String texte = this.barRe.getTextField().getText();
+            try {
+                this.idAnnonce= ObjetRechercheMots(texte);
+                afficheAnnonce();
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(VueAnnonces.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SQLException ex) {
+                Logger.getLogger(VueAnnonces.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(VueAnnonces.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
         this.barRe.getTrieCombo().setOnAction((t) -> {
             String typeTri = this.barRe.getTrieCombo().getValue().toString();
             System.out.println(this.barRe.getTrieCombo().getValue().toString());
@@ -55,10 +70,10 @@ public class VueAnnonces extends BorderPane {
                     afficheAnnonce();
                 } catch (SQLException | ClassNotFoundException | IOException ex) {
                     Logger.getLogger(VueAnnonces.class.getName()).log(Level.SEVERE, null, ex);
-                } 
+                }
             }
             if ("Prix décroissant".equals(typeTri)) {
-                
+
                 try {
                     this.idAnnonce = TriPrixDecroissant();
                     afficheAnnonce();
@@ -103,7 +118,7 @@ public class VueAnnonces extends BorderPane {
 
     public void afficheTousLesUtilisateur(Connection con)
             throws SQLException {
-        try (Statement st = con.createStatement()) {
+        try ( Statement st = con.createStatement()) {
             ResultSet res = st.executeQuery("select * from utilisateur");
             while (res.next()) {
                 String lenom = res.getString("nom");
@@ -116,29 +131,33 @@ public class VueAnnonces extends BorderPane {
         }
     }
 
-    private void recupereIdAnnonce()
-            throws SQLException {
-        try (PreparedStatement st = this.con.prepareStatement("select id from objet")) {
+    public void recupereIdAnnonce()
+            throws SQLException, ClassNotFoundException {
+        try ( PreparedStatement st = this.con.prepareStatement("select id from objet")) {
             ResultSet res = st.executeQuery();
             while (res.next()) {
                 this.idAnnonce.add(res.getInt("id"));
-                //System.out.println("ids recupéré nb:" + this.idAnnonce.size());
+                System.out.println("ids recupéré nb:" + this.idAnnonce.size());
+//            if (ValiditeDateEnchere(res.getInt("id")) == false) {
+//                int size = this.idAnnonce.size();
+//                this.idAnnonce.remove(size-1);
+//            }
             }
         }
     }
 
     private void afficheAnnoncePrixDecroissante() throws SQLException, IOException {
         try {
-            System.out.println("idAnnonce1"+this.idAnnonce);
+            System.out.println("idAnnonce1" + this.idAnnonce);
             this.idAnnonce.clear();
-            System.out.println("idAnnonce2"+this.idAnnonce);
+            System.out.println("idAnnonce2" + this.idAnnonce);
             this.idAnnonce = TriDateDecroissant();
-            System.out.println("idAnnonce3"+this.idAnnonce);
+            System.out.println("idAnnonce3" + this.idAnnonce);
             this.gridPane.getChildren().clear();
             System.out.println(this.gridPane.getChildren());
             int nbAnnonce = this.idAnnonce.size();
             for (int i = 0; i < nbAnnonce; i++) {
-                this.gridPane.add(new Annonce(this.main, this.idAnnonce.get(i)+1), 0, i);
+                this.gridPane.add(new Annonce(this.main, this.idAnnonce.get(i) + 1), 0, i);
             }
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(VueAnnonces.class.getName()).log(Level.SEVERE, null, ex);
@@ -146,7 +165,6 @@ public class VueAnnonces extends BorderPane {
     }
 
     private void afficheAnnonce() throws SQLException, ClassNotFoundException, IOException {
-        
         this.gridPane.getChildren().clear();
         int nbAnnonce = this.idAnnonce.size();
         for (int i = 0; i < nbAnnonce; i++) {
@@ -154,23 +172,27 @@ public class VueAnnonces extends BorderPane {
         }
     }
 
-    private void afficheAnnonceSansTri() throws SQLException, ClassNotFoundException, IOException {
-        recupereIdAnnonce();
-        int nbAnnonce = this.idAnnonce.size();
-        for (int i = 0; i < nbAnnonce; i++) {
-            this.gridPane.add(new Annonce(this.main, i+1), 0, i);
-        }
-    }
+//    private void afficheAnnonceSansTri() throws SQLException, ClassNotFoundException, IOException {
+//        recupereIdAnnonce();
+//        int nbAnnonce = this.idAnnonce.size();
+////        for (int i = 0; i < nbAnnonce; i++) {
+////            System.out.println(i);
+//            this.gridPane.add(new Annonce(this.main, 7), 0, 1);
+////        
+//    }
 
     public static ArrayList<Integer> TriCategorie(int idCategorie) throws SQLException, ClassNotFoundException {
         Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
         ArrayList<Integer> TriCat;
         TriCat = new ArrayList<>();
-        try (PreparedStatement st = con.prepareStatement("select id from objet where categorie = ?")) {
+        try ( PreparedStatement st = con.prepareStatement("select id from objet where categorie = ?")) {
             st.setInt(1, idCategorie);
             ResultSet res = st.executeQuery();
             while (res.next()) {
-                TriCat.add(res.getInt("id"));
+                int resultat = res.getInt("id");
+                if (ValiditeDateEnchere(resultat) == false) {
+                    TriCat.add(resultat);
+                }
             }
         }
         return TriCat;
@@ -180,10 +202,13 @@ public class VueAnnonces extends BorderPane {
         Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
         ArrayList<Integer> TriCat;
         TriCat = new ArrayList<>();
-        try (PreparedStatement st = con.prepareStatement("select id from objet order by prixactuel asc")) {
+        try ( PreparedStatement st = con.prepareStatement("select id from objet order by prixactuel asc")) {
             ResultSet res = st.executeQuery();
             while (res.next()) {
-                TriCat.add(res.getInt("id"));
+                int resultat = res.getInt("id");
+                if (ValiditeDateEnchere(resultat) == false) {
+                    TriCat.add(resultat);
+                }
             }
         }
         return TriCat;
@@ -193,10 +218,13 @@ public class VueAnnonces extends BorderPane {
         Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
         ArrayList<Integer> TriCat;
         TriCat = new ArrayList<>();
-        try (PreparedStatement st = con.prepareStatement("select id from objet order by prixactuel desc")) {
+        try ( PreparedStatement st = con.prepareStatement("select id from objet order by prixactuel desc")) {
             ResultSet res = st.executeQuery();
             while (res.next()) {
-                TriCat.add(res.getInt("id"));
+                int resultat = res.getInt("id");
+                if (ValiditeDateEnchere(resultat) == false) {
+                    TriCat.add(resultat);
+                }
             }
         }
         return TriCat;
@@ -206,10 +234,13 @@ public class VueAnnonces extends BorderPane {
         Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
         ArrayList<Integer> TriCat;
         TriCat = new ArrayList<>();
-        try (Statement st = con.createStatement()) {
+        try ( Statement st = con.createStatement()) {
             ResultSet res = st.executeQuery("select id from objet order by fin desc");
             while (res.next()) {
-                TriCat.add(res.getInt("id"));
+                int resultat = res.getInt("id");
+                if (ValiditeDateEnchere(resultat) == false) {
+                    TriCat.add(resultat);
+                }
             }
         }
         return TriCat;
@@ -219,10 +250,13 @@ public class VueAnnonces extends BorderPane {
         Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
         ArrayList<Integer> TriCat;
         TriCat = new ArrayList<>();
-        try (Statement st = con.createStatement()) {
+        try ( Statement st = con.createStatement()) {
             ResultSet res = st.executeQuery("select id from objet order by fin asc");
             while (res.next()) {
-                TriCat.add(res.getInt("id"));
+                int resultat = res.getInt("id");
+                if (ValiditeDateEnchere(resultat) == false) {
+                    TriCat.add(resultat);
+                }
             }
         }
         return TriCat;
@@ -230,7 +264,7 @@ public class VueAnnonces extends BorderPane {
 
     public int getIdCategorie(String textCat) throws SQLException, ClassNotFoundException {
         Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
-        try (PreparedStatement st = con.prepareCall("select id from categorie where nom = ?")) {
+        try ( PreparedStatement st = con.prepareCall("select id from categorie where nom = ?")) {
             st.setString(1, textCat);
             ResultSet res = st.executeQuery();
             if (res.next()) {
@@ -241,6 +275,33 @@ public class VueAnnonces extends BorderPane {
             }
 
         }
+
+    }
+    public static ArrayList<Integer> ObjetRechercheMots(String texte) throws ClassNotFoundException, SQLException {
+        Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
+        ArrayList<Integer> List = new ArrayList<>();
+        try ( PreparedStatement st = con.prepareStatement("select * from objet where contains(bio,?) ")) {
+            st.setString(1, texte);
+            ResultSet res = st.executeQuery();
+            while (res.next()) {
+                int resultat = res.getInt("id");
+                if (ValiditeDateEnchere(resultat) == false) {
+                    List.add(res.getInt("id"));
+                } 
+            }
+            
+        }
+        try ( PreparedStatement st2 = con.prepareStatement("select * from objet where contains(titre,?)")) {
+            st2.setString(1, texte);
+            ResultSet res2 = st2.executeQuery();
+            while (res2.next()) {
+                int resultat = res2.getInt("id");
+                if (ValiditeDateEnchere(resultat) == false) {
+                    List.add(resultat);
+                } 
+            }
+        }
+            return List;
 
     }
 

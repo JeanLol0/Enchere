@@ -5,6 +5,7 @@
 package fr.insa.strasbourg.zerr.projetEnchere.FX.vues;
 
 import fr.insa.strasbourg.zerr.projetEnchere.FX.JavaFXUtils;
+import static fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD.ValiditeDateEnchere;
 import static fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD.connectGeneralPostGres;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -106,10 +107,11 @@ public class Annonce extends HBox {
             throws SQLException, ClassNotFoundException {
         Connection con = this.main.getBDD();
 
-        try (PreparedStatement st = con.prepareStatement("select * from objet where id = ?")) {
+        try ( PreparedStatement st = con.prepareStatement("select * from objet where id = ?")) {
             st.setInt(1, id);
             ResultSet res = st.executeQuery();
             while (res.next()) {
+                System.out.println(res.getString("titre"));
                 this.titre = res.getString("titre");
                 this.debut = res.getTimestamp("debut");
                 this.fin = res.getTimestamp("fin");
@@ -122,7 +124,6 @@ public class Annonce extends HBox {
                 this.npVendeur = new Label(prenom + " " + nom);
                 this.idVendeur = res.getInt("proposerpar");
                 this.stringImage = res.getString("image");
-
             }
         }
 
@@ -142,7 +143,6 @@ public class Annonce extends HBox {
         LocalDateTime l2 = this.fin.toLocalDateTime();
         long diffS = l1.until(l2, ChronoUnit.SECONDS);
         return diffS % 60;
-
     }
 
     private long minRestant(Timestamp fin) {
@@ -253,7 +253,7 @@ public class Annonce extends HBox {
 
     public String getStringCategorie(Integer id) throws SQLException {
         Connection con = this.main.getBDD();
-        try (PreparedStatement st = con.prepareCall("select * from categorie where id = ?")) {
+        try ( PreparedStatement st = con.prepareCall("select * from categorie where id = ?")) {
             st.setInt(1, id);
             ResultSet res = st.executeQuery();
             if (res.next()) {
@@ -269,7 +269,7 @@ public class Annonce extends HBox {
 
     public String getNom(Integer idU) throws SQLException {
         Connection con = this.main.getBDD();
-        try (PreparedStatement st = con.prepareCall("select nom from utilisateur where id = ?")) {
+        try ( PreparedStatement st = con.prepareCall("select nom from utilisateur where id = ?")) {
             st.setInt(1, idU);
             ResultSet res = st.executeQuery();
             if (res.next()) {
@@ -285,7 +285,7 @@ public class Annonce extends HBox {
 
     public String getPrenom(Integer idU) throws SQLException {
         Connection con = this.main.getBDD();
-        try (PreparedStatement st = con.prepareCall("select prenom from utilisateur where id = ?")) {
+        try ( PreparedStatement st = con.prepareCall("select prenom from utilisateur where id = ?")) {
             st.setInt(1, idU);
             ResultSet res = st.executeQuery();
             if (res.next()) {
@@ -324,15 +324,15 @@ public class Annonce extends HBox {
             int prixActu = Integer.parseInt(this.prixActuel.getText());
             Connection con = this.main.getBDD();
 
-            try (PreparedStatement st = con.prepareStatement("select * from objet where id = ?")) {
+            try ( PreparedStatement st = con.prepareStatement("select * from objet where id = ?")) {
                 st.setInt(1, this.id);
                 ResultSet res = st.executeQuery();
                 while (res.next()) {
                     int prix = res.getInt("prixactuel");
                     if (prixActu != prix) {
-                this.prixActuel.setText(String.valueOf(prix));
+                        this.prixActuel.setText(String.valueOf(prix));
                         System.out.println("Prix actualisé");
-            }
+                    }
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(Annonce.class.getName()).log(Level.SEVERE, null, ex);

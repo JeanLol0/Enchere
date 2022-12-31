@@ -69,6 +69,13 @@ public class BarRecherche extends HBox {
     public ComboBox getTrieCombo() {
         return trieCombo;
     }
+    public Button getButtonRecherche() {
+        return bRecherche;
+    }
+    
+    public TextField getTextField(){
+        return tfRecherche;
+    }
 
     public ComboBox getCategorieCombo() {
         return categorieCombo;
@@ -79,7 +86,7 @@ public class BarRecherche extends HBox {
         String c1 = new String("Voitures");
         String c2 = new String("Motos");
         String c3 = new String("Caravaning");
-        String c4 = new String("Mainson");
+        String c4 = new String("Maison");
         String c5 = new String("Appartement");
         String c6 = new String("Terrain");
         String c7 = new String("Vetements");
@@ -107,4 +114,5 @@ public class BarRecherche extends HBox {
 
         return list;
     }
+    
 }

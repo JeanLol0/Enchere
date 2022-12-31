@@ -105,7 +105,7 @@ private TableView tvEnCours;
             int IdUtil = 0;
             while (res.next()) {
                 int resultat = res.getInt("sur");
-                if (ValiditeDateEnchere(resultat) == true) {
+                if (ValiditeDateEnchere(resultat) == false) {
                     List.add(res.getInt("id"));
                     System.out.println("Valeurs" + res.getInt("sur"));
                 } else {

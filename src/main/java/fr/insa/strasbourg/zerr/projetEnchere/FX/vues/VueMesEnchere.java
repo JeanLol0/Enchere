@@ -107,7 +107,7 @@ public class VueMesEnchere extends GridPane {
             ResultSet res = st.executeQuery();
             while (res.next()) {
                 int resultat = res.getInt("sur");
-                if (ValiditeDateEnchere(resultat) == true) {
+                if (ValiditeDateEnchere(resultat) == false) {
                     List.add(res.getInt("id"));
                 } else {
                 }
@@ -127,8 +127,7 @@ public class VueMesEnchere extends GridPane {
                 System.out.println(ValiditeDateEnchere(resultat));
                 if (ValiditeDateEnchere(resultat) == false) {
                     List.add(res.getInt("id"));
-                } else {
-                }
+                } 
             }
             return List;
         }
