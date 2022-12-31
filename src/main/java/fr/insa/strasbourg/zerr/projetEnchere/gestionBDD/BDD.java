@@ -1397,7 +1397,7 @@ public class BDD {
     public static ArrayList<Integer> EnchereParUtilisateurPlusHautEnCours(int idUtil) throws ClassNotFoundException, SQLException {
         Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
         ArrayList<Integer> List = new ArrayList<>();
-        try ( PreparedStatement st = con.prepareStatement("select sur from enchere where de = ? ")) {
+        try ( PreparedStatement st = con.prepareStatement("select sur,id from enchere where de = ? ")) {
             st.setInt(1, idUtil);
             ResultSet res = st.executeQuery();
             int IdUtil = 0;
@@ -1417,7 +1417,7 @@ public class BDD {
     public static ArrayList<Integer> EnchereParUtilisateurPlusHautFini(int idUtil) throws ClassNotFoundException, SQLException {
         Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
         ArrayList<Integer> List = new ArrayList<>();
-        try ( PreparedStatement st = con.prepareStatement("select sur from enchere where de = ? ")) {
+        try ( PreparedStatement st = con.prepareStatement("select sur,id from enchere where de = ? ")) {
             st.setInt(1, idUtil);
             ResultSet res = st.executeQuery();
             int IdUtil = 0;
@@ -1492,5 +1492,44 @@ public class BDD {
 
         return List;
     //tri du plus proche au plus éloigné 
+    }
+    
+    public static ArrayList<Integer> EncheresUtilisateurFini(int idUtil) throws ClassNotFoundException, SQLException {
+        Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
+        ArrayList<Integer> List = new ArrayList<>();
+        try ( PreparedStatement st = con.prepareStatement("select id,sur from enchere where de = ? ")) {
+            st.setInt(1, idUtil);
+            ResultSet res = st.executeQuery();
+            int IdUtil = 0;
+            while (res.next()) {
+                int resultat = res.getInt("sur");
+                if (ValiditeDateEnchere(resultat) == false) {
+                    List.add(res.getInt("id"));
+                    System.out.println("Valeurs" + res.getInt("sur"));
+                } else {
+                }
+            }
+            System.out.println(IdUtil);
+            return List;
+        }
+    } // renvoit l'id des encheres que l'utilsateurs a fait qui sont fini
+    public static ArrayList<Integer> EncheresUtilisateurEnCours(int idUtil) throws ClassNotFoundException, SQLException {
+        Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
+        ArrayList<Integer> List = new ArrayList<>();
+        try ( PreparedStatement st = con.prepareStatement("select id,sur from enchere where de = ? ")) {
+            st.setInt(1, idUtil);
+            ResultSet res = st.executeQuery();
+            int IdUtil = 0;
+            while (res.next()) {
+                int resultat = res.getInt("sur");
+                if (ValiditeDateEnchere(resultat) == true) {
+                    List.add(res.getInt("id"));
+                    System.out.println("Valeurs" + res.getInt("sur"));
+                } else {
+                }
+            }
+            System.out.println(IdUtil);
+            return List;
+        }
     }
 }
