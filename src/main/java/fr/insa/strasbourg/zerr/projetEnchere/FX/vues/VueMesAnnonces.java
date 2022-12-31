@@ -45,6 +45,11 @@ private TableView tvEnCours;
 
     private ArrayList lAnnonceEnCours;
     private ArrayList lAnnonceEnTerminee;
+    
+    private Label lAnnonceC;
+    private Label lAnnonceT;
+
+            
     public VueMesAnnonces(FenetrePrincipale main) throws ClassNotFoundException, SQLException {
         this.main = main;
         this.setPrefWidth(this.main.getWidth());
@@ -82,6 +87,8 @@ private TableView tvEnCours;
 
         this.lAnnonceEnCours = AnnonceParUtilisateurCours(this.main.getSessionInfo().getUserID());
         this.lAnnonceEnTerminee = AnnonceParUtilisateurFini(this.main.getSessionInfo().getUserID());
+        System.out.println(this.main.getSessionInfo().getUserID());
+        System.out.println(lAnnonceEnCours);
         ajoutAnnoncesUtilisateurEnCours();
         ajoutAnnoncesUtilisateurFini();
 
@@ -90,28 +97,32 @@ private TableView tvEnCours;
         
         this.tvTerminee.getColumns().addAll(titreT, prixDepartT, prixActuelT, tRestantT, nbEnchereT, DerEnchereT);
         this.tvTerminee.setPrefWidth(this.getPrefWidth());
+        
+        
+        this.lAnnonceC = new Label("Annonces en cours");
+        this.lAnnonceT = new Label("Annonces terminées");
+        this.lAnnonceC.setId("grand-texte");
+        this.lAnnonceT.setId("grand-texte");
 
-        this.add(new Label("Encheres en cours"), 0, 0);
+        this.add(lAnnonceC, 0, 0);
         this.add(this.tvEnCours, 0, 1);
-        this.add(new Label("Encheres terminées"), 0, 2);
+        this.add(lAnnonceT, 0, 2);
         this.add(this.tvTerminee, 0, 3);
     }
     public static ArrayList<Integer> AnnonceParUtilisateurCours(int idUtil) throws ClassNotFoundException, SQLException {
         Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
         ArrayList<Integer> List = new ArrayList<>();
-        try ( PreparedStatement st = con.prepareStatement("select sur,id from enchere where de = ? ")) {
+        try ( PreparedStatement st = con.prepareStatement("select * from objet where proposerpar = ? ")) {
             st.setInt(1, idUtil);
             ResultSet res = st.executeQuery();
-            int IdUtil = 0;
             while (res.next()) {
-                int resultat = res.getInt("sur");
+                int resultat = res.getInt("id");
                 if (ValiditeDateEnchere(resultat) == false) {
                     List.add(res.getInt("id"));
-                    System.out.println("Valeurs" + res.getInt("sur"));
+                    //System.out.println("Valeurs" + res.getInt("sur"));
                 } else {
                 }
             }
-            System.out.println(IdUtil);
             return List;
         }
     }
@@ -119,19 +130,17 @@ private TableView tvEnCours;
     public static ArrayList<Integer> AnnonceParUtilisateurFini(int idUtil) throws ClassNotFoundException, SQLException {
         Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
         ArrayList<Integer> List = new ArrayList<>();
-        try ( PreparedStatement st = con.prepareStatement("select sur,id from enchere where de = ? ")) {
+        try ( PreparedStatement st = con.prepareStatement("select * from objet where proposerpar = ? ")) {
             st.setInt(1, idUtil);
             ResultSet res = st.executeQuery();
-            int IdUtil = 0;
             while (res.next()) {
-                int resultat = res.getInt("sur");
-                if (ValiditeDateEnchere(resultat) == false) {
+                int resultat = res.getInt("id");
+                if (ValiditeDateEnchere(resultat) == true) {
                     List.add(res.getInt("id"));
-                    System.out.println("Valeurs" + res.getInt("sur"));
+                    //System.out.println("Valeurs" + res.getInt("sur"));
                 } else {
                 }
             }
-            System.out.println(IdUtil);
             return List;
         }
     }
@@ -143,8 +152,8 @@ private TableView tvEnCours;
     }
 
     private void ajoutAnnoncesUtilisateurFini() throws SQLException, ClassNotFoundException {
-        for (int i = 1; i < this.lAnnonceEnTerminee.size(); i++) {
-            this.tvTerminee.getItems().add(new MesEncheres(this.main, (Integer) lAnnonceEnCours.get(i)));
+        for (int i = 0; i < this.lAnnonceEnTerminee.size(); i++) {
+            this.tvTerminee.getItems().add(new MesEncheres(this.main, (Integer) lAnnonceEnTerminee.get(i)));
         }
     }
 }

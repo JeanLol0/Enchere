@@ -14,7 +14,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 #vue-connexion-inscription{
     -fx-background-color:#252525;
     -fx-font-size: 22px;
-    
+
 }
 #annonce {
     -fx-font-family: Segoe UI;
@@ -32,7 +32,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-border-insets: 30 ;
     -fx-border:2px double black;
     -fx-border-color: blue ;
-    -fx-border-width: 3 ; 
+    -fx-border-width: 3 ;
     -fx-border-radius:10px;
     -fx-spacing: 10;
     -fx-padding: 10 30 10 30;
@@ -55,14 +55,25 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-font-variant: normal;
     -fx-text-transform: none;
     -fx-background-color:#c1d2ff;
-    
+
 }
 
 
-#vue-connexion-inscription>.label {-fx-text-fill: white;}
+#vue-connexion-inscription>.label {
+    -fx-text-fill: white;
+}
 
 #grand-texte{
     -fx-font-size: 50px;
+}
+
+#nom-prenom {
+    -fx-font-family: Tahoma;
+    -fx-font-size: 25px;
+    -fx-color: #241f31;
+    -fx-font-weight: bold;
+    -fx-font-variant: small-caps;
+    -fx-text-transform: uppercase;
 }
 
 
@@ -79,7 +90,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 #bouton-vert{
     -fx-content-display : center;
     -fx-alignment : center;
-    -fx-background-color: #32cd32; 
+    -fx-background-color: #32cd32;
     -fx-text-fill: white;
     -fx-padding: 3 6 6 6;
 }
@@ -87,14 +98,14 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 #bouton-rouge{
     -fx-content-display : center;
     -fx-alignment : center;
-    -fx-background-color: #ff0000; 
+    -fx-background-color: #ff0000;
     -fx-text-fill: white;
     -fx-padding: 3 6 6 6;
 }
 #bouton-bleu{
     -fx-content-display : center;
     -fx-alignment : center;
-    -fx-background-color:#00bfff ; 
+    -fx-background-color:#00bfff ;
     -fx-text-fill: white;
     -fx-padding: 3 6 6 6;
 }
@@ -109,14 +120,14 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 }
 
 .text-field{
-    -fx-font-size: 25px; 
+    -fx-font-size: 25px;
 }
 
 .combo-box{
-    -fx-font-size: 25px; 
+    -fx-font-size: 25px;
 }
 
-.button {     
-   
-     -fx-font-size: 25px; 
+.button {
+
+    -fx-font-size: 25px;
 }

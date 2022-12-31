@@ -40,19 +40,16 @@ import javax.imageio.ImageIO;
  */
 public class BDD {
 
-    public static Optional<Utilisateur> login(Connection con,
-            String email, String pass) throws SQLException {
+    public static Optional<Utilisateur> login(Connection con, String email, String pass) throws SQLException {
         try ( PreparedStatement pst = con.prepareStatement(
-                "select utilisateur.id as uid"
-                + " from utilisateur "
-                + " where "
-                + "utilisateur.email = ? and pass = ?")) {
+                "select * from utilisateur  where utilisateur.email = ? and pass = ?")) {
 
             pst.setString(1, email);
             pst.setString(2, pass);
             ResultSet res = pst.executeQuery();
             if (res.next()) {
-                return Optional.of(new Utilisateur(res.getInt("uid"), email, pass));
+                return Optional.of(new Utilisateur(res.getInt("id"), email, pass, res.getString("nom"), res.getString("prenom")));
+                
             } else {
                 return Optional.empty();
             }
@@ -1233,8 +1230,8 @@ public class BDD {
 //        Timestamp conv = Timestamp.valueOf(ldt2);
 //        LocalDateTime ldt3 = LocalDateTime.of(2022, Month.MARCH, 12, 0, 0);
 //        long diff = ldt.until(ldt3, ChronoUnit.MINUTES);
-        Timestamp conv = Timestamp.valueOf(LocalDateTime.of(2022, 12, 19, 16, 8));
-        Timestamp conv1 = Timestamp.valueOf(LocalDateTime.of(2022, 12, 19, 16, 8).plusDays(45));
+        Timestamp conv = Timestamp.valueOf(LocalDateTime.of(2022, 12, 31, 12, 8));
+        Timestamp conv1 = Timestamp.valueOf(LocalDateTime.of(2022, 12, 31, 12, 8).plusDays(20));
         Timestamp conv2 = Timestamp.valueOf(LocalDateTime.of(2022, 12, 19, 16, 8).plusDays(9));
         createObjet(con, "Babouches", conv, conv1, 10, 24, 1, "S'est facile à utliser", null);
         createObjet(con, "Vélo Tout Terrain", conv, conv1, 100, 23, 1, "Vélo tout neuf", null);

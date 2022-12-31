@@ -62,4 +62,7 @@ public class SessionInfo {
     public String getUserName() {
         return this.curUser.orElseThrow().getEmail();
     }
+    public String getUserNomPrenom() {
+        return this.curUser.orElseThrow().getNomPrenom();
+    }
 }

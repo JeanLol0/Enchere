@@ -46,6 +46,9 @@ public class VueMesEnchere extends GridPane {
     private ArrayList lEnchereEnCours;
     private ArrayList lEnchereEnTerminee;
 
+    private Label lEncheresC;
+    private Label lEncheresT;
+
     public VueMesEnchere(FenetrePrincipale main) throws SQLException, ClassNotFoundException {
         this.main = main;
         this.setPrefWidth(this.main.getWidth());
@@ -83,6 +86,7 @@ public class VueMesEnchere extends GridPane {
 
         this.lEnchereEnCours = EncheresUtilisateurEnCours(this.main.getSessionInfo().getUserID());
         this.lEnchereEnTerminee = EncheresUtilisateurFini(this.main.getSessionInfo().getUserID());
+        System.out.println(this.main.getSessionInfo().getUserID());
         System.out.println(lEnchereEnCours);
         ajoutEncheresUtilisateurEnCours();
         ajoutEncheresUtilisateurFini();
@@ -93,22 +97,27 @@ public class VueMesEnchere extends GridPane {
         this.tvTerminee.getColumns().addAll(titreT, prixDepartT, prixActuelT, tRestantT, nbEnchereT, DerEnchereT);
         this.tvTerminee.setPrefWidth(this.getPrefWidth());
 
-        this.add(new Label("Encheres en cours"), 0, 0);
+        this.lEncheresC = new Label("Encheres en cours");
+        this.lEncheresT = new Label("Encheres terminées");
+        this.lEncheresC.setId("grand-texte");
+        this.lEncheresT.setId("grand-texte");
+
+        this.add(lEncheresC, 0, 0);
         this.add(this.tvEnCours, 0, 1);
-        this.add(new Label("Encheres terminées"), 0, 2);
+        this.add(lEncheresT, 0, 2);
         this.add(this.tvTerminee, 0, 3);
     }
 
     public static ArrayList<Integer> EncheresUtilisateurEnCours(int idUtil) throws ClassNotFoundException, SQLException {
         Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
         ArrayList<Integer> List = new ArrayList<>();
-        try (PreparedStatement st = con.prepareStatement("select id,sur from enchere where de = ? ")) {
+        try (PreparedStatement st = con.prepareStatement("select * from enchere where de = ? ")) {
             st.setInt(1, idUtil);
             ResultSet res = st.executeQuery();
             while (res.next()) {
                 int resultat = res.getInt("sur");
                 if (ValiditeDateEnchere(resultat) == false) {
-                    List.add(res.getInt("id"));
+                    List.add(res.getInt("sur"));
                 } else {
                 }
             }
@@ -119,15 +128,15 @@ public class VueMesEnchere extends GridPane {
     public static ArrayList<Integer> EncheresUtilisateurFini(int idUtil) throws ClassNotFoundException, SQLException {
         Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
         ArrayList<Integer> List = new ArrayList<>();
-        try (PreparedStatement st = con.prepareStatement("select id,sur from enchere where de = ? ")) {
+        try (PreparedStatement st = con.prepareStatement("select * from enchere where de = ? ")) {
             st.setInt(1, idUtil);
             ResultSet res = st.executeQuery();
             while (res.next()) {
                 int resultat = res.getInt("sur");
                 System.out.println(ValiditeDateEnchere(resultat));
-                if (ValiditeDateEnchere(resultat) == false) {
-                    List.add(res.getInt("id"));
-                } 
+                if (ValiditeDateEnchere(resultat) == true) {
+                    List.add(res.getInt("sur"));
+                }
             }
             return List;
         }
@@ -145,7 +154,7 @@ public class VueMesEnchere extends GridPane {
     private void ajoutEncheresUtilisateurFini() throws SQLException, ClassNotFoundException {
         if (this.lEnchereEnTerminee.size() > 0) {
             for (int i = 0; i < this.lEnchereEnTerminee.size(); i++) {
-                this.tvTerminee.getItems().add(new MesEncheres(this.main, (Integer) lEnchereEnCours.get(i)));
+                this.tvTerminee.getItems().add(new MesEncheres(this.main, (Integer) lEnchereEnTerminee.get(i)));
             }
         }
     }
