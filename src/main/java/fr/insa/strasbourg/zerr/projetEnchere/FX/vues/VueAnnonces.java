@@ -48,10 +48,10 @@ public class VueAnnonces extends BorderPane {
         this.gridPane.setVgap(15);
         this.setTop(this.barRe);
         this.setCenter(this.gridPane);
-        this.barRe.getButtonRecherche().setOnAction((t) ->{
+        this.barRe.getButtonRecherche().setOnAction((t) -> {
             String texte = this.barRe.getTextField().getText();
             try {
-                this.idAnnonce= ObjetRechercheMots(texte);
+                this.idAnnonce = ObjetRechercheMots(texte);
                 afficheAnnonce();
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(VueAnnonces.class.getName()).log(Level.SEVERE, null, ex);
@@ -165,12 +165,32 @@ public class VueAnnonces extends BorderPane {
     }
 
     private void afficheAnnonce() throws SQLException, ClassNotFoundException, IOException {
+        Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
         this.gridPane.getChildren().clear();
         int nbAnnonce = this.idAnnonce.size();
-        for (int i = 0; i < nbAnnonce; i++) {
-            this.gridPane.add(new Annonce(this.main, this.idAnnonce.get(i)), 0, i);
+
+        try ( PreparedStatement st = con.prepareStatement("select id from objet where proposerpar = ?")) {
+            st.setInt(1, this.main.getSessionInfo().getUserID());
+            System.out.println(this.main.getSessionInfo().getUserID());
+            ResultSet res = st.executeQuery();
+            while (res.next()) {
+                int resultat = res.getInt("id");
+                System.out.println(resultat);
+                for (int i = 0; i < nbAnnonce; i++) {
+                    if (this.idAnnonce.get(i) == resultat) {
+                        this.idAnnonce.remove(i);
+                        nbAnnonce=nbAnnonce-1;
+                    }
+                }
+            }
+
         }
-    }
+        nbAnnonce=this.idAnnonce.size();
+        for (int j = 0; j < nbAnnonce; j++) {
+                this.gridPane.add(new Annonce(this.main, this.idAnnonce.get(j)), 0, j);
+            }
+        }
+    
 
 //    private void afficheAnnonceSansTri() throws SQLException, ClassNotFoundException, IOException {
 //        recupereIdAnnonce();
@@ -180,7 +200,6 @@ public class VueAnnonces extends BorderPane {
 //            this.gridPane.add(new Annonce(this.main, 7), 0, 1);
 ////        
 //    }
-
     public static ArrayList<Integer> TriCategorie(int idCategorie) throws SQLException, ClassNotFoundException {
         Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
         ArrayList<Integer> TriCat;
@@ -277,6 +296,7 @@ public class VueAnnonces extends BorderPane {
         }
 
     }
+
     public static ArrayList<Integer> ObjetRechercheMots(String texte) throws ClassNotFoundException, SQLException {
         Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
         ArrayList<Integer> List = new ArrayList<>();
@@ -287,9 +307,9 @@ public class VueAnnonces extends BorderPane {
                 int resultat = res.getInt("id");
                 if (ValiditeDateEnchere(resultat) == false) {
                     List.add(res.getInt("id"));
-                } 
+                }
             }
-            
+
         }
         try ( PreparedStatement st2 = con.prepareStatement("select * from objet where contains(titre,?)")) {
             st2.setString(1, texte);
@@ -298,10 +318,10 @@ public class VueAnnonces extends BorderPane {
                 int resultat = res2.getInt("id");
                 if (ValiditeDateEnchere(resultat) == false) {
                     List.add(resultat);
-                } 
+                }
             }
         }
-            return List;
+        return List;
 
     }
 

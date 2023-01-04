@@ -14,6 +14,10 @@
     </licenses>
     
     <properties>
+
+
+        <slf4j.version>1.7.25</slf4j.version>
+        <jetty.plugin.version>9.4.19.v20190610</jetty.plugin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>18</maven.compiler.source>
         <maven.compiler.target>18</maven.compiler.target>
@@ -22,7 +26,15 @@
 
 
     <dependencies>
-        
+
+
+
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
@@ -58,11 +70,35 @@
             <artifactId>osmosis-pbf</artifactId>
             <version>0.46</version>
         </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>16</version>
+        </dependency>
+        <dependency>
+            <groupId>com.gluonhq.attach</groupId>
+            <artifactId>util</artifactId>
+            <version>4.0.11</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.gluonhq.attach</groupId>
+            <artifactId>storage</artifactId>
+            <version>4.0.11</version>
+            <scope>runtime</scope>
+            <classifier>desktop</classifier>
+        </dependency>
+        <dependency>
+            <groupId>com.gluonhq</groupId>
+            <artifactId>maps</artifactId>
+            <version>2.0.0-ea+1</version>
+        </dependency>
 
     </dependencies>
     
     <build>
         <plugins>
+            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>

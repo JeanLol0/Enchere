@@ -4,11 +4,15 @@
  */
 package fr.insa.strasbourg.zerr.projetEnchere.FX.vues;
 
-
 import fr.insa.strasbourg.zerr.projetEnchere.FX.JavaFXUtils;
 import fr.insa.strasbourg.zerr.projetEnchere.FX.composants.TopBar;
 import fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD;
+import static fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD.ValiditeDateEnchere;
+import static fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD.connectGeneralPostGres;
 import fr.insa.strasbourg.zerr.projetEnchere.model.Utilisateur;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -25,39 +29,37 @@ import javafx.scene.text.Text;
  *
  * @author jules
  */
-public class VueLogin extends GridPane{
-    
-    
-    private FenetrePrincipale main ;
+public class VueLogin extends GridPane {
+
+    private FenetrePrincipale main;
     private TextField tfEmail;
     private PasswordField pfPass;
     private Button bLogin;
-    
+
     private Label tInscription;
     private Label tBienvenue;
     private Button bInscription;
-    
-    
-    public VueLogin (FenetrePrincipale fenetre){
+
+    public VueLogin(FenetrePrincipale fenetre) {
         this.setId("vue-connexion-inscription");
         this.main = fenetre;
-        
+
         this.tfEmail = new TextField();
         this.tfEmail.setPromptText("Adresse e-mail");
-        
+
         this.pfPass = new PasswordField();
         this.pfPass.setPromptText("Mot de passe");
-        
-        this.bLogin =new Button("Se connecter");
+
+        this.bLogin = new Button("Se connecter");
         this.bLogin.setId("bouton-vert");
-        
+
         this.bInscription = new Button("Inscription");
         this.bInscription.setId("bouton-bleu");
-        
+
         this.tBienvenue = new Label("Bienvenue");
         this.tBienvenue.setId("grand-texte");
         this.tInscription = new Label("Pas encore de compte ?");
-        
+
         this.add(this.tBienvenue, 0, 5);
         this.add(this.tfEmail, 0, 15);
         this.add(this.pfPass, 0, 16);
@@ -72,7 +74,7 @@ public class VueLogin extends GridPane{
         this.setHalignment(this.bInscription, HPos.CENTER);
         this.setHalignment(this.tBienvenue, HPos.CENTER);
         this.setHalignment(this.tInscription, HPos.CENTER);
-        
+
 ////////        //this.getStylesheets().add(getClass().getResource("CSS.css").toExternalForm());
 ////////        //StylesCSS.DarkTheme(this);
 ////////        //this.setStyle("-fx-border-color :red;");
@@ -80,23 +82,20 @@ public class VueLogin extends GridPane{
 ////////        //StylesCSS.StyleBoutonBleu(bInscription);
 ////////        StylesCSS.StyleGrandTitre(tBienvenue);
 ////////        StylesCSS.StyleText(tInscription);
-        
-        
         JavaFXUtils.DesactiveAutoFocus(pfPass);
         JavaFXUtils.DesactiveAutoFocus(tfEmail);
-        
+
         this.bLogin.setOnAction((t) -> {
             doLogin();
         });
-        
+
         this.bInscription.setOnAction((t) -> {
             System.out.println("bouton incr");
             this.main.setCenter(new VueInscription(this.main));
         });
-        
-        
-        
+
     }
+
     public void doLogin() {
         String nom = this.tfEmail.getText();
         String pass = this.pfPass.getText();
@@ -104,7 +103,7 @@ public class VueLogin extends GridPane{
             Optional<Utilisateur> user = BDD.login(this.main.getBDD(), nom, pass);
             if (user.isEmpty()) {
                 JavaFXUtils.showErrorInAlert("Erreur", "utilisateur invalide", "");
-                
+
             } else {
                 this.main.getSessionInfo().setCurUser(user);
                 this.main.setCenter(new VueAcceuil(this.main));
@@ -119,4 +118,17 @@ public class VueLogin extends GridPane{
         }
     }
     
+    public int getIdUtilisateur() throws SQLException, ClassNotFoundException {
+        Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
+        int resultat = 0;
+        try ( PreparedStatement st = con.prepareStatement("select id from utilisateur where email = ? ")) {
+            st.setString(1, this.tfEmail.getText());
+            ResultSet res = st.executeQuery();
+            while (res.next()) {
+                resultat = res.getInt("id");
+            }
+        }
+        return resultat;
+
+    }
 }
