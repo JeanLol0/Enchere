@@ -16,6 +16,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.geometry.Pos;
@@ -179,18 +181,17 @@ public class VueAnnonces extends BorderPane {
                 for (int i = 0; i < nbAnnonce; i++) {
                     if (this.idAnnonce.get(i) == resultat) {
                         this.idAnnonce.remove(i);
-                        nbAnnonce=nbAnnonce-1;
+                        nbAnnonce = nbAnnonce - 1;
                     }
                 }
             }
 
         }
-        nbAnnonce=this.idAnnonce.size();
+        nbAnnonce = this.idAnnonce.size();
         for (int j = 0; j < nbAnnonce; j++) {
-                this.gridPane.add(new Annonce(this.main, this.idAnnonce.get(j)), 0, j);
-            }
+            this.gridPane.add(new Annonce(this.main, this.idAnnonce.get(j)), 0, j);
         }
-    
+    }
 
 //    private void afficheAnnonceSansTri() throws SQLException, ClassNotFoundException, IOException {
 //        recupereIdAnnonce();
@@ -300,28 +301,53 @@ public class VueAnnonces extends BorderPane {
     public static ArrayList<Integer> ObjetRechercheMots(String texte) throws ClassNotFoundException, SQLException {
         Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
         ArrayList<Integer> List = new ArrayList<>();
-        try ( PreparedStatement st = con.prepareStatement("select * from objet where contains(bio,?) ")) {
-            st.setString(1, texte);
+        System.out.println("on est ici");
+        try ( PreparedStatement st = con.prepareStatement("select * from objet where titre like ?")) {
+            st.setString(1, "%"+texte+"%");
             ResultSet res = st.executeQuery();
             while (res.next()) {
                 int resultat = res.getInt("id");
-                if (ValiditeDateEnchere(resultat) == false) {
-                    List.add(res.getInt("id"));
-                }
-            }
-
-        }
-        try ( PreparedStatement st2 = con.prepareStatement("select * from objet where contains(titre,?)")) {
-            st2.setString(1, texte);
-            ResultSet res2 = st2.executeQuery();
-            while (res2.next()) {
-                int resultat = res2.getInt("id");
                 if (ValiditeDateEnchere(resultat) == false) {
                     List.add(resultat);
                 }
             }
         }
-        return List;
+        try ( PreparedStatement st = con.prepareStatement("select * from objet where bio like ?")) {
+            st.setString(1, "%"+texte+"%");
+            ResultSet res = st.executeQuery();
+            while (res.next()) {
+                int resultat = res.getInt("id");
+                if (ValiditeDateEnchere(resultat) == false) {
+                    List.add(resultat);
+                }
+            }
+        }
+        Set<Integer> set = new LinkedHashSet<>(List);
+        ArrayList<Integer> sansdoublons = new ArrayList<>(set);
+        
+//        try ( Statement st = con.createStatement()) {
+//            String queryssg = ""select * from objet where titre like '%""" + texte + "%'";
+//            try ( ResultSet tlu = st.executeQuery(queryssg)) {
+//                System.out.println("on est la ");
+//                while (tlu.next()) {
+//                    int resultats = tlu.getInt("id");
+//                    System.out.println("resultat");
+//                    List.add(resultats);
+//                }
+//            }
+//
+//        }
+//        try ( Statement st = con.createStatement()) {
+//            ResultSet res2 = st.executeQuery("select * from objet where titre like '%" + texte + "%'");
+//            while (res2.next()) {
+//                int resultat2 = res2.getInt("id");
+//                System.out.println("resultat" + resultat2);
+//                if (ValiditeDateEnchere(resultat2) == false) {
+//                    List.add(resultat2);
+//                }
+//            }
+//        }
+        return sansdoublons;
 
     }
 

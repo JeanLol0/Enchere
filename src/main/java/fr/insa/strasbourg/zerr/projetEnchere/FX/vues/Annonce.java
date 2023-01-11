@@ -84,11 +84,15 @@ public class Annonce extends HBox {
         this.tVendeur = new Label("Nom du vendeur :");
         this.tTitre = new Label(this.titre);
         this.tTempsR = new Label("Temps restant :");
-        this.tDistance=new Label ("Distance");
+        this.tDistance = new Label("Distance");
         int idUtil = this.main.getSessionInfo().getUserID();
         RecupCoordUtil(idUtil);
         double distance = CalculDistance(this.Utillongitude, Utillatitude, Olongitude, Olatitude);
-        this.distance = new Label (Double.toString(distance)+" km");
+        if (distance < 1) {
+            this.distance = new Label("Moins d'un kilomètre ");
+        } else {
+            this.distance = new Label(Double.toString(distance) + " km");
+        }
         this.tTitre.setId("grand-text-annonce");
 
         this.grid.add(this.tTitre, 0, 0, 2, 1);
@@ -141,6 +145,7 @@ public class Annonce extends HBox {
         }
 
     }
+
     private void RecupCoordUtil(int id)
             throws SQLException, ClassNotFoundException {
         Connection con = this.main.getBDD();
@@ -148,12 +153,13 @@ public class Annonce extends HBox {
             st.setInt(1, id);
             ResultSet res = st.executeQuery();
             while (res.next()) {
-                this.Utillatitude= res.getDouble("lat");
+                this.Utillatitude = res.getDouble("lat");
                 this.Utillongitude = res.getDouble("long");
             }
         }
 
     }
+
     public static int CalculDistance(double Utlong, double Utlat, double Objlong, double Objlat) {
         double value = Math.sin(Math.toRadians(Utlat)) * Math.sin(Math.toRadians(Objlat));
         double value2 = Math.cos(Math.toRadians(Objlat)) * Math.cos(Math.toRadians(Utlat)) * Math.cos(Math.toRadians(Utlong - Objlong));
