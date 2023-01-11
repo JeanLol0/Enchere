@@ -7,14 +7,13 @@ package fr.insa.strasbourg.zerr.projetEnchere.FX.vues;
 import fr.insa.strasbourg.zerr.projetEnchere.FX.JavaFXUtils;
 import fr.insa.strasbourg.zerr.projetEnchere.FX.composants.TopBar;
 import fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD;
-import static fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD.ValiditeDateEnchere;
 import static fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD.connectGeneralPostGres;
 import fr.insa.strasbourg.zerr.projetEnchere.model.Utilisateur;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Optional;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
@@ -22,8 +21,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.GridPane;
-import javafx.scene.text.Text;
 
 /**
  *
@@ -43,6 +47,10 @@ public class VueLogin extends GridPane {
     public VueLogin(FenetrePrincipale fenetre) {
         this.setId("vue-connexion-inscription");
         this.main = fenetre;
+        
+        Image image = getImage("ressources/background.png");
+        Background bg = new Background(new BackgroundImage(image, BackgroundRepeat.SPACE, BackgroundRepeat.SPACE, BackgroundPosition.CENTER, BackgroundSize.DEFAULT));
+        this.setBackground(bg);
 
         this.tfEmail = new TextField();
         this.tfEmail.setPromptText("Adresse e-mail");
@@ -66,7 +74,7 @@ public class VueLogin extends GridPane {
         this.add(this.bLogin, 0, 17);
         this.add(this.tInscription, 0, 18);
         this.add(this.bInscription, 0, 19);
-        this.bLogin.setMaxWidth(Double.MAX_VALUE);
+        //this.bLogin.setMaxWidth(Double.MAX_VALUE);
         this.bInscription.setMaxWidth(Double.MAX_VALUE);
         this.setVgap(20);
         this.setAlignment(Pos.TOP_CENTER);
@@ -130,5 +138,11 @@ public class VueLogin extends GridPane {
         }
         return resultat;
 
+    }
+    private Image getImage(String resourcePath) {
+        InputStream input //
+                = this.getClass().getResourceAsStream(resourcePath);
+        Image image = new Image(input);
+        return image;
     }
 }

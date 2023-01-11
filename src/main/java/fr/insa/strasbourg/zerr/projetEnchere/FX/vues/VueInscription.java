@@ -218,6 +218,7 @@ public class VueInscription extends GridPane {
         this.avatar.setOnMouseClicked((t) -> {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Open Resource File");
+            System.out.println("Avatar");
             
         });
         

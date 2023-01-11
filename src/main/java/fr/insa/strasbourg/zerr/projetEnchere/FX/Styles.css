@@ -30,10 +30,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-vgap: 10px;
     -fx-hgap: 30px;
     -fx-border-insets: 30 ;
-    -fx-border:2px double black;
     -fx-border-color: blue ;
     -fx-border-width: 3 ;
-    -fx-border-radius:10px;
+    -fx-border-radius:15px;
     -fx-spacing: 10;
     -fx-padding: 10 30 10 30;
 }
@@ -87,12 +86,32 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-padding: 9 9 9 9;
 }
 
-#bouton-vert{
+/*#bouton-vert{
     -fx-content-display : center;
     -fx-alignment : center;
     -fx-background-color: #32cd32;
     -fx-text-fill: white;
     -fx-padding: 3 6 6 6;
+}*/
+
+#bouton-vert{
+    -fx-content-display : center;
+    -fx-max-width: 200;
+    -fx-alignment : center;
+    -fx-padding: 3 6 6 6;
+    -fx-color: #fff;
+    -fx-background-color: #08c708;
+    -fx-align-items: center;
+    -fx-background-radius: 15px;
+
+}
+
+#bouton-vert:hover{
+    -fx-initial-delay:300;
+    -fx-transition : 383ms;
+    -fx-max-width: 500;
+    -fx-color: #19d10c;
+
 }
 
 #bouton-rouge{
@@ -130,4 +149,5 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 .button {
 
     -fx-font-size: 25px;
+    -fx-background-radius: 30;
 }

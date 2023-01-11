@@ -183,6 +183,7 @@
                 <filtering>false</filtering>
                 <includes>
                     <include>**/*.png</include>
+                    <include>**/*.jpg</include>
                 </includes>
                 <excludes>
                     <exclude>**/*.java</exclude>
