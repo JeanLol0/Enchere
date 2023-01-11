@@ -88,7 +88,7 @@ public class Annonce extends HBox {
         int idUtil = this.main.getSessionInfo().getUserID();
         RecupCoordUtil(idUtil);
         double distance = CalculDistance(this.Utillongitude, Utillatitude, Olongitude, Olatitude);
-        this.distance = new Label (Double.toString(distance));
+        this.distance = new Label (Double.toString(distance)+" km");
         this.tTitre.setId("grand-text-annonce");
 
         this.grid.add(this.tTitre, 0, 0, 2, 1);

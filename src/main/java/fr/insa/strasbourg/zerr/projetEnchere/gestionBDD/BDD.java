@@ -397,8 +397,8 @@ public class BDD {
                 st.setInt(1, proposerpar);
                 ResultSet res2 = st.executeQuery();
                 while (res2.next()) {
-                    lat = res2.getInt("long");
-                    longitude = res2.getInt("lat");
+                    lat = res2.getDouble("long");
+                    longitude = res2.getDouble("lat");
                 }
             }
             pst.setDouble(10, lat);
