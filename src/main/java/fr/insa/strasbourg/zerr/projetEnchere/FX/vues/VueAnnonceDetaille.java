@@ -112,4 +112,6 @@ public class VueAnnonceDetaille extends ScrollPane {
             Logger.getLogger(VueAnnonceDetaille.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    
 }

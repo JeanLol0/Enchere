@@ -5,7 +5,7 @@
 package fr.insa.strasbourg.zerr.projetEnchere.FX.vues;
 
 import fr.insa.strasbourg.zerr.projetEnchere.FX.JavaFXUtils;
-import static fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD.ValiditeDateEnchere;
+import fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD;
 import static fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD.connectGeneralPostGres;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -131,7 +131,7 @@ public class Annonce extends HBox {
                 this.debut = res.getTimestamp("debut");
                 this.fin = res.getTimestamp("fin");
                 int prix = res.getInt("prixactuel");
-                this.prixActuel = new Label(String.valueOf(prix));
+                this.prixActuel = new Label(String.valueOf(prix) + " €");
                 int idcat = res.getInt("categorie");
                 this.categorie = new Label(getStringCategorie(idcat));
                 String nom = getNom(res.getInt("proposerpar"));
@@ -351,6 +351,16 @@ public class Annonce extends HBox {
 //            long diffH = ldt.until(ldt3, ChronoUnit.HOURS);
             if (secR < 0) {
                 tTime.setText("Enchere terminée");
+                try {
+                    if ((recupereEtatLivraison(this.main.getBDD(), this.id) != 2) || (recupereEtatLivraison(this.main.getBDD(), this.id) != 3)) {
+                        setEtatLivraison(this.main.getBDD(), 1); //ca veut dire que l'objet n'est plus en vente mais que mode de livraison n'est pas déterminé
+                        messageFin();
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(Annonce.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(Annonce.class.getName()).log(Level.SEVERE, null, ex);
+                }
             } else {
                 tTime.setText(jourR + " j " + heureR + " h " + minR + " m " + secR + " s");
             }
@@ -359,9 +369,43 @@ public class Annonce extends HBox {
         tempsRestant.play();
     }
 
+    private static int recupereEtatLivraison(Connection con, int id)
+            throws SQLException, ClassNotFoundException {
+        int etat = 0;
+        try ( PreparedStatement st = con.prepareStatement("select * from objet where id = ?")) {
+            st.setInt(1, id);
+            ResultSet res = st.executeQuery();
+            while (res.next()) {
+                etat = res.getInt("Etatlivraison");
+            }
+        }
+        return etat;
+    }
+
+    public static void setEtatLivraison(Connection con, int valeur) throws SQLException {
+        con.setAutoCommit(false);
+        try ( PreparedStatement pst = con.prepareStatement(
+                "update objet set Etatlivraison = ?", PreparedStatement.RETURN_GENERATED_KEYS)) {
+            pst.setInt(1, valeur);
+            pst.executeUpdate();
+            con.commit();
+            System.out.println("categorie créé");
+            try ( ResultSet rid = pst.getGeneratedKeys()) {
+                // et comme ici je suis sur qu'il y a une et une seule clé, je
+                // fait un simple next 
+                rid.next();
+                // puis je récupère la valeur de la clé créé qui est dans la
+                // première colonne du ResultSet
+                int id = rid.getInt(1);
+            }
+        } finally {
+            con.setAutoCommit(true);
+        }
+    }
+
     private void ActualisePrix() {
         Timeline Prix = new Timeline(new KeyFrame(javafx.util.Duration.seconds(1), (t) -> {
-            int prixActu = Integer.parseInt(this.prixActuel.getText());
+            int prixActu = Integer.parseInt(this.prixActuel.getText().substring(0, this.prixActuel.getText().length() - 2));
             Connection con = this.main.getBDD();
 
             try ( PreparedStatement st = con.prepareStatement("select * from objet where id = ?")) {
@@ -370,7 +414,7 @@ public class Annonce extends HBox {
                 while (res.next()) {
                     int prix = res.getInt("prixactuel");
                     if (prixActu != prix) {
-                        this.prixActuel.setText(String.valueOf(prix));
+                        this.prixActuel.setText(String.valueOf(prix) + " €");
                         System.out.println("Prix actualisé");
                     }
                 }
@@ -380,6 +424,53 @@ public class Annonce extends HBox {
         }));
         Prix.setCycleCount(Animation.INDEFINITE);
         Prix.play();
+    }
+
+    private void messageFin() throws SQLException, ClassNotFoundException {
+        String TextePourVendeurSiPasEnchere = "Votre objet '" + BDD.recupereTitreObjet(this.main.getBDD(), this.id) + "' n'est plus en vente mais il n'y a pas eut d'offres! \nVous pouvez le remettre en ligne en suivant les conseils du guide";
+        int idVendeur = this.idVendeur;
+        int IdDernierMec = UtilDernierEnchereSurObjet(this.id);
+        if (UtilDernierEnchereSurObjet(this.id) != -1) {
+            String TextePourAcheteurSiEnchere = "Vous avez gagné l'enchere sur l'objet: " + BDD.recupereTitreObjet(this.main.getBDD(), this.id) + "\nVous pouvez à présent choisir le mode de réception sur la rubrique 'Mes Encheres Finies'";
+            String TextePourVendeurSiEnchere = "Votre objet " + BDD.recupereTitreObjet(this.main.getBDD(), this.id) + " n'est plus en vente! L'utilisateur ";
+            TextePourVendeurSiEnchere = TextePourVendeurSiEnchere + recupereNomUTil(this.main.getBDD(), UtilDernierEnchereSurObjet(this.id)) + " vous propose de vous l'acheter";
+            BDD.createMessage(this.main.getBDD(), TextePourAcheteurSiEnchere, UtilDernierEnchereSurObjet(this.id), this.idVendeur);
+            BDD.createMessage(this.main.getBDD(), TextePourVendeurSiEnchere, this.idVendeur, UtilDernierEnchereSurObjet(this.id));
+        }
+        else{
+            //createMessage(this.main.getBDD(), TextePourVendeurSiPasEnchere, )
+        }
+
+    }
+
+    public int UtilDernierEnchereSurObjet(int idObjet) throws ClassNotFoundException, SQLException {
+        Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
+        int idDernierUtil = -1;
+        try ( PreparedStatement st = con.prepareStatement("select * from enchere where (select max(montant) from enchere where sur=?)")) {
+            st.setInt(1, idObjet);
+            ResultSet res = st.executeQuery();
+            while (res.next()) {
+                idDernierUtil = res.getInt("de");
+
+            }
+            return idDernierUtil;
+        }
+    }
+
+    public static String recupereNomUTil(Connection con, int id)
+            throws SQLException, ClassNotFoundException {
+        String NOM = "";
+        try ( PreparedStatement st = con.prepareStatement("select * from utilisateur where id = ?")) {
+            st.setInt(1, id);
+            ResultSet res = st.executeQuery();
+            while (res.next()) {
+                String nom = res.getString("nom");
+                String prenom = res.getString("prenom");
+                NOM = nom.toUpperCase() + " " + prenom.toUpperCase();
+            }
+        }
+        return NOM;
+
     }
 
 }

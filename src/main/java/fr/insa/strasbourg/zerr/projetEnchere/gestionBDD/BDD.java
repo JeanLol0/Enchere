@@ -31,6 +31,7 @@ import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javax.imageio.ImageIO;
 
@@ -117,6 +118,18 @@ public class BDD {
                     )
             """
             );
+            st.executeUpdate(//message
+                    """
+                    create table message(
+                            id integer not null primary key
+                            generated always as identity,
+                            texte Text not null,
+                            vendeur integer not null,
+                            acheteur integer not null, 
+                            date Timestamp not null
+                    )
+            """
+            );
             st.executeUpdate(//objet 
                     """
                     create table objet(
@@ -132,7 +145,8 @@ public class BDD {
                             image Text, 
                             prixactuel integer not null,
                             lat real not null,
-                            long real not null
+                            long real not null, 
+                            Etatlivraison integer 
                     )
                     """
             );
@@ -592,6 +606,11 @@ public class BDD {
                 con.commit();
                 System.out.println("enchere créé");
                 miseAjourPrix(montant, sur);
+                String titre = recupereTitreObjet(con, sur);
+                String acheteurnom = recupereNomUTil(con, de);
+                String texte = "Une enchère a été faites sur l'un de vos Objet :'" +titre+"' par " +acheteurnom+". \nConsultez votre rubrique 'Mes annonces'!";
+                int vendeur = recupereVendeurObjet(con, sur);
+                createMessage(con, texte, vendeur, de);
                 try ( ResultSet rid = pst.getGeneratedKeys()) {
                     rid.next();
                     int id = rid.getInt(1);
@@ -614,7 +633,65 @@ public class BDD {
         createEnchere(con, sur, de, montant);
         System.out.println("demande enchere faite");
     }
+    public static String recupereTitreObjet(Connection con, int id)
+            throws SQLException, ClassNotFoundException {
+        String titre = "";
+        try ( PreparedStatement st = con.prepareStatement("select * from objet where id = ?")) {
+            st.setInt(1, id);
+            ResultSet res = st.executeQuery();
+            while (res.next()) {
+                System.out.println(res.getString("titre"));
+                titre = res.getString("titre");
+                
+            }
+        }
+        return titre;
+    }
+    
+    
+    public static int recupereEtatLivraison(Connection con, int id)
+            throws SQLException, ClassNotFoundException {
+        int etat = 0;
+        try ( PreparedStatement st = con.prepareStatement("select * from objet where id = ?")) {
+            st.setInt(1, id);
+            ResultSet res = st.executeQuery();
+            while (res.next()) {
+                etat = res.getInt("Etatlivraison");
+            }
+        }
+        return etat;
+    }
+    
+    
+    public static String recupereNomUTil(Connection con, int id)
+            throws SQLException, ClassNotFoundException {
+        String NOM  = "";
+        try ( PreparedStatement st = con.prepareStatement("select * from utilisateur where id = ?")) {
+            st.setInt(1, id);
+            ResultSet res = st.executeQuery();
+            while (res.next()) {
+                String nom = res.getString("nom");
+                String prenom = res.getString("prenom");
+                NOM= nom.toUpperCase() + " " + prenom.toUpperCase();
+            }
+        }
+        return NOM;
 
+    }
+    public static int recupereVendeurObjet(Connection con, int id)
+            throws SQLException, ClassNotFoundException {
+        int titre = 0;
+        try ( PreparedStatement st = con.prepareStatement("select * from objet where id = ?")) {
+            st.setInt(1, id);
+            ResultSet res = st.executeQuery();
+            while (res.next()) {
+                titre = res.getInt("proposerpar");
+                
+            }
+        }
+        return titre;
+
+    }
     public static String ImageEnTexte(Image img) {
 
         BufferedImage bufi = SwingFXUtils.fromFXImage(img, null);
@@ -1527,7 +1604,22 @@ public class BDD {
             return List;
         }
     }
-    
+    public static void createMessage(Connection con, String texte, int IdVendeur, int IdAcheteur) throws SQLException {
+        con.setAutoCommit(false);
+        try ( PreparedStatement pst = con.prepareStatement(
+                "insert into message (texte,vendeur,acheteur,date) values (?,?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS)) {
+            pst.setString(1, texte);
+            pst.setInt(2, IdVendeur);
+            pst.setInt(3, IdAcheteur);
+            Timestamp maintenant = new Timestamp(System.currentTimeMillis());
+            pst.setTimestamp(4, maintenant);
+            pst.executeUpdate();
+            con.commit();
+            System.out.println("message créé");
+        } finally {
+            con.setAutoCommit(true);
+        }
+    }
      //retourne la liste des objets par rapport à la recherche des objets en cours de validité 
     
 }

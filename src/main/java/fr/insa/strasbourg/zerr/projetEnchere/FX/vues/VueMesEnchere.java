@@ -163,7 +163,7 @@ public class VueMesEnchere extends GridPane {
         }
     }
     
-    private int UtilDernierEnchereSurObjet(int idObjet) throws ClassNotFoundException, SQLException{
+    public int UtilDernierEnchereSurObjet(int idObjet) throws ClassNotFoundException, SQLException{
         Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
         int idDernierUtil = -1;
         try (PreparedStatement st = con.prepareStatement("select * from enchere where (select max(montant) from enchere where sur=?)")){
