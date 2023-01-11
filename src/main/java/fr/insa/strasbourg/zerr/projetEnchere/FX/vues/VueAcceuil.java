@@ -5,11 +5,19 @@
 package fr.insa.strasbourg.zerr.projetEnchere.FX.vues;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 
@@ -22,16 +30,23 @@ public class VueAcceuil extends GridPane{
     private Button bAffAnnonce;
     private Button bAffMesAnnonces;
     private Button bAffMesEnchere;
-    private Text tBienvenue;
+    private Label tBienvenue;
 
     public VueAcceuil(FenetrePrincipale main) {
-        this.setAlignment(Pos.TOP_CENTER);
+        this.setAlignment(Pos.CENTER_RIGHT);
         this.main = main;
         this.setId("vue-acceuil"); 
+        
+        
+        Image image = getImage("ressources/acceuil.png");
+        Background bg = new Background(new BackgroundImage(image, BackgroundRepeat.SPACE, BackgroundRepeat.SPACE, BackgroundPosition.CENTER, BackgroundSize.DEFAULT));
+        this.setBackground(bg);
+        
         this.bAffAnnonce = new Button("Afficher les annonces en cours ");
         this.bAffMesAnnonces = new Button("Afficher mes annonces en cours ");
         this.bAffMesEnchere = new Button("Afficher mes encheres en cours ");
-        this.tBienvenue = new Text("Bienvenue");
+        this.tBienvenue = new Label("Bienvenue");
+        this.tBienvenue.setId("grand-titre-bienvenue");
         this.add(this.tBienvenue, 0, 0);
         this.add(this.bAffAnnonce, 0, 4);
         this.add(this.bAffMesAnnonces, 0, 6);
@@ -60,6 +75,13 @@ public class VueAcceuil extends GridPane{
                 Logger.getLogger(VueAcceuil.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
+    }
+    
+    private Image getImage(String resourcePath) {
+        InputStream input //
+                = this.getClass().getResourceAsStream(resourcePath);
+        Image image = new Image(input);
+        return image;
     }
     
 }

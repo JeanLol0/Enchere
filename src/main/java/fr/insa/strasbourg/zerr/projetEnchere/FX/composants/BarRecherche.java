@@ -10,21 +10,19 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
-import javafx.scene.text.Text;
+import javafx.scene.layout.VBox;
 
 /**
  *
  * @author jules
  */
-public class BarRecherche extends HBox {
+public class BarRecherche extends VBox {
     private Button bRecherche;
-    private HBox center;
+    private VBox center;
     private ComboBox trieCombo;
     private ComboBox categorieCombo;
     private TextField tfRecherche;
@@ -55,9 +53,9 @@ public class BarRecherche extends HBox {
         this.prefWidthProperty().bind(main.widthProperty());
         
         this.tfRecherche = new TextField("Effectuer une recherche");
-        this.tfRecherche.setPrefWidth(200);
+        //this.tfRecherche.setPrefWidth(200);
         
-        this.center = new HBox();
+        this.center = new VBox();
         this.center.getChildren().addAll(new Label("Catégorie"),this.categorieCombo,this.tfRecherche,this.bRecherche,new Label("Trier par :"),this.trieCombo);
         
         this.getChildren().addAll(this.center);

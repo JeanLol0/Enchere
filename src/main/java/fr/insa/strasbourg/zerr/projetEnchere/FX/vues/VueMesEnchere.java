@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -101,9 +102,12 @@ public class VueMesEnchere extends GridPane {
         this.lEncheresT = new Label("Encheres terminées");
         this.lEncheresC.setId("grand-texte");
         this.lEncheresT.setId("grand-texte");
-
+        
+        Button b = new Button("bouton");
+        
         this.add(lEncheresC, 0, 0);
         this.add(this.tvEnCours, 0, 1);
+        this.add(b, 0, 2);
         this.add(lEncheresT, 0, 2);
         this.add(this.tvTerminee, 0, 3);
     }

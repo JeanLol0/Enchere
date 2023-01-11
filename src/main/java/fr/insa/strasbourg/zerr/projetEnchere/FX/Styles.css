@@ -12,10 +12,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 
 
 #vue-connexion-inscription{
-    -fx-background-color:#252525;
+    /*-fx-background-color:#252525;*/
     -fx-font-size: 22px;
 
 }
+
+
 #annonce {
     -fx-font-family: Segoe UI;
     -fx-font-size: 25px;
@@ -77,7 +79,11 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 
 
 #vue-acceuil{
-    -fx-background-color:#c1d2ff;
+    -fx-font-size: 50px;
+    -fx-alignment: center-right;
+    -fx-padding: 100;
+    -fx-hgap: 30;
+    -fx-vgap:10;
 }
 
 #bar-recherche{
@@ -150,4 +156,11 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 
     -fx-font-size: 25px;
     -fx-background-radius: 30;
+}
+
+#grand-titre-bienvenue{
+    -fx-font-family: Segoe UI;
+    -fx-font-size: 100px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
 }

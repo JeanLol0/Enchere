@@ -20,6 +20,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
@@ -60,6 +65,10 @@ public class VueInscription extends GridPane {
         this.coordonnee=0;
         this.main = main;
         this.setId("vue-connexion-inscription");
+        
+        Image image = getImage("ressources/background.png");
+        Background bg = new Background(new BackgroundImage(image, BackgroundRepeat.SPACE, BackgroundRepeat.SPACE, BackgroundPosition.CENTER, BackgroundSize.DEFAULT));
+        this.setBackground(bg);
 
         this.tfNom = new TextField();
         this.tfPrenom = new TextField();

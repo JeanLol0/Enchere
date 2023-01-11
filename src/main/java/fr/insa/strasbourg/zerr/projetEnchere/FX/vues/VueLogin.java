@@ -48,6 +48,7 @@ public class VueLogin extends GridPane {
         this.setId("vue-connexion-inscription");
         this.main = fenetre;
         
+        
         Image image = getImage("ressources/background.png");
         Background bg = new Background(new BackgroundImage(image, BackgroundRepeat.SPACE, BackgroundRepeat.SPACE, BackgroundPosition.CENTER, BackgroundSize.DEFAULT));
         this.setBackground(bg);
