@@ -98,8 +98,8 @@ public class Annonce extends HBox {
         this.grid.add(categorie, 1, 3);
         this.grid.add(tVendeur, 0, 4);
         this.grid.add(npVendeur, 1, 4);
-        this.grid.add(tDistance, 0, 4);
-        this.grid.add(this.distance, 1, 4);
+        this.grid.add(tDistance, 0, 5);
+        this.grid.add(this.distance, 1, 5);
         this.grid.add(tTempsR, 0, 6);
         this.grid.add(tTime, 1, 6);
         this.getChildren().addAll(this.imageV, this.grid);
@@ -135,8 +135,8 @@ public class Annonce extends HBox {
                 this.npVendeur = new Label(prenom + " " + nom);
                 this.idVendeur = res.getInt("proposerpar");
                 this.stringImage = res.getString("image");
-                this.Olongitude = res.getDouble("longitude");
-                this.Olatitude = res.getDouble("latitude");
+                this.Olongitude = res.getDouble("lat");
+                this.Olatitude = res.getDouble("long");
             }
         }
 
@@ -144,12 +144,12 @@ public class Annonce extends HBox {
     private void RecupCoordUtil(int id)
             throws SQLException, ClassNotFoundException {
         Connection con = this.main.getBDD();
-        try ( PreparedStatement st = con.prepareStatement("select latitude from utilisateur where id = ?")) {
+        try ( PreparedStatement st = con.prepareStatement("select * from utilisateur where id = ?")) {
             st.setInt(1, id);
             ResultSet res = st.executeQuery();
             while (res.next()) {
-                this.Utillatitude= res.getDouble("latitude");
-                this.Utillongitude = res.getDouble("longitude");
+                this.Utillatitude= res.getDouble("lat");
+                this.Utillongitude = res.getDouble("long");
             }
         }
 
