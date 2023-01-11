@@ -42,6 +42,11 @@ public class Annonce extends HBox {
     private Timestamp debut;
     private Timestamp fin;
     private Timestamp restant;
+    private double Olongitude;
+    private double Olatitude;
+    private double Utillatitude;
+    private double Utillongitude;
+    private Label distance;
     private Label prixActuel;
     private Label categorie;
     private Integer idVendeur;
@@ -53,12 +58,12 @@ public class Annonce extends HBox {
 
     private Label npVendeur;
     private Label tTime;
-
     private Label tTitre;
     private Label tPrix;
     private Label tCategorie;
     private Label tVendeur;
     private Label tTempsR;
+    private Label tDistance;
 
     public Annonce(FenetrePrincipale main, Integer id) throws SQLException, ClassNotFoundException, IOException {
         //this.getStylesheets().add(getClass().getResource("StyleAnnonce.css").toExternalForm());
@@ -79,7 +84,11 @@ public class Annonce extends HBox {
         this.tVendeur = new Label("Nom du vendeur :");
         this.tTitre = new Label(this.titre);
         this.tTempsR = new Label("Temps restant :");
-
+        this.tDistance=new Label ("Distance");
+        int idUtil = this.main.getSessionInfo().getUserID();
+        RecupCoordUtil(idUtil);
+        double distance = CalculDistance(this.Utillongitude, Utillatitude, Olongitude, Olatitude);
+        this.distance = new Label (Double.toString(distance));
         this.tTitre.setId("grand-text-annonce");
 
         this.grid.add(this.tTitre, 0, 0, 2, 1);
@@ -89,8 +98,10 @@ public class Annonce extends HBox {
         this.grid.add(categorie, 1, 3);
         this.grid.add(tVendeur, 0, 4);
         this.grid.add(npVendeur, 1, 4);
-        this.grid.add(tTempsR, 0, 5);
-        this.grid.add(tTime, 1, 5);
+        this.grid.add(tDistance, 0, 4);
+        this.grid.add(this.distance, 1, 4);
+        this.grid.add(tTempsR, 0, 6);
+        this.grid.add(tTime, 1, 6);
         this.getChildren().addAll(this.imageV, this.grid);
 
         ActualisationTempsRestant();
@@ -124,10 +135,33 @@ public class Annonce extends HBox {
                 this.npVendeur = new Label(prenom + " " + nom);
                 this.idVendeur = res.getInt("proposerpar");
                 this.stringImage = res.getString("image");
+                this.Olongitude = res.getDouble("longitude");
+                this.Olatitude = res.getDouble("latitude");
             }
         }
 
     }
+    private void RecupCoordUtil(int id)
+            throws SQLException, ClassNotFoundException {
+        Connection con = this.main.getBDD();
+        try ( PreparedStatement st = con.prepareStatement("select latitude from utilisateur where id = ?")) {
+            st.setInt(1, id);
+            ResultSet res = st.executeQuery();
+            while (res.next()) {
+                this.Utillatitude= res.getDouble("latitude");
+                this.Utillongitude = res.getDouble("longitude");
+            }
+        }
+
+    }
+    public static int CalculDistance(double Utlong, double Utlat, double Objlong, double Objlat) {
+        double value = Math.sin(Math.toRadians(Utlat)) * Math.sin(Math.toRadians(Objlat));
+        double value2 = Math.cos(Math.toRadians(Objlat)) * Math.cos(Math.toRadians(Utlat)) * Math.cos(Math.toRadians(Utlong - Objlong));
+        double arccos = Math.acos(value + value2);
+        double distance = 6371 * arccos;
+        int distancerenvoye = (int) Math.round(distance);
+        return distancerenvoye;
+    }//renvoit une distance en kilometres
 
     private Timestamp tempsRestant(Timestamp debut, Timestamp fin) {
         long l1 = debut.getTime();
