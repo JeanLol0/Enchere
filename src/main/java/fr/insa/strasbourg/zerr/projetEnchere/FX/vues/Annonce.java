@@ -23,12 +23,14 @@ import java.util.logging.Logger;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 import javax.imageio.ImageIO;
 
 /**
@@ -418,7 +420,7 @@ public class Annonce extends HBox {
 
     private void ActualisePrix() {
         Timeline Prix = new Timeline(new KeyFrame(javafx.util.Duration.seconds(1), (t) -> {
-            int prixActu = Integer.parseInt(this.prixActuel.getText().substring(0, this.prixActuel.getText().length() - 2));
+            int prixActu = Integer.parseInt(getNbr(this.prixActuel.getText()));
             Connection con = this.main.getBDD();
 
             try ( PreparedStatement st = con.prepareStatement("select * from objet where id = ?")) {
@@ -483,5 +485,17 @@ public class Annonce extends HBox {
         }
         return NOM;
     }
+    
+    static String getNbr(String str) 
+    { 
+        // Remplacer chaque nombre non numérique par un espace
+        str = str.replaceAll("[^\\d]", " "); 
+        // Supprimer les espaces de début et de fin 
+        str = str.trim(); 
+        // Remplacez les espaces consécutifs par un seul espace
+        str = str.replaceAll(" +", ""); 
+  
+        return str; 
+    } 
 
 }

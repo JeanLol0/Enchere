@@ -6,8 +6,7 @@ package fr.insa.strasbourg.zerr.projetEnchere.FX.vues;
 
 import fr.insa.strasbourg.zerr.projetEnchere.FX.JavaFXUtils;
 import static fr.insa.strasbourg.zerr.projetEnchere.FX.vues.Annonce.CalculDistance;
-import static fr.insa.strasbourg.zerr.projetEnchere.FX.vues.Annonce.recupereNomUTil;
-import static fr.insa.strasbourg.zerr.projetEnchere.FX.vues.Annonce.setEtatLivraison;
+import static fr.insa.strasbourg.zerr.projetEnchere.FX.vues.Annonce.getNbr;
 import static fr.insa.strasbourg.zerr.projetEnchere.FX.vues.Annonce.texteEnImage;
 import fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD;
 import static fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD.connectGeneralPostGres;
@@ -189,7 +188,7 @@ public class VueAnnonceDetaille extends BorderPane {
                 this.debut = res.getTimestamp("debut");
                 this.fin = res.getTimestamp("fin");
                 int prix = res.getInt("prixactuel");
-                this.prixActuel = new Label(String.valueOf(prix));
+                this.prixActuel = new Label(String.valueOf(prix)+" €");
                 int idcat = res.getInt("categorie");
                 this.categorie = new Label(getStringCategorie(idcat));
                 String nom = getNom(res.getInt("proposerpar"));
@@ -340,7 +339,7 @@ public String getNom(Integer idU) throws SQLException {
 
     private void ActualisePrix() {
         Timeline Prix = new Timeline(new KeyFrame(javafx.util.Duration.seconds(1), (t) -> {
-            int prixActu = Integer.parseInt(this.prixActuel.getText().substring(0, this.prixActuel.getText().length() - 2));
+            int prixActu = Integer.parseInt(getNbr(this.prixActuel.getText()));
             Connection con = this.main.getBDD();
 
             try ( PreparedStatement st = con.prepareStatement("select * from objet where id = ?")) {
