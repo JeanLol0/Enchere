@@ -354,7 +354,6 @@ public class Annonce extends HBox {
 //            long diffH = ldt.until(ldt3, ChronoUnit.HOURS);
             if (secR < 0) {
                 tTime.setText("Enchere terminée");
-
                 try {
                     if ((recupereEtatLivraison(this.main.getBDD(), this.id) != 2) || (recupereEtatLivraison(this.main.getBDD(), this.id) != 3)) {
                         setEtatLivraison(this.main.getBDD(), 1); //ca veut dire que l'objet n'est plus en vente mais que mode de livraison n'est pas déterminé
@@ -452,7 +451,7 @@ public class Annonce extends HBox {
             BDD.createMessage(this.main.getBDD(), TextePourVendeurSiEnchere, this.idVendeur, UtilDernierEnchereSurObjet(this.id));
         }
         else{
-            //createMessage(this.main.getBDD(), TextePourVendeurSiPasEnchere, )
+            BDD.createMessage(this.main.getBDD(), TextePourVendeurSiPasEnchere, this.idVendeur, 2 );
         }
 
     }
@@ -465,7 +464,6 @@ public class Annonce extends HBox {
             ResultSet res = st.executeQuery();
             while (res.next()) {
                 idDernierUtil = res.getInt("de");
-
             }
             return idDernierUtil;
         }
@@ -484,7 +482,6 @@ public class Annonce extends HBox {
             }
         }
         return NOM;
-
     }
 
 }
