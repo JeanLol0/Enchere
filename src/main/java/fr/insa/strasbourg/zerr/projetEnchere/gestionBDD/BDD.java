@@ -94,7 +94,8 @@ public class BDD {
                         codepostal varchar(20),
                         image Text, 
                         lat real not null,
-                        long real not null
+                        long real not null, 
+                        role integer
                     )
                     """);
             System.out.println("1");
