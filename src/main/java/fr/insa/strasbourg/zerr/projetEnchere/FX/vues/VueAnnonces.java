@@ -48,7 +48,7 @@ public class VueAnnonces extends BorderPane {
         afficheAnnonce();
         this.gridPane.setAlignment(Pos.CENTER);
         this.gridPane.setVgap(15);
-        this.setTop(this.barRe);
+        this.main.setLeft(this.barRe);
         this.setCenter(this.gridPane);
         this.barRe.getButtonRecherche().setOnAction((t) -> {
             String texte = this.barRe.getTextField().getText();
@@ -104,16 +104,19 @@ public class VueAnnonces extends BorderPane {
                     Logger.getLogger(VueAnnonces.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            if ("Catégorie".equals(typeTri)) {
-                String categorie = this.barRe.getCategorieCombo().getValue().toString();
-                try {
-                    int idCat = getIdCategorie(categorie);
-                    this.idAnnonce = TriCategorie(idCat);
-                    afficheAnnonce();
-                } catch (SQLException | ClassNotFoundException | IOException ex) {
-                    Logger.getLogger(VueAnnonces.class.getName()).log(Level.SEVERE, null, ex);
-                }
+            
+        });
+        this.barRe.getbCategorie().setOnAction((t) -> {
+            try {
+                String categoriSelect = this.barRe.getCategorie().getTextCategorieSelected();
+                System.out.println(categoriSelect);
+                int idCat = getIdCategorie(categoriSelect);
+                this.idAnnonce = TriCategorie(idCat);
+                afficheAnnonce();
+            } catch (SQLException | ClassNotFoundException | IOException ex) {
+                Logger.getLogger(VueAnnonces.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
         });
 
     }

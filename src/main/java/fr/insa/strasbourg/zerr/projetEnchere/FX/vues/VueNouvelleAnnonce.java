@@ -13,6 +13,7 @@ import fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.SessionInfo;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -37,6 +38,11 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.DragEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
@@ -56,8 +62,8 @@ public class VueNouvelleAnnonce extends ScrollPane {
 
     private VueImage image;
 
-    private RadioButton rbDuree;
-    private RadioButton rbProgramme;
+    //private Label rbDuree;
+    private Label rbProgramme;
 
     private DatePicker dDebut;
     private DatePicker dFin;
@@ -73,43 +79,42 @@ public class VueNouvelleAnnonce extends ScrollPane {
     private Integer proposerPar;
     private Button bCreerAnnonce;
 
-    private Text tTitre;
-    private Text tPrix;
-    private Text tCategorie;
-    private Text tPhoto;
-    private Text tDescr;
+    private Label tTitre;
+    private Label tPrix;
+    private Label tCategorie;
+    private Label tPhoto;
+    private Label tDescr;
 
     private SessionInfo sessionInfo;
 
     public VueNouvelleAnnonce(FenetrePrincipale main) throws IOException {
+        Image image = getImage("ressources/background.png");
+        Background bg = new Background(new BackgroundImage(image, BackgroundRepeat.SPACE, BackgroundRepeat.SPACE, BackgroundPosition.CENTER, BackgroundSize.DEFAULT));
+        this.setBackground(bg);
+
         this.main = main;
         this.gridMain = new GridPane();
         this.gridMain.setId("vue-nouvelle-annonce");
         this.gridMain.setAlignment(Pos.CENTER);
         this.setFitToWidth(true);
-        this.rbDuree = new RadioButton("Définir la durée de l'enchère");
-        this.rbProgramme = new RadioButton("Programmer le début et la fin de la vente");
+        //this.rbDuree = new Label("Définir la durée de l'enchère");
+        this.rbProgramme = new Label("Programmer le début et la fin de la vente");
+        this.rbProgramme.setId("grand-text-annonce");
         this.bCreerAnnonce = new Button("Mettre en ligne");
-        this.rbProgramme.setOnAction((t) -> {
-            insererLigne(9, 2);
-            this.gridMain.add(this.dDebut, 0, 9);
-            this.gridMain.add(this.tDebut, 1, 9);
-            this.gridMain.add(this.dFin, 0, 10);
-            this.gridMain.add(this.tFin, 1, 10);
-            this.rbProgramme.setDisable(true);
-        });
-        this.rbDuree.setOnAction((t) -> {
-            if (this.rbProgramme.isSelected()) {
-                insererLigne(12, 1);
-                this.gridMain.add(new Label("TODO"), 0, 12);
-
-                this.rbDuree.setDisable(true);
-            }
-        });
+//        this.rbProgramme.setOnAction((t) -> {
+//            insererLigne(9, 2);
+//            this.gridMain.add(this.dDebut, 0, 9);
+//            this.gridMain.add(this.tDebut, 1, 9);
+//            this.gridMain.add(this.dFin, 0, 10);
+//            this.gridMain.add(this.tFin, 1, 10);
+//            this.rbProgramme.setDisable(true);
+//        });
 
         this.sessionInfo = this.main.getSessionInfo();
-        this.tfTitre = new TextField("Titre de l'annonce");
-        this.taDescription = new TextArea("Dercription de l'objet");
+        this.tfTitre = new TextField();
+        this.tfTitre.setPromptText("Titre de l'annonce");
+        this.taDescription = new TextArea();
+        this.taDescription.setPromptText("Dercription de l'objet");
         this.taDescription.setWrapText(true);
         this.dDebut = new DatePicker(LocalDate.now());
         this.dFin = new DatePicker(LocalDate.now());
@@ -133,7 +138,8 @@ public class VueNouvelleAnnonce extends ScrollPane {
         this.dFin.setDayCellFactory(dayCellFactory);
         this.dFin.setValue(dDebut.getValue().plusDays(1));
 
-        this.prixBase = new TextField("indiquer le prix");
+        this.prixBase = new TextField();
+        this.prixBase.setPromptText("Indiquer le prix de base");
         this.prixBase.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             if (newValue.matches("\\d*")) {
                 int value = Integer.parseInt(newValue);
@@ -141,19 +147,20 @@ public class VueNouvelleAnnonce extends ScrollPane {
                 prixBase.setText(oldValue);
             }
         });
-        
-        this.tTitre = new Text("Définir le titre");
-        this.tCategorie = new Text("Ajouter une photo");
-        this.tDescr = new Text("Ajouter une déscription");
-        this.tPrix = new Text("Définir le prix de départ");
-        this.tPhoto = new Text("Définir une catégorie");
+
+        this.tTitre = new Label("Définir le titre");
+        this.tCategorie = new Label("Définir une catégorie");
+        this.tDescr = new Label("Ajouter une déscription");
+        this.tPrix = new Label("Définir le prix de départ");
+        this.tPhoto = new Label("Ajouter une photo");
         this.tTitre.setId("grand-text-annonce");
         this.tCategorie.setId("grand-text-annonce");
         this.tDescr.setId("grand-text-annonce");
         this.tPrix.setId("grand-text-annonce");
         this.tPhoto.setId("grand-text-annonce");
-        
+
         this.bCreerAnnonce = new Button("Mettre en ligne");
+        this.bCreerAnnonce.setPrefWidth(1000);
         this.categories = new Categories(this.main);
         this.image = new VueImage();
 
@@ -170,10 +177,13 @@ public class VueNouvelleAnnonce extends ScrollPane {
         this.gridMain.add(this.tPrix, 0, 6, 2, 1);
         this.gridMain.add(this.prixBase, 0, 7, 2, 1);
         this.gridMain.add(this.rbProgramme, 0, 8, 2, 1);
-        this.gridMain.add(this.rbDuree, 0, 9, 2, 1);
-        this.gridMain.add(this.tCategorie, 0, 10, 2, 1);
-        this.gridMain.add(this.categories, 0, 11, 2, 1);
-        this.gridMain.add(this.bCreerAnnonce, 0, 12);
+        this.gridMain.add(this.dDebut, 0, 9);
+        this.gridMain.add(this.tDebut, 1, 9);
+        this.gridMain.add(this.dFin, 0, 10);
+        this.gridMain.add(this.tFin, 1, 10);
+        this.gridMain.add(this.tCategorie, 0, 11, 2, 1);
+        this.gridMain.add(this.categories, 0, 12, 2, 1);
+        this.gridMain.add(this.bCreerAnnonce, 0, 13);
 //        gridMain.add(this.tfTitre, 0, 0);
 //        gridMain.add(new Text("Début de l'enchère"), 0, 1);
 //        gridMain.add(this.dDebut, 1, 1);
@@ -193,6 +203,8 @@ public class VueNouvelleAnnonce extends ScrollPane {
 //        gridMain.add(this.bCreerAnnonce, 3, 6);
 
         this.setContent(this.gridMain);
+        JavaFXUtils.DesactiveAutoFocus(this.prixBase);
+        JavaFXUtils.DesactiveAutoFocus(this.tfTitre);
 
         this.bCreerAnnonce.setOnAction((t) -> {
             LocalDateTime ldt = LocalDateTime.now();
@@ -290,4 +302,10 @@ public class VueNouvelleAnnonce extends ScrollPane {
 
     }
 
+    private Image getImage(String resourcePath) {
+        InputStream input //
+                = this.getClass().getResourceAsStream(resourcePath);
+        Image image = new Image(input);
+        return image;
+    }
 }

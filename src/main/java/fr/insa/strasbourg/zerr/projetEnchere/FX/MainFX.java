@@ -39,7 +39,7 @@ public class MainFX extends Application {
         this.mainVue = new FenetrePrincipale(stage);
          
         this.scene = new Scene(mainVue);
-        JavaFXUtils.grandeFenetre(stage);
+        JavaFXUtils.maxFenetre(stage);
         //this.scene.getStylesheets().add("FX/DarkTheme.css");
         this.scene.getStylesheets().add(getClass().getResource("Styles.css").toExternalForm());
         stage.setScene(scene);

@@ -112,8 +112,11 @@ public class Annonce extends HBox {
         ActualisePrix();
 
         this.tTitre.setOnMouseClicked((t) -> {
-            //this.main.setCenter(new VueAnnonceDetaille(this.main, this.id, tTitre, tTempsR, tPrix, categorie, tVendeur, tTempsR, imageV));
-            this.main.setCenter(new VueAnnonceDetaille(main, grid, this.id, this.imageV));
+            try {
+                this.main.setCenter(new VueAnnonceDetaille(this.main, this.id));
+            } catch (SQLException | ClassNotFoundException | IOException ex) {
+                Logger.getLogger(Annonce.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
 
     }
@@ -351,6 +354,7 @@ public class Annonce extends HBox {
 //            long diffH = ldt.until(ldt3, ChronoUnit.HOURS);
             if (secR < 0) {
                 tTime.setText("Enchere terminée");
+
                 try {
                     if ((recupereEtatLivraison(this.main.getBDD(), this.id) != 2) || (recupereEtatLivraison(this.main.getBDD(), this.id) != 3)) {
                         setEtatLivraison(this.main.getBDD(), 1); //ca veut dire que l'objet n'est plus en vente mais que mode de livraison n'est pas déterminé
@@ -361,12 +365,22 @@ public class Annonce extends HBox {
                 } catch (ClassNotFoundException ex) {
                     Logger.getLogger(Annonce.class.getName()).log(Level.SEVERE, null, ex);
                 }
+
             } else {
                 tTime.setText(jourR + " j " + heureR + " h " + minR + " m " + secR + " s");
             }
         }));
         tempsRestant.setCycleCount(Animation.INDEFINITE);
         tempsRestant.play();
+        
+        
+        long secR = secRestant(this.fin);
+        if(secR < 0) {
+                tempsRestant.stop();;
+                tTime.setText("Stop timeline");
+                
+                
+            } 
     }
 
     private static int recupereEtatLivraison(Connection con, int id)

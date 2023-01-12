@@ -43,8 +43,11 @@ public class VueAcceuil extends GridPane{
         this.setBackground(bg);
         
         this.bAffAnnonce = new Button("Afficher les annonces en cours ");
+        this.bAffAnnonce.setId("bouton-annonce-en-cours");
         this.bAffMesAnnonces = new Button("Afficher mes annonces en cours ");
+        this.bAffMesAnnonces.setId("bouton-mes-annonces");
         this.bAffMesEnchere = new Button("Afficher mes encheres en cours ");
+        this.bAffMesEnchere.setId("bouton-mes-enchere");
         this.tBienvenue = new Label("Bienvenue");
         this.tBienvenue.setId("grand-titre-bienvenue");
         this.add(this.tBienvenue, 0, 0);

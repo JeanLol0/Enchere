@@ -144,6 +144,7 @@ public class Categories extends Accordion {
        
        this.Accessoires.setOnAction((t) -> {
            this.setCategorieSelected("Accessoires");
+           System.out.println(this.categorieSelected);
        });
        this.Ameublement.setOnAction((t) -> {
            this.setCategorieSelected("Ameublement");

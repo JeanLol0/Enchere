@@ -119,11 +119,13 @@ public class VueInscription extends GridPane {
 
         this.setVgap(20);
         this.setAlignment(Pos.CENTER);
-        this.bInscription.setMaxWidth(Double.MAX_VALUE);
-        this.bLogin.setMaxWidth(Double.MAX_VALUE);
-        this.bChoixPos.setMaxWidth(Double.MAX_VALUE);
         this.setHalignment(this.lInscription, HPos.CENTER);
         this.setHalignment(this.avatar, HPos.CENTER);
+        this.setHalignment(this.lInscription, HPos.CENTER);
+        this.setHalignment(this.avatar, HPos.CENTER);
+        this.setHalignment(this.bChoixPos, HPos.CENTER);
+        this.setHalignment(this.bInscription, HPos.CENTER);
+        this.setHalignment(this.bLogin, HPos.CENTER);
         
 
         JavaFXUtils.DesactiveAutoFocus(tfNom);
@@ -203,11 +205,11 @@ public class VueInscription extends GridPane {
 
         this.setVgap(20);
         this.setAlignment(Pos.CENTER);
-        this.bInscription.setMaxWidth(Double.MAX_VALUE);
-        this.bLogin.setMaxWidth(Double.MAX_VALUE);
-        this.bChoixPos.setMaxWidth(Double.MAX_VALUE);
         this.setHalignment(this.lInscription, HPos.CENTER);
         this.setHalignment(this.avatar, HPos.CENTER);
+        this.setHalignment(this.bChoixPos, HPos.CENTER);
+        this.setHalignment(this.bInscription, HPos.CENTER);
+        this.setHalignment(this.bLogin, HPos.CENTER);
         
 
         JavaFXUtils.DesactiveAutoFocus(tfNom);
@@ -216,7 +218,8 @@ public class VueInscription extends GridPane {
         JavaFXUtils.DesactiveAutoFocus(tfPrenom);
         JavaFXUtils.DesactiveAutoFocus(pfPass);
 
-
+        
+        
         this.bInscription.setOnAction((t) -> {
             doInscription();
         });

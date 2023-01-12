@@ -104,12 +104,15 @@ public class VueMesEnchere extends GridPane {
         this.lEncheresT.setId("grand-texte");
         
         Button b = new Button("bouton");
+        b.setOnAction((t) -> {
+            
+        });
         
         this.add(lEncheresC, 0, 0);
         this.add(this.tvEnCours, 0, 1);
         this.add(b, 0, 2);
-        this.add(lEncheresT, 0, 2);
-        this.add(this.tvTerminee, 0, 3);
+        this.add(lEncheresT, 0, 3);
+        this.add(this.tvTerminee, 0, 4);
     }
 
     public static ArrayList<Integer> EncheresUtilisateurEnCours(int idUtil) throws ClassNotFoundException, SQLException {

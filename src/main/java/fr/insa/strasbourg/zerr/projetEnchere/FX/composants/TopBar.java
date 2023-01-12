@@ -4,6 +4,7 @@
  */
 package fr.insa.strasbourg.zerr.projetEnchere.FX.composants;
 
+import com.ctc.wstx.util.StringUtil;
 import fr.insa.strasbourg.zerr.projetEnchere.FX.vues.FenetrePrincipale;
 import fr.insa.strasbourg.zerr.projetEnchere.FX.vues.VueAcceuil;
 import fr.insa.strasbourg.zerr.projetEnchere.FX.vues.VueLogin;
@@ -17,6 +18,7 @@ import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.geometry.Side;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -34,6 +36,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
+import org.apache.commons.lang3.text.WordUtils;
 
 /**
  *
@@ -62,6 +65,7 @@ public class TopBar extends HBox {
         this.logo = getIcon("ressources/logo.png",50,50);
         this.logo.setOnMouseClicked((t) -> {
             this.main.setCenter(new VueAcceuil(this.main));
+            this.main.setLeft(null);
         });
         this.milogout = new MenuItem("Déconnection");
         this.miAnnonce = new MenuItem("Mes Annonces");
@@ -80,7 +84,7 @@ public class TopBar extends HBox {
         this.menuUser.setOpacity(0);
         this.menuUser.setStyle("-fx-background-color: #ff0000; ");
         Circle cr = new Circle(30, 30, 30);
-        cr.setFill(new ImagePattern(getImage("ressources/user.png", 25, 25)));
+        cr.setFill(new ImagePattern(getImage("ressources/user.png", 35, 35)));
         cm.getItems().addAll(miAnnonce, miEnchere, milogout);
         
         cr.setOnMouseClicked((t) -> {
@@ -95,6 +99,9 @@ public class TopBar extends HBox {
         
         this.setId("topbar");
         this.bNouvelleAnnonce = new Button("Déposer une annonce");
+        this.bNouvelleAnnonce.setId("bouton-nouvelle-annonce");
+        ImageView plus = this.getIcon("ressources/bouton-ajouter.png",35,35);
+        this.bNouvelleAnnonce.setGraphic(plus);
         this.bNouvelleAnnonce.setMaxWidth(Integer.MAX_VALUE);
         TopBar.setHgrow(this.bNouvelleAnnonce, Priority.SOMETIMES);
         
@@ -102,18 +109,18 @@ public class TopBar extends HBox {
         Region region = new Region();
         TopBar.setHgrow(region, Priority.ALWAYS);
         
-        this.lNomPrenom = new Label(this.main.getSessionInfo().getUserNomPrenom());
+        this.lNomPrenom = new Label(WordUtils.capitalize(main.getSessionInfo().getUserNomPrenom()));
         this.lNomPrenom.setId("nom-prenom");
 
 
         this.setSpacing(10);
         this.setPadding(new Insets(10, 10, 10, 10));
-
         this.getChildren().addAll(logo,bNouvelleAnnonce, region,lNomPrenom, sp);
 
         this.bNouvelleAnnonce.setOnAction((t) -> {
             try {
                 this.main.setCenter(new VueNouvelleAnnonce(this.main));
+                this.main.setLeft(null);
             } catch (IOException ex) {
                 Logger.getLogger(TopBar.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -138,6 +145,7 @@ public class TopBar extends HBox {
         this.miAnnonce.setOnAction((t) -> {
             try {
                 this.main.setCenter(new VueMesAnnonces(this.main));
+                this.main.setLeft(null);
             } catch (ClassNotFoundException | SQLException ex) {
                 Logger.getLogger(TopBar.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -146,6 +154,7 @@ public class TopBar extends HBox {
         this.miEnchere.setOnAction((t) -> {
             try {
                 this.main.setCenter(new VueMesEnchere(this.main));
+                this.main.setLeft(null);
             } catch (ClassNotFoundException | SQLException ex) {
                 Logger.getLogger(TopBar.class.getName()).log(Level.SEVERE, null, ex);
             }

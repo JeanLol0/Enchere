@@ -76,7 +76,6 @@ public class VueLogin extends GridPane {
         this.add(this.tInscription, 0, 18);
         this.add(this.bInscription, 0, 19);
         //this.bLogin.setMaxWidth(Double.MAX_VALUE);
-        this.bInscription.setMaxWidth(Double.MAX_VALUE);
         this.setVgap(20);
         this.setAlignment(Pos.TOP_CENTER);
         this.setHalignment(this.bLogin, HPos.CENTER);
@@ -99,7 +98,6 @@ public class VueLogin extends GridPane {
         });
 
         this.bInscription.setOnAction((t) -> {
-            System.out.println("bouton incr");
             this.main.setCenter(new VueInscription(this.main));
         });
 

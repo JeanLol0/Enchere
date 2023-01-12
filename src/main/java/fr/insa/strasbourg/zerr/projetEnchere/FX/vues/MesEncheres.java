@@ -123,7 +123,22 @@ public class MesEncheres {
         }
     }
 
-    
+//    private void recupereNomCategorie(Integer id) throws SQLException, ClassNotFoundException {
+//        Connection con = this.main.getBDD();
+//
+//        try (PreparedStatement st = con.prepareStatement("select * from ca where id = ?")) {
+//            st.setInt(1, idAnn);
+//            ResultSet res = st.executeQuery();
+//            while (res.next()) {
+//                this.titre = res.getString("titre");
+//                //this.idEncherisseur = res.getInt(titre)
+//                this.nbEnchere = String.valueOf(IdencheresSurObjet(idAnn).size());
+//                this.prixActuel = res.getString("prixactuel");
+//                this.prixDepart = res.getString("prixbase");
+//
+//            }
+//        }
+//    }
     
     
 }

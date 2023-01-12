@@ -27,7 +27,6 @@ import javafx.stage.Stage;
     private Stage fenetre;
     private ScrollPane mainPane;
     private SessionInfo sessionInfo;
-    private TopBar topBar;
 
 
     public FenetrePrincipale(Stage fenetre) {

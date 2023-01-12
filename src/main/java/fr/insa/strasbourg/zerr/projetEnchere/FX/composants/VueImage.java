@@ -41,12 +41,12 @@ public class VueImage extends BorderPane {
     private Image image;
 
     public VueImage() throws IOException {
+        this.setId("vue-image");
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         this.width = gd.getDisplayMode().getWidth() / 2;
         int height = gd.getDisplayMode().getHeight() / 2;
         this.contentPane = new StackPane();
         this.contentPane.setPrefSize(width, width);
-        JavaFXUtils.addSimpleBorder(this);
         this.getChildren().size();
         this.setCenter(this.contentPane);
         try {

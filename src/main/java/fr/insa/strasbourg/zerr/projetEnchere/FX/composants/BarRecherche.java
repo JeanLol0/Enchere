@@ -8,6 +8,7 @@ import fr.insa.strasbourg.zerr.projetEnchere.FX.JavaFXUtils;
 import fr.insa.strasbourg.zerr.projetEnchere.FX.vues.FenetrePrincipale;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -21,47 +22,81 @@ import javafx.scene.layout.VBox;
  * @author jules
  */
 public class BarRecherche extends VBox {
+    private FenetrePrincipale main;
     private Button bRecherche;
+    private Button bCategorie;
     private VBox center;
     private ComboBox trieCombo;
-    private ComboBox categorieCombo;
     private TextField tfRecherche;
+    private Categories categorie;
+    
+    private Label lTrie;
+    private Label lCategorie;
 
     public BarRecherche(FenetrePrincipale main) {
+        this.main = main;
+        this.setPrefWidth(350);
         this.setId("bar-recherche");
         String c1 = "Prix croissant";
         String c2 = "Prix décroissant";
         String c3 = "Dates croissante";
         String c4 = "Dates décroissante";
-        String c5 = "Catégorie";
         //MenuItem c1 = new MenuItem("Prix croissant");
         //Choic c1 = new MenuItem("Prix croissant");
         this.trieCombo = new ComboBox();
+        this.categorie=new Categories(this.main);
         
-        this.categorieCombo = new ComboBox();
-        ObservableList<String> listTrie = FXCollections.observableArrayList(c1,c2,c3,c4,c5);
+        ObservableList<String> listTrie = FXCollections.observableArrayList(c1,c2,c3,c4);
         this.trieCombo.setItems(listTrie);
         ObservableList<String> listCategorie = getCategorieList();
-        this.categorieCombo.setItems(listCategorie);
         
         this.trieCombo.setOnAction((t) -> {
             System.out.println(this.trieCombo.getValue());
+            
+            
         });
         
+        this.lCategorie=new Label("Rechercher par catégorie");
+        this.lTrie = new Label("Trier par");
+        this.lTrie.setId("text-recherche");
+        this.lCategorie.setId("text-recherche");
+
+        
         this.bRecherche =new Button("Rechercher");
-        this.setAlignment(Pos.CENTER);
-        this.prefWidthProperty().bind(main.widthProperty());
+        this.bCategorie =new Button("Rechercher par catégorie");
+        this.bCategorie.setOnAction((t) -> {
+            System.out.println(this.categorie.getTextCategorieSelected());
+        });
+        this.setAlignment(Pos.TOP_CENTER);
         
-        this.tfRecherche = new TextField("Effectuer une recherche");
-        //this.tfRecherche.setPrefWidth(200);
         
+        this.tfRecherche = new TextField();
+        this.tfRecherche.setPromptText("Effectuer une recherche");
         this.center = new VBox();
-        this.center.getChildren().addAll(new Label("Catégorie"),this.categorieCombo,this.tfRecherche,this.bRecherche,new Label("Trier par :"),this.trieCombo);
+        this.bRecherche.prefWidthProperty().bind(this.widthProperty());
+        this.tfRecherche.prefWidthProperty().bind(this.widthProperty());
+        this.trieCombo.prefWidthProperty().bind(this.widthProperty());
+        this.center.getChildren().addAll(this.tfRecherche,this.bRecherche,this.lTrie,this.trieCombo,
+                this.lCategorie,this.categorie,this.bCategorie);
+        this.center.setSpacing(10);
+        this.center.setPadding(new Insets(10));
         
         this.getChildren().addAll(this.center);
-        JavaFXUtils.addSimpleBorder(this);
         
         
+        
+    }
+
+    public Button getbCategorie() {
+        return bCategorie;
+    }
+
+    public Button getbRecherche() {
+        return bRecherche;
+    }
+
+    public Categories getCategorie() {
+        return categorie;
     }
 
     public ComboBox getTrieCombo() {
@@ -75,9 +110,6 @@ public class BarRecherche extends VBox {
         return tfRecherche;
     }
 
-    public ComboBox getCategorieCombo() {
-        return categorieCombo;
-    }
     
     
     public static ObservableList<String> getCategorieList() {

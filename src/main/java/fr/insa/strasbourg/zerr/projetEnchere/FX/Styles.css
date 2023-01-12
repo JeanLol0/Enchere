@@ -17,13 +17,16 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 
 }
 
+#vue-image{
+    -fx-background-color:whitesmoke;
+}
 
 #annonce {
     -fx-font-family: Segoe UI;
     -fx-font-size: 25px;
     -fx-letter-spacing: 1px;
     -fx-word-spacing: 4px;
-    -fx-color: #241f31;
+    -fx-color: #238636;
     -fx-font-weight: bold;
     -fx-text-decoration: none;
     -fx-font-style: normal;
@@ -32,7 +35,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-vgap: 10px;
     -fx-hgap: 30px;
     -fx-border-insets: 30 ;
-    -fx-border-color: blue ;
+    -fx-border-color: #3B2786 ;
     -fx-border-width: 3 ;
     -fx-border-radius:15px;
     -fx-spacing: 10;
@@ -42,20 +45,19 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 
 #grand-text-annonce {
     -fx-font-size: 40px;
-    -fx-text-fill: red;
+    -fx-text-fill: #7ED167;
 }
 #vue-nouvelle-annonce {
     -fx-font-family: Segoe UI;
     -fx-font-size: 25px;
-    -fx-letter-spacing: 1px;
-    -fx-word-spacing: 4px;
-    -fx-color: #241f31;
+    /*    -fx-letter-spacing: 1px;
+        -fx-word-spacing: 4px;*/
+    -fx-color: #238636;
     -fx-font-weight: bold;
-    -fx-text-decoration: none;
-    -fx-font-style: normal;
-    -fx-font-variant: normal;
-    -fx-text-transform: none;
-    -fx-background-color:#c1d2ff;
+    /*-fx-text-transform: none;*/
+    -fx-background-color:#001419;
+    -fx-text-fill: blue;
+
 
 }
 
@@ -70,11 +72,13 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 
 #nom-prenom {
     -fx-font-family: Tahoma;
-    -fx-font-size: 25px;
+    -fx-font-size: 35px;
     -fx-color: #241f31;
     -fx-font-weight: bold;
     -fx-font-variant: small-caps;
     -fx-text-transform: uppercase;
+    -fx-text-fill: white;
+    -fx-padding: 10 0 0 0;
 }
 
 
@@ -87,9 +91,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 }
 
 #bar-recherche{
-    -fx-background-color:#c1d2ff;
+    -fx-background-color:#0B2239;
     -fx-font-size: 25px;
     -fx-padding: 9 9 9 9;
+    -fx-color: #238636;
 }
 
 /*#bouton-vert{
@@ -102,42 +107,67 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 
 #bouton-vert{
     -fx-content-display : center;
-    -fx-max-width: 200;
+    -fx-max-width: 600;
     -fx-alignment : center;
     -fx-padding: 3 6 6 6;
     -fx-color: #fff;
     -fx-background-color: #08c708;
     -fx-align-items: center;
-    -fx-background-radius: 15px;
+    -fx-background-radius: 5px;
 
 }
 
 #bouton-vert:hover{
-    -fx-initial-delay:300;
+    -fx-initial-delay:250;
     -fx-transition : 383ms;
-    -fx-max-width: 500;
+    -fx-max-width: 300;
     -fx-color: #19d10c;
+    -fx-background-radius: 30px;
 
 }
 
+
 #bouton-rouge{
     -fx-content-display : center;
+    -fx-max-width: 600;
+    -fx-background-radius: 5px;
     -fx-alignment : center;
     -fx-background-color: #ff0000;
     -fx-text-fill: white;
     -fx-padding: 3 6 6 6;
 }
+
+#bouton-rouge:hover{
+    -fx-max-width: 300;
+    -fx-background-radius: 30px;
+    -fx-background-color:#ff0000 ;
+}
+
+#bouton-bleu:hover{
+    -fx-content-display : center;
+    -fx-max-width: 300;
+    -fx-alignment : center;
+    -fx-padding: 3 6 6 6;
+    -fx-color: #fff;
+    -fx-align-items: center;
+    -fx-background-radius: 30px;
+    -fx-background-color:#00bfff ;
+}
 #bouton-bleu{
     -fx-content-display : center;
+    -fx-max-width: 600;
+
     -fx-alignment : center;
-    -fx-background-color:#00bfff ;
-    -fx-text-fill: white;
     -fx-padding: 3 6 6 6;
+    -fx-color: #fff;
+    -fx-align-items: center;
+    -fx-background-radius: 5px;
+    -fx-background-color:#00bfff ;
 }
 
 #topbar{
     -fx-spacing:20;
-    -fx-background-color:#e2e2e2;
+    -fx-background-color:#0B2239;
 }
 
 .text-area .scroll-bar:vertical:disabled {
@@ -155,12 +185,57 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 .button {
 
     -fx-font-size: 25px;
-    -fx-background-radius: 30;
+    -fx-background-radius: 3px;
 }
 
 #grand-titre-bienvenue{
     -fx-font-family: Segoe UI;
     -fx-font-size: 100px;
     -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+}
+
+#bouton-annonce-en-cours{
+    -fx-background-color:#148ca7;
     -fx-text-fill: white;
+    -fx-max-width: 500;
+    -fx-background-radius: 15px;
+}
+#bouton-annonce-en-cours:hover{
+    -fx-background-color:#A9BBFF;
+    -fx-text-fill: #0B2239;
+}
+
+#bouton-mes-annonces {
+    -fx-background-color:#148ca7;
+    -fx-text-fill: white;
+    -fx-background-radius: 15px;
+    -fx-max-width: 500;
+}
+#bouton-mes-annonces:hover {
+    -fx-background-color:#A9BBFF;
+    -fx-text-fill: #0B2239;
+}
+
+#bouton-mes-enchere{
+    -fx-background-color:#148ca7;
+    -fx-text-fill: white;
+    -fx-background-radius: 15px;
+    -fx-max-width: 500;
+}
+#bouton-mes-enchere:hover{
+    -fx-background-color:#A9BBFF;
+    -fx-text-fill: #0B2239;
+}
+#bouton-nouvelle-annonce{
+    -fx-background-color:#A9BBFF;
+    -fx-background-radius: 15px;
+    -fx-font-size: 35px;
+}
+#bouton-nouvelle-annonce:hover{
+    -fx-background-color:#148ca7;
+    -fx-text-fill: #0B2239;
+}
+#text-recherche{
+    -fx-text-fill: #238636;
 }
