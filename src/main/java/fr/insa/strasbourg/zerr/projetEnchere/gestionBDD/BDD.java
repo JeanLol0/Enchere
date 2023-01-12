@@ -50,7 +50,7 @@ public class BDD {
             ResultSet res = pst.executeQuery();
             if (res.next()) {
                 return Optional.of(new Utilisateur(res.getInt("id"), email, pass, res.getString("nom"), res.getString("prenom")));
-                
+
             } else {
                 return Optional.empty();
             }
@@ -506,25 +506,25 @@ public class BDD {
                 } else if (rep == 10) {
                     System.out.println(CalculDistance(-73.984, 40.76, -77.032, 38.89));
                 } else if (rep == 11) {
-                    
-                    TreeMap map =new TreeMap();
-                    map.put(Double.valueOf(48.39),3);
-                    map.put(Double.valueOf(28.39),5);
-                    map.put(Double.valueOf(23.9),1);
-                    map.put(Double.valueOf(8.39),4);
-                    map.put(Double.valueOf(18.39),2);
+
+                    TreeMap map = new TreeMap();
+                    map.put(Double.valueOf(48.39), 3);
+                    map.put(Double.valueOf(28.39), 5);
+                    map.put(Double.valueOf(23.9), 1);
+                    map.put(Double.valueOf(8.39), 4);
+                    map.put(Double.valueOf(18.39), 2);
                     Set set = map.entrySet();
                     Iterator it = set.iterator();
                     ArrayList<Integer> List = new ArrayList<>();
                     while (it.hasNext()) {
                         Map.Entry me = (Map.Entry) it.next();
                         List.add((Integer) me.getValue());
-                        
+
                     }
-                    for (int i =0; i<5;i++){
-                            System.out.println(List.get(i));
-                        }
-                    
+                    for (int i = 0; i < 5; i++) {
+                        System.out.println(List.get(i));
+                    }
+
                 }
 //                else if (rep == 5) {
 //                    demandeNouvelAime(con);
@@ -585,9 +585,23 @@ public class BDD {
         }
     }
 
+    public static int UtilDernierEnchereSurObjet(int idObjet) throws ClassNotFoundException, SQLException {
+        Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
+        int idDernierUtil = -1;
+        try ( PreparedStatement st = con.prepareStatement("select * from enchere where (select max(montant) from enchere where sur=?)")) {
+            st.setInt(1, idObjet);
+            ResultSet res = st.executeQuery();
+            while (res.next()) {
+                idDernierUtil = res.getInt("de");
+            }
+            return idDernierUtil;
+        }
+    }
+
     public static int createEnchere(Connection con, int sur, int de, int montant) throws SQLException, ClassNotFoundException {
         con.setAutoCommit(false);
         int prixObjetActuel = 0;
+        int idUtilDernier = UtilDernierEnchereSurObjet(sur);
         try ( PreparedStatement pst2 = con.prepareStatement("select prixactuel from objet where id = ?")) {
             pst2.setInt(1, sur);
             ResultSet res2 = pst2.executeQuery();
@@ -609,9 +623,10 @@ public class BDD {
                 miseAjourPrix(montant, sur);
                 String titre = recupereTitreObjet(con, sur);
                 String acheteurnom = recupereNomUTil(con, de);
-                String texte = "Une enchère a été faites sur l'un de vos Objet :'" +titre+"' par " +acheteurnom+". \nConsultez votre rubrique 'Mes annonces'!";
+                String texte = "Une enchère a été faites sur l'un de vos Objet :'" + titre + "' par " + acheteurnom + ". \nConsultez votre rubrique 'Mes annonces'!";
                 int vendeur = recupereVendeurObjet(con, sur);
                 createMessage(con, texte, vendeur, de);
+                //if (idUtilDernier)
                 try ( ResultSet rid = pst.getGeneratedKeys()) {
                     rid.next();
                     int id = rid.getInt(1);
@@ -634,6 +649,7 @@ public class BDD {
         createEnchere(con, sur, de, montant);
         System.out.println("demande enchere faite");
     }
+
     public static String recupereTitreObjet(Connection con, int id)
             throws SQLException, ClassNotFoundException {
         String titre = "";
@@ -643,13 +659,12 @@ public class BDD {
             while (res.next()) {
                 System.out.println(res.getString("titre"));
                 titre = res.getString("titre");
-                
+
             }
         }
         return titre;
     }
-    
-    
+
     public static int recupereEtatLivraison(Connection con, int id)
             throws SQLException, ClassNotFoundException {
         int etat = 0;
@@ -662,23 +677,23 @@ public class BDD {
         }
         return etat;
     }
-    
-    
+
     public static String recupereNomUTil(Connection con, int id)
             throws SQLException, ClassNotFoundException {
-        String NOM  = "";
+        String NOM = "";
         try ( PreparedStatement st = con.prepareStatement("select * from utilisateur where id = ?")) {
             st.setInt(1, id);
             ResultSet res = st.executeQuery();
             while (res.next()) {
                 String nom = res.getString("nom");
                 String prenom = res.getString("prenom");
-                NOM= nom.toUpperCase() + " " + prenom.toUpperCase();
+                NOM = nom.toUpperCase() + " " + prenom.toUpperCase();
             }
         }
         return NOM;
 
     }
+
     public static int recupereVendeurObjet(Connection con, int id)
             throws SQLException, ClassNotFoundException {
         int titre = 0;
@@ -687,12 +702,13 @@ public class BDD {
             ResultSet res = st.executeQuery();
             while (res.next()) {
                 titre = res.getInt("proposerpar");
-                
+
             }
         }
         return titre;
 
     }
+
     public static String ImageEnTexte(Image img) {
 
         BufferedImage bufi = SwingFXUtils.fromFXImage(img, null);
@@ -1567,9 +1583,9 @@ public class BDD {
         }
 
         return List;
-    //tri du plus proche au plus éloigné 
+        //tri du plus proche au plus éloigné 
     }
-    
+
     public static ArrayList<Integer> EncheresUtilisateurFini(int idUtil) throws ClassNotFoundException, SQLException {
         Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
         ArrayList<Integer> List = new ArrayList<>();
@@ -1581,12 +1597,12 @@ public class BDD {
                 if (ValiditeDateEnchere(resultat) == false) {
                     List.add(res.getInt("id"));
                     System.out.println("Valeurs" + res.getInt("sur"));
-                } 
+                }
             }
             return List;
         }
     } // renvoit l'id des encheres que l'utilsateurs a fait qui sont fini
-    
+
     public static ArrayList<Integer> EncheresUtilisateurEnCours(int idUtil) throws ClassNotFoundException, SQLException {
         Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
         ArrayList<Integer> List = new ArrayList<>();
@@ -1599,12 +1615,13 @@ public class BDD {
                 if (ValiditeDateEnchere(resultat) == true) {
                     List.add(res.getInt("id"));
                     System.out.println("Valeurs" + res.getInt("sur"));
-                } 
+                }
             }
             System.out.println(IdUtil);
             return List;
         }
     }
+
     public static void createMessage(Connection con, String texte, int IdVendeur, int IdAcheteur) throws SQLException {
         con.setAutoCommit(false);
         try ( PreparedStatement pst = con.prepareStatement(
@@ -1621,6 +1638,26 @@ public class BDD {
             con.setAutoCommit(true);
         }
     }
-     //retourne la liste des objets par rapport à la recherche des objets en cours de validité 
-    
+    //retourne la liste des objets par rapport à la recherche des objets en cours de validité 
+
+    public static void setAdmin(Connection con, int idAdmin) throws SQLException {
+        con.setAutoCommit(false);
+        try ( PreparedStatement pst = con.prepareStatement(
+                "update utilisateur set Etatlivraison = 1 where id =?", PreparedStatement.RETURN_GENERATED_KEYS)) {
+            pst.setInt(1, idAdmin);
+            pst.executeUpdate();
+            con.commit();
+            System.out.println("categorie créé");
+            try ( ResultSet rid = pst.getGeneratedKeys()) {
+                // et comme ici je suis sur qu'il y a une et une seule clé, je
+                // fait un simple next 
+                rid.next();
+                // puis je récupère la valeur de la clé créé qui est dans la
+                // première colonne du ResultSet
+                int id = rid.getInt(1);
+            }
+        } finally {
+            con.setAutoCommit(true);
+        }
+    }
 }

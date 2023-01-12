@@ -358,7 +358,7 @@ public class Annonce extends HBox {
                 tTime.setText("Enchere terminée");
                 try {
                     if ((recupereEtatLivraison(this.main.getBDD(), this.id) != 2) || (recupereEtatLivraison(this.main.getBDD(), this.id) != 3)) {
-                        setEtatLivraison(this.main.getBDD(), 1); //ca veut dire que l'objet n'est plus en vente mais que mode de livraison n'est pas déterminé
+                        setEtatLivraison(this.main.getBDD(), 1, this.id); //ca veut dire que l'objet n'est plus en vente mais que mode de livraison n'est pas déterminé
                         messageFin();
                     }
                 } catch (SQLException ex) {
@@ -373,15 +373,12 @@ public class Annonce extends HBox {
         }));
         tempsRestant.setCycleCount(Animation.INDEFINITE);
         tempsRestant.play();
-        
-        
+
         long secR = secRestant(this.fin);
-        if(secR < 0) {
-                tempsRestant.stop();;
-                tTime.setText("Stop timeline");
-                
-                
-            } 
+        if (secR < 0) {
+            tempsRestant.stop();;
+            tTime.setText("Stop timeline");
+        }
     }
 
     private static int recupereEtatLivraison(Connection con, int id)
@@ -397,11 +394,12 @@ public class Annonce extends HBox {
         return etat;
     }
 
-    public static void setEtatLivraison(Connection con, int valeur) throws SQLException {
+    public static void setEtatLivraison(Connection con, int valeur, int idObjet) throws SQLException {
         con.setAutoCommit(false);
         try ( PreparedStatement pst = con.prepareStatement(
-                "update objet set Etatlivraison = ?", PreparedStatement.RETURN_GENERATED_KEYS)) {
+                "update objet set Etatlivraison = ? where id = ?", PreparedStatement.RETURN_GENERATED_KEYS)) {
             pst.setInt(1, valeur);
+            pst.setInt(2, idObjet);
             pst.executeUpdate();
             con.commit();
             System.out.println("categorie créé");
@@ -449,11 +447,11 @@ public class Annonce extends HBox {
             String TextePourAcheteurSiEnchere = "Vous avez gagné l'enchere sur l'objet: " + BDD.recupereTitreObjet(this.main.getBDD(), this.id) + "\nVous pouvez à présent choisir le mode de réception sur la rubrique 'Mes Encheres Finies'";
             String TextePourVendeurSiEnchere = "Votre objet " + BDD.recupereTitreObjet(this.main.getBDD(), this.id) + " n'est plus en vente! L'utilisateur ";
             TextePourVendeurSiEnchere = TextePourVendeurSiEnchere + recupereNomUTil(this.main.getBDD(), UtilDernierEnchereSurObjet(this.id)) + " vous propose de vous l'acheter";
+            System.out.println(TextePourVendeurSiPasEnchere);
             BDD.createMessage(this.main.getBDD(), TextePourAcheteurSiEnchere, UtilDernierEnchereSurObjet(this.id), this.idVendeur);
             BDD.createMessage(this.main.getBDD(), TextePourVendeurSiEnchere, this.idVendeur, UtilDernierEnchereSurObjet(this.id));
-        }
-        else{
-            BDD.createMessage(this.main.getBDD(), TextePourVendeurSiPasEnchere, this.idVendeur, 2 );
+        } else {
+            BDD.createMessage(this.main.getBDD(), TextePourVendeurSiPasEnchere, this.idVendeur, 2);
         }
 
     }
