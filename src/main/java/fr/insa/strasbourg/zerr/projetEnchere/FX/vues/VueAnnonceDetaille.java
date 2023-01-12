@@ -180,8 +180,8 @@ public class VueAnnonceDetaille extends BorderPane {
 ////        this.HBox.setHgrow(this.gridPane, Priority.ALWAYS);
 //        this.HBox.getChildren().addAll(this.gri);
         
-        this.content.getChildren().addAll(this.gridPane);
-        this.content.setAlignment(Pos.CENTER);
+//        this.content.getChildren().addAll(this.gridPane);
+//        this.content.setAlignment(Pos.CENTER);
         this.scroll = new ScrollPane();
         this.scroll.setContent(this.gridPane);
         
