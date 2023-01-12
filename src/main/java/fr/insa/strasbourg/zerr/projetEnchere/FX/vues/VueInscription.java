@@ -8,12 +8,15 @@ import fr.insa.strasbourg.zerr.projetEnchere.FX.JavaFXUtils;
 import fr.insa.strasbourg.zerr.projetEnchere.FX.composants.VueImage;
 import static fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD.createUtilisateur;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -55,7 +58,7 @@ public class VueInscription extends ScrollPane {
     private Button bInscription;
     private Button bLogin;
     private Button bChoixPos;
-
+    private Image image;
     private Label lInscription;
 
     private Circle avatar;
@@ -132,7 +135,7 @@ public class VueInscription extends ScrollPane {
         this.gridpane.setHalignment(this.bChoixPos, HPos.CENTER);
         this.gridpane.setHalignment(this.bInscription, HPos.CENTER);
         this.gridpane.setHalignment(this.bLogin, HPos.CENTER);
-
+        this.setContent(this.gridpane);
         JavaFXUtils.DesactiveAutoFocus(tfNom);
         JavaFXUtils.DesactiveAutoFocus(tfEmail);
         JavaFXUtils.DesactiveAutoFocus(tfCodePostal);
@@ -150,11 +153,20 @@ public class VueInscription extends ScrollPane {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Open Resource File");
             File file = fileChooser.showOpenDialog(getContextMenu());
-            Image image2 = new Image(file.getAbsolutePath());
-            this.avatar.setFill(new ImagePattern(image2));
+            VueImage image2 = null; 
+            try {
+                image2 = new VueImage();
+            } catch (IOException ex) {
+                Logger.getLogger(VueInscription.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            image2.mouseClicked(file);
+            Image image3= image2.getImage();
+            this.avatar.setFill(new ImagePattern(image3));
         });
 
     }
+
+    
 
     public VueInscription(FenetrePrincipale main, double longitude, double latitude) {
         this.coordonnee = 1;
@@ -234,8 +246,15 @@ public class VueInscription extends ScrollPane {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Open Resource File");
             File file = fileChooser.showOpenDialog(getContextMenu());
-            Image image2 = new Image(file.getAbsolutePath());
-            this.avatar.setFill(new ImagePattern(image2));
+            VueImage image2 = null; 
+            try {
+                image2 = new VueImage();
+            } catch (IOException ex) {
+                Logger.getLogger(VueInscription.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            image2.mouseClicked(file);
+            Image image3= image2.getImage();
+            this.avatar.setFill(new ImagePattern(image3));
         });
 
     }

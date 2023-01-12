@@ -130,6 +130,7 @@ public class VueImage extends BorderPane {
                         setImage(img);
                         System.out.println("on est la");
                         addImage(img, contentPane);
+                        this.image = img;
                     } catch (FileNotFoundException ex) {
                         Logger.getLogger(VueImage.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (IOException ex) {
@@ -138,6 +139,9 @@ public class VueImage extends BorderPane {
                 }
             });
   
+    }
+    public Image getImage(){
+        return this.image;
     }
      public static Image texteEnImage(String img) throws IOException {
         byte[] result = Base64.getUrlDecoder().decode(img);
@@ -192,9 +196,7 @@ public class VueImage extends BorderPane {
         Image image = new Image(is);
         addDefautImage(image, contentPane);
     }
-    public Image getImage(){
-        return this.image;
-    }
+    
 
     public void setImage(Image image) {
         this.image = image;
