@@ -203,6 +203,8 @@ public class VueNouvelleAnnonce extends ScrollPane {
 //        gridMain.add(this.bCreerAnnonce, 3, 6);
 
         this.setContent(this.gridMain);
+        this.setId("scroll-annonce");
+        
         JavaFXUtils.DesactiveAutoFocus(this.prixBase);
         JavaFXUtils.DesactiveAutoFocus(this.tfTitre);
 

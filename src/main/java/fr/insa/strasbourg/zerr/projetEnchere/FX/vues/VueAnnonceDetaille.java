@@ -5,6 +5,7 @@
 package fr.insa.strasbourg.zerr.projetEnchere.FX.vues;
 
 import fr.insa.strasbourg.zerr.projetEnchere.FX.JavaFXUtils;
+import fr.insa.strasbourg.zerr.projetEnchere.FX.composants.BarRecherche;
 import static fr.insa.strasbourg.zerr.projetEnchere.FX.vues.Annonce.CalculDistance;
 import static fr.insa.strasbourg.zerr.projetEnchere.FX.vues.Annonce.getNbr;
 import static fr.insa.strasbourg.zerr.projetEnchere.FX.vues.Annonce.texteEnImage;
@@ -38,6 +39,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.text.Text;
 
 /**
@@ -55,7 +58,6 @@ public class VueAnnonceDetaille extends BorderPane {
     private TextField tfEnchere;
     private Button bEnchere;
 
-    private HBox content;
     private int idObj;
     private Label prix;
 
@@ -84,6 +86,14 @@ public class VueAnnonceDetaille extends BorderPane {
     private Label tDistance;
     
     private ScrollPane scroll;
+    private HBox HBox;
+    private Region region;
+    
+    private GridPane gri;
+    
+    private Button bGoEnchere;
+    private Button bRetour;
+    
 
     public VueAnnonceDetaille(FenetrePrincipale main, int idO) throws SQLException, ClassNotFoundException, IOException {
         this.main = main;
@@ -92,17 +102,16 @@ public class VueAnnonceDetaille extends BorderPane {
         this.idObj = idO;
         recupereObjet(idO);
         this.desc = new Label("Description");
-        this.content = new HBox();
-        this.content.setId("annonce");
         this.gridPane = new GridPane();
+        this.gridPane.setId("annonce");
         this.gridPane.setHgap(20);
         this.image = texteEnImage(this.stringImage);
         this.imageV = new ImageView(this.image);
 
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         int width = gd.getDisplayMode().getWidth() / 2;
-        this.imageV.setFitHeight(width*0.8);
-        this.imageV.setFitWidth(width*0.8);
+//        this.imageV.setFitHeight(width*0.8);
+//        this.imageV.setFitWidth(width*0.8);
         this.gridPane.setPrefWidth(width);
         
         this.gridPane.setVgap(10);
@@ -158,19 +167,148 @@ public class VueAnnonceDetaille extends BorderPane {
         this.gridPane.setHalignment(this.bEnchere, HPos.CENTER);
         this.gridPane.setHalignment(this.imageV, HPos.CENTER);
         
-        //this.gridPane.setGridLinesVisible(true);
+//        //this.gridPane.setGridLinesVisible(true);
+//        //this.content.setPrefWidth(this.getWidth());
+//        
+//        this.region = new Region();
+//        this.region.setPrefWidth(this.main.getWidth()/4);
+//        this.HBox=new HBox();
+//        this.gri=new GridPane();
+//        this.gri.add(this.gridPane, 0, 0);
+//        this.gri.setHalignment(this.gridPane,HPos.CENTER);
+////        this.HBox.setHgrow(this.region, Priority.SOMETIMES);
+////        this.HBox.setHgrow(this.gridPane, Priority.ALWAYS);
+//        this.HBox.getChildren().addAll(this.gri);
         
-        this.content.getChildren().addAll(this.gridPane);
         this.scroll = new ScrollPane();
+        this.scroll.setContent(this.gridPane);
         
-        this.scroll.setContent(this.content);
         this.setCenter(this.scroll);
+        //this.BorderPane.setId("scroll-annonce");
         ActualisationTempsRestant();
         ActualisePrix();
         this.bEnchere.setOnAction((t) -> {
             faireEnchere();
         });
-        JavaFXUtils.addSimpleBorder(scroll);
+        JavaFXUtils.addSimpleBorder(this);
+    }
+    public VueAnnonceDetaille(FenetrePrincipale main, int idO,int i) throws SQLException, ClassNotFoundException, IOException {
+        this.main = main;
+        this.gridPane = new GridPane();
+        this.main.setLeft(null);
+        this.idObj = idO;
+        recupereObjet(idO);
+        this.desc = new Label("Description");
+        this.gridPane = new GridPane();
+        this.gridPane.setId("annonce");
+        this.gridPane.setHgap(20);
+        this.image = texteEnImage(this.stringImage);
+        this.imageV = new ImageView(this.image);
+
+        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+        int width = gd.getDisplayMode().getWidth() / 2;
+//        this.imageV.setFitHeight(width*0.8);
+//        this.imageV.setFitWidth(width*0.8);
+        this.gridPane.setPrefWidth(width);
+        
+        this.gridPane.setVgap(10);
+
+        this.tTime = new Label("Temps restant :");
+        this.tPrix = new Label("Prix actuel :");
+        this.tCategorie = new Label("Catégorie :");
+        this.tVendeur = new Label("Nom du vendeur :");
+        this.tTitre = new Label(this.titre);
+        this.tTempsR = new Label("Temps restant :");
+        this.tDistance = new Label("Distance");
+        this.bEnchere = new Button("Encherir");
+
+        int idUtil = this.main.getSessionInfo().getUserID();
+        RecupCoordUtil(idUtil);
+        double distance = CalculDistance(this.Utillongitude, Utillatitude, Olongitude, Olatitude);
+        if (distance < 1) {
+            this.distance = new Label("Moins d'un kilomètre ");
+        } else {
+            this.distance = new Label(Double.toString(distance) + " km");
+        }
+        this.tfEnchere = new TextField();
+        this.tfEnchere.setPromptText("Indiquer le nouveau montant");
+        this.tfEnchere.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (newValue.matches("\\d*")) {
+                int value = Integer.parseInt(newValue);
+            } else {
+                tfEnchere.setText(oldValue);
+            }
+        });
+        this.tTitre.setId("grand-text-annonce");
+        
+        this.bGoEnchere = new Button("Plus de détails");
+        this.bRetour = new Button("Fermer");
+
+        this.gridPane.add(this.tTitre, 0, 0, 2, 1);
+        this.gridPane.add(imageV, 0, 1, 2, 1);
+        this.gridPane.add(this.desc, 0, 2, 1, 1);
+        this.gridPane.add(this.tDesc, 0, 3, 2, 1);
+        this.gridPane.add(tCategorie, 0, 4);
+        this.gridPane.add(categorie, 1, 4);
+        this.gridPane.add(tVendeur, 0, 5);
+        this.gridPane.add(npVendeur, 1, 5);
+        this.gridPane.add(tDistance, 0, 6);
+        this.gridPane.add(this.distance, 1, 6);
+        this.gridPane.add(tTempsR, 0, 7);
+        this.gridPane.add(tTime, 1, 7);
+        this.gridPane.add(tPrix, 0, 8);
+        this.gridPane.add(prixActuel, 1, 8);
+        this.gridPane.add(bGoEnchere, 0, 9);
+        this.gridPane.add(bRetour,1 , 9);
+
+        
+        this.gridPane.setAlignment(Pos.TOP_CENTER);
+        this.gridPane.setHalignment(this.tTitre, HPos.CENTER);
+        this.gridPane.setHalignment(this.bEnchere, HPos.CENTER);
+        this.gridPane.setHalignment(this.imageV, HPos.CENTER);
+        this.gridPane.setHalignment(this.bGoEnchere, HPos.CENTER);
+        this.gridPane.setHalignment(this.bRetour, HPos.CENTER);
+        
+//        //this.gridPane.setGridLinesVisible(true);
+//        //this.content.setPrefWidth(this.getWidth());
+//        
+//        this.region = new Region();
+//        this.region.setPrefWidth(this.main.getWidth()/4);
+//        this.HBox=new HBox();
+//        this.gri=new GridPane();
+//        this.gri.add(this.gridPane, 0, 0);
+//        this.gri.setHalignment(this.gridPane,HPos.CENTER);
+////        this.HBox.setHgrow(this.region, Priority.SOMETIMES);
+////        this.HBox.setHgrow(this.gridPane, Priority.ALWAYS);
+//        this.HBox.getChildren().addAll(this.gri);
+        
+        this.scroll = new ScrollPane();
+        this.scroll.setContent(this.gridPane);
+        
+        this.setCenter(this.scroll);
+        //this.BorderPane.setId("scroll-annonce");
+        ActualisationTempsRestant();
+        ActualisePrix();
+        this.bEnchere.setOnAction((t) -> {
+            faireEnchere();
+        });
+        JavaFXUtils.addSimpleBorder(this);
+        this.bGoEnchere.setOnAction((t) -> {
+            try {
+                this.main.setCenter(new VueAnnonceDetaille(main, idObj));
+                this.main.setRight(null);
+            } catch (SQLException ex) {
+                Logger.getLogger(VueAnnonceDetaille.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(VueAnnonceDetaille.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(VueAnnonceDetaille.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+        this.bRetour.setOnAction((t) -> {
+            this.main.setRight(null);
+            this.main.setLeft(new BarRecherche(main));
+        });
     }
 
     private void recupereObjet(int id)

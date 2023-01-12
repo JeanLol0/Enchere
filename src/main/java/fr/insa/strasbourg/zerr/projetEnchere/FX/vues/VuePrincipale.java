@@ -25,6 +25,7 @@ public class VuePrincipale extends ScrollPane {
         this.main = main;
         this.setContent(new VueAnnonces(this.main));
         this.setFitToWidth(true);
+        this.setId("scroll-annonce");
         //this.topBar = new TopBar(main);
         
         

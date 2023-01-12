@@ -179,7 +179,7 @@ public class TopBar extends HBox {
         return IV;
     }
 
-    private Image getImage(String resourcePath, int par, int par1) {
+    public  Image getImage(String resourcePath, int par, int par1) {
         InputStream input //
                 = this.getClass().getResourceAsStream(resourcePath);
         Image image = new Image(input);

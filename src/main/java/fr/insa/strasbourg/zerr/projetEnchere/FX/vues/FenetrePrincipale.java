@@ -35,6 +35,7 @@ import javafx.stage.Stage;
 
         this.sessionInfo = new SessionInfo();
         this.mainPane = new ScrollPane();
+        this.mainPane.setId("scroll-annonce2");
         //JavaFXUtils.addSimpleBorder(mainPane);
 
         try {

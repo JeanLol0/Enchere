@@ -8,7 +8,6 @@ import fr.insa.strasbourg.zerr.projetEnchere.FX.JavaFXUtils;
 import fr.insa.strasbourg.zerr.projetEnchere.FX.composants.BarRecherche;
 import static fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD.ValiditeDateEnchere;
 import static fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD.connectGeneralPostGres;
-import static fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD.defautConnect;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -23,7 +22,8 @@ import java.util.logging.Logger;
 import javafx.geometry.Pos;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.text.Text;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 
 /**
  *
@@ -37,10 +37,13 @@ public class VueAnnonces extends BorderPane {
     private ArrayList<Integer> idAnnonce;
     private Connection con;
     private BarRecherche barRe;
+    private Region region;
 
     public VueAnnonces(FenetrePrincipale main) throws SQLException, ClassNotFoundException, IOException {
         this.main = main;
+        this.setPrefWidth(this.main.getWidth()/2);
         this.gridPane = new GridPane();
+        
         this.barRe = new BarRecherche(this.main);
         this.idAnnonce = new ArrayList<Integer>();
         this.con = this.main.getBDD();
@@ -49,6 +52,7 @@ public class VueAnnonces extends BorderPane {
         this.gridPane.setAlignment(Pos.CENTER);
         this.gridPane.setVgap(15);
         this.main.setLeft(this.barRe);
+        //this.HBox.getChildren().addAll(this.gridPane);
         this.setCenter(this.gridPane);
         this.barRe.getButtonRecherche().setOnAction((t) -> {
             String texte = this.barRe.getTextField().getText();
@@ -65,7 +69,6 @@ public class VueAnnonces extends BorderPane {
         });
         this.barRe.getTrieCombo().setOnAction((t) -> {
             String typeTri = this.barRe.getTrieCombo().getValue().toString();
-            System.out.println(this.barRe.getTrieCombo().getValue().toString());
             if ("Prix croissant".equals(typeTri)) {
                 try {
                     this.idAnnonce = TriPrixCroissant();
@@ -109,7 +112,6 @@ public class VueAnnonces extends BorderPane {
         this.barRe.getbCategorie().setOnAction((t) -> {
             try {
                 String categoriSelect = this.barRe.getCategorie().getTextCategorieSelected();
-                System.out.println(categoriSelect);
                 int idCat = getIdCategorie(categoriSelect);
                 this.idAnnonce = TriCategorie(idCat);
                 afficheAnnonce();
@@ -130,8 +132,8 @@ public class VueAnnonces extends BorderPane {
                 String pass = res.getString("pass");
                 String prenom = res.getString("prenom");
                 String mail = res.getString("email");
-                System.out.println("utilisateur " + lenom + " " + prenom + " ("
-                        + pass + ")" + mail);
+//                System.out.println("utilisateur " + lenom + " " + prenom + " ("
+//                        + pass + ")" + mail);
             }
         }
     }
@@ -142,7 +144,7 @@ public class VueAnnonces extends BorderPane {
             ResultSet res = st.executeQuery();
             while (res.next()) {
                 this.idAnnonce.add(res.getInt("id"));
-                System.out.println("ids recupéré nb:" + this.idAnnonce.size());
+//                System.out.println("ids recupéré nb:" + this.idAnnonce.size());
 //            if (ValiditeDateEnchere(res.getInt("id")) == false) {
 //                int size = this.idAnnonce.size();
 //                this.idAnnonce.remove(size-1);
@@ -153,13 +155,13 @@ public class VueAnnonces extends BorderPane {
 
     private void afficheAnnoncePrixDecroissante() throws SQLException, IOException {
         try {
-            System.out.println("idAnnonce1" + this.idAnnonce);
+//            System.out.println("idAnnonce1" + this.idAnnonce);
             this.idAnnonce.clear();
-            System.out.println("idAnnonce2" + this.idAnnonce);
+//            System.out.println("idAnnonce2" + this.idAnnonce);
             this.idAnnonce = TriDateDecroissant();
-            System.out.println("idAnnonce3" + this.idAnnonce);
+//            System.out.println("idAnnonce3" + this.idAnnonce);
             this.gridPane.getChildren().clear();
-            System.out.println(this.gridPane.getChildren());
+//            System.out.println(this.gridPane.getChildren());
             int nbAnnonce = this.idAnnonce.size();
             for (int i = 0; i < nbAnnonce; i++) {
                 this.gridPane.add(new Annonce(this.main, this.idAnnonce.get(i) + 1), 0, i);
@@ -176,11 +178,11 @@ public class VueAnnonces extends BorderPane {
 
         try ( PreparedStatement st = con.prepareStatement("select id from objet where proposerpar = ?")) {
             st.setInt(1, this.main.getSessionInfo().getUserID());
-            System.out.println(this.main.getSessionInfo().getUserID());
+//            System.out.println(this.main.getSessionInfo().getUserID());
             ResultSet res = st.executeQuery();
             while (res.next()) {
                 int resultat = res.getInt("id");
-                System.out.println(resultat);
+//                System.out.println(resultat);
                 for (int i = 0; i < nbAnnonce; i++) {
                     if (this.idAnnonce.get(i) == resultat) {
                         this.idAnnonce.remove(i);

@@ -57,8 +57,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     /*-fx-text-transform: none;*/
     -fx-background-color:#001419;
     -fx-text-fill: blue;
+    -fx-show-week-numbers:true;
 
 
+}
+.date-picker{
+    -fx-show-week-numbers:true;
 }
 
 
@@ -92,10 +96,22 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 
 #bar-recherche{
     -fx-background-color:#0B2239;
-    -fx-font-size: 25px;
+    -fx-font-size: 20px;
     -fx-padding: 9 9 9 9;
     -fx-color: #238636;
 }
+
+#scroll-recherche{
+    -fx-background-color:red;
+    -fx-font-size: 15px;
+    -fx-color: #238636;
+}
+#scroll-annonce{
+    -fx-background-color:#0B2239;
+    -fx-font-size: 15px;
+    -fx-color: #238636;
+}
+
 
 /*#bouton-vert{
     -fx-content-display : center;
@@ -114,6 +130,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-background-color: #08c708;
     -fx-align-items: center;
     -fx-background-radius: 5px;
+    -fx-font-size: 25px;
 
 }
 
@@ -135,12 +152,14 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-background-color: #ff0000;
     -fx-text-fill: white;
     -fx-padding: 3 6 6 6;
+    -fx-font-size: 25px;
 }
 
 #bouton-rouge:hover{
     -fx-max-width: 300;
     -fx-background-radius: 30px;
     -fx-background-color:#ff0000 ;
+    -fx-font-size: 25px;
 }
 
 #bouton-bleu:hover{
@@ -156,7 +175,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 #bouton-bleu{
     -fx-content-display : center;
     -fx-max-width: 600;
-
+    -fx-font-size: 25px;
     -fx-alignment : center;
     -fx-padding: 3 6 6 6;
     -fx-color: #fff;
@@ -184,7 +203,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 
 .button {
 
-    -fx-font-size: 25px;
+    -fx-font-size: 20px;
     -fx-background-radius: 3px;
 }
 
@@ -198,6 +217,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 #bouton-annonce-en-cours{
     -fx-background-color:#148ca7;
     -fx-text-fill: white;
+    -fx-font-size: 25px;
     -fx-max-width: 500;
     -fx-background-radius: 15px;
 }
@@ -211,6 +231,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-text-fill: white;
     -fx-background-radius: 15px;
     -fx-max-width: 500;
+    -fx-font-size: 25px;
 }
 #bouton-mes-annonces:hover {
     -fx-background-color:#A9BBFF;
@@ -220,6 +241,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 #bouton-mes-enchere{
     -fx-background-color:#148ca7;
     -fx-text-fill: white;
+    -fx-font-size: 25px;
     -fx-background-radius: 15px;
     -fx-max-width: 500;
 }
@@ -228,6 +250,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-text-fill: #0B2239;
 }
 #bouton-nouvelle-annonce{
+    
     -fx-background-color:#A9BBFF;
     -fx-background-radius: 15px;
     -fx-font-size: 35px;

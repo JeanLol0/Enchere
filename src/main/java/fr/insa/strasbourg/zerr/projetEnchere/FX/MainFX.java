@@ -5,16 +5,21 @@
 package fr.insa.strasbourg.zerr.projetEnchere.FX;
 
 import fr.insa.strasbourg.zerr.projetEnchere.FX.vues.FenetrePrincipale;
-import fr.insa.strasbourg.zerr.projetEnchere.FX.vues.VueLogin;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.Base64;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.Cursor;
+import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
 import javafx.stage.Stage;
+import javax.imageio.ImageIO;
 
 /**
  *
@@ -41,6 +46,11 @@ public class MainFX extends Application {
         this.scene = new Scene(mainVue);
         JavaFXUtils.grandeFenetre(stage);
         //this.scene.getStylesheets().add("FX/DarkTheme.css");
+        
+        
+        Cursor cur = Cursor.OPEN_HAND;
+        Image curI = getImage("le-curseur.png");
+        this.scene.setCursor(new ImageCursor(curI));
         this.scene.getStylesheets().add(getClass().getResource("Styles.css").toExternalForm());
         stage.setScene(scene);
 
@@ -55,6 +65,13 @@ public class MainFX extends Application {
         this.mainVue = mainVue;
     }
 
+    public  Image getImage(String resourcePath) {
+        InputStream input //
+                = this.getClass().getResourceAsStream(resourcePath);
+        Image image = new Image(input);
+        return image;
+    }
+    
     
 
     public static void main(String[] args) {

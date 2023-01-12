@@ -115,7 +115,7 @@ public class Annonce extends HBox {
 
         this.tTitre.setOnMouseClicked((t) -> {
             try {
-                this.main.setCenter(new VueAnnonceDetaille(this.main, this.id));
+                this.main.setRight(new VueAnnonceDetaille(this.main, this.id,1));
             } catch (SQLException | ClassNotFoundException | IOException ex) {
                 Logger.getLogger(Annonce.class.getName()).log(Level.SEVERE, null, ex);
             }
