@@ -47,7 +47,7 @@ public class VueCarte extends BorderPane {
         this.Confirmer.setOnAction((t) -> {
 //            if((this.longitude!=0)&&(this.latitude!=0)){
             if ((this.longitude != 0)&&(this.latitude != 0)) {
-                    this.main.setCenter(new VueInscription(this.main, this.longitude, this.latitude));
+                    //this.main.setCenter(new VueInscription(this.main, this.longitude, this.latitude));
             }
             else{
                 JavaFXUtils.showErrorInAlert("Erreur", "Vous n'avez pas entré de position", "Veuillez saisir une localisation");

@@ -120,7 +120,7 @@ public class VueImage extends BorderPane {
                 private Image image;
                 @Override
                 public void run() {
-                    System.out.println(file.getAbsolutePath());
+                    //System.out.println(file.getAbsolutePath());
                     try {
                         if (!contentPane.getChildren().isEmpty()) {
                             contentPane.getChildren().remove(0);
