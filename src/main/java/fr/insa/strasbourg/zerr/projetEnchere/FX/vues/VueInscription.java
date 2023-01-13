@@ -160,8 +160,8 @@ public class VueInscription extends ScrollPane {
                 Logger.getLogger(VueInscription.class.getName()).log(Level.SEVERE, null, ex);
             }
             image2.mouseClicked(file);
-            Image image3= image2.getImage();
-            this.avatar.setFill(new ImagePattern(image3));
+            this.image = image2.getImage();
+           this.avatar.setFill(new ImagePattern(this.image));
         });
 
     }
@@ -266,7 +266,7 @@ public class VueInscription extends ScrollPane {
 
             } else {
                 Connection con = this.main.getBDD();
-                createUtilisateur(con, this.tfNom.getText(), this.pfPass.getText(), this.tfPrenom.getText(), this.tfEmail.getText(), null, this.latitude, this.longitude);
+                createUtilisateur(con, this.tfNom.getText(), this.pfPass.getText(), this.tfPrenom.getText(), this.tfEmail.getText(), this.image, this.latitude, this.longitude);
                 this.main.setCenter(new VueLogin(main));
             }
 
