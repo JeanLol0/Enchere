@@ -77,7 +77,6 @@ public class Message extends HBox {
         this.grid = new GridPane();
         this.grid.setHgap(20);
         this.setId("annonce");
-        this.image = texteEnImage(this.stringImage);
         this.imageV = new ImageView(this.image);
         this.imageV.setFitHeight(200);
         this.imageV.setFitWidth(200);
@@ -111,8 +110,6 @@ public class Message extends HBox {
         this.grid.add(tTempsR, 0, 6);
         this.grid.add(tTime, 1, 6);
         this.getChildren().addAll(this.imageV, this.grid);
-        ActualisationTempsRestant();
-        ActualisePrix();
 
         this.tTitre.setOnMouseClicked((t) -> {
             try {
@@ -344,46 +341,7 @@ public class Message extends HBox {
 
     }
 
-    private void ActualisationTempsRestant() {
-        Timeline tempsRestant = new Timeline(new KeyFrame(javafx.util.Duration.seconds(1), (t) -> {
-            Timestamp mtn = new Timestamp(System.currentTimeMillis());
-            long secR = secRestant(this.fin);
-            long minR = minRestant(this.fin);
-            long heureR = hRestant(this.fin);
-            long jourR = jourRestant(this.fin);
-//            LocalDateTime ldt = LocalDateTime.now();
-//            LocalDateTime ldt3 = this.fin.toLocalDateTime();
-//            long diffH = ldt.until(ldt3, ChronoUnit.HOURS);
-            if (secR < 0) {
-                tTime.setText("Enchere terminée");
-                try {
-                    if ((this.compteur == 0) && ((recupereEtatLivraison(this.main.getBDD(), this.id) != 2) || (recupereEtatLivraison(this.main.getBDD(), this.id) != 3))) {
-                        System.out.println(this.compteur);
-                        setEtatLivraison(this.main.getBDD(), 1, this.id); //ca veut dire que l'objet n'est plus en vente mais que mode de livraison n'est pas déterminé
-                        messageFin();
-                        System.out.println("coucouccoucoc");
-                        System.out.println("fr.insa.strasbourg.zerr.projetEnchere.FX.vues.Annonce.ActualisationTempsRestant()");
-                        this.compteur = 1;
-                    }
-                } catch (SQLException ex) {
-                    Logger.getLogger(Annonce.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(Annonce.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
-            } else {
-                tTime.setText(jourR + " j " + heureR + " h " + minR + " m " + secR + " s");
-            }
-        }));
-        tempsRestant.setCycleCount(Animation.INDEFINITE);
-        tempsRestant.play();
-
-        long secR = secRestant(this.fin);
-        if (secR < 0) {
-            tempsRestant.stop();;
-            tTime.setText("Enchere Terminée");
-        }
-    }
+    
 
     private static int recupereEtatLivraison(Connection con, int id)
             throws SQLException, ClassNotFoundException {
@@ -399,67 +357,7 @@ public class Message extends HBox {
     }
 
     
-    public static void setEtatLivraison(Connection con, int valeur, int idObjet) throws SQLException {
-        con.setAutoCommit(false);
-        try ( PreparedStatement pst = con.prepareStatement(
-                "update objet set etatlivraison = ? where id = ?", PreparedStatement.RETURN_GENERATED_KEYS)) {
-            pst.setInt(1, valeur);
-            pst.setInt(2, idObjet);
-            pst.executeUpdate();
-            con.commit();
-            System.out.println("ca passe ici");
-            try ( ResultSet rid = pst.getGeneratedKeys()) {
-                // et comme ici je suis sur qu'il y a une et une seule clé, je
-                // fait un simple next 
-                rid.next();
-                // puis je récupère la valeur de la clé créé qui est dans la
-                // première colonne du ResultSet
-                int id = rid.getInt(1);
-            }
-        } finally {
-            con.setAutoCommit(true);
-        }
-    }
-
-    private void ActualisePrix() {
-        Timeline Prix = new Timeline(new KeyFrame(javafx.util.Duration.seconds(1), (t) -> {
-            int prixActu = Integer.parseInt(getNbr(this.prixActuel.getText()));
-            Connection con = this.main.getBDD();
-
-            try ( PreparedStatement st = con.prepareStatement("select * from objet where id = ?")) {
-                st.setInt(1, this.id);
-                ResultSet res = st.executeQuery();
-                while (res.next()) {
-                    int prix = res.getInt("prixactuel");
-                    if (prixActu != prix) {
-                        this.prixActuel.setText(String.valueOf(prix) + " €");
-                        System.out.println("Prix actualisé");
-                    }
-                }
-            } catch (SQLException ex) {
-                Logger.getLogger(Annonce.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }));
-        Prix.setCycleCount(Animation.INDEFINITE);
-        Prix.play();
-    }
-
-    private void messageFin() throws SQLException, ClassNotFoundException {
-        String TextePourVendeurSiPasEnchere = "Votre objet '" + BDD.recupereTitreObjet(this.main.getBDD(), this.id) + "' n'est plus en vente mais il n'y a pas eut d'offres! \nVous pouvez le remettre en ligne en suivant les conseils du guide";
-        int idVendeur = this.idVendeur;
-        int IdDernierMec = UtilDernierEnchereSurObjet(this.id);
-        if (UtilDernierEnchereSurObjet(this.id) != -1) {
-            String TextePourAcheteurSiEnchere = "Vous avez gagné l'enchere sur l'objet: " + BDD.recupereTitreObjet(this.main.getBDD(), this.id) + "\nVous pouvez à présent choisir le mode de réception sur la rubrique 'Mes Encheres Finies'";
-            String TextePourVendeurSiEnchere = "Votre objet " + BDD.recupereTitreObjet(this.main.getBDD(), this.id) + " n'est plus en vente! L'utilisateur ";
-            TextePourVendeurSiEnchere = TextePourVendeurSiEnchere + recupereNomUTil(this.main.getBDD(), UtilDernierEnchereSurObjet(this.id)) + " vous propose de vous l'acheter";
-            System.out.println(TextePourVendeurSiPasEnchere);
-            BDD.createMessage(this.main.getBDD(), TextePourAcheteurSiEnchere, UtilDernierEnchereSurObjet(this.id), this.idVendeur);
-            BDD.createMessage(this.main.getBDD(), TextePourVendeurSiEnchere, this.idVendeur, UtilDernierEnchereSurObjet(this.id));
-        } else {
-            BDD.createMessage(this.main.getBDD(), TextePourVendeurSiPasEnchere, this.idVendeur, 2);
-        }
-
-    }
+    
 
     public int UtilDernierEnchereSurObjet(int idObjet) throws ClassNotFoundException, SQLException {
         Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");

@@ -6,7 +6,6 @@ package fr.insa.strasbourg.zerr.projetEnchere.FX.vues;
 
 import fr.insa.strasbourg.zerr.projetEnchere.FX.JavaFXUtils;
 import fr.insa.strasbourg.zerr.projetEnchere.FX.composants.BarRecherche;
-import fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD;
 import static fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD.DistanceObjetFromUtiilisateur;
 import static fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD.ValiditeDateEnchere;
 import static fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD.connectGeneralPostGres;
@@ -27,7 +26,6 @@ import java.util.logging.Logger;
 import javafx.geometry.Pos;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 
 /**
@@ -385,28 +383,29 @@ public class VueAnnonces extends BorderPane {
     }
     public static ArrayList<Integer> TriDistanceObjet(int idUtil, double distancemax) throws ClassNotFoundException, SQLException {
         Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
-        TreeMap<Double, Integer> map = new TreeMap();
-
+//        TreeMap<Double, Integer> map = new TreeMap();
+        ArrayList<Integer> map = new ArrayList<>();
         try ( PreparedStatement st = con.prepareStatement("select id from objet")) {
             ResultSet res = st.executeQuery();
 
             while (res.next()) {
                 if (DistanceObjetFromUtiilisateur(idUtil, res.getInt("id")) <= distancemax) {
-                    map.put(DistanceObjetFromUtiilisateur(idUtil, res.getInt("id")), res.getInt("id"));
+                    map.add(res.getInt("id"));
                 }
+                    System.out.println("Objet : "+res.getInt("id"));
             }
         }
 
-        Set set = map.entrySet();
-        Iterator it = set.iterator();
-        ArrayList<Integer> List = new ArrayList<>();
-        while (it.hasNext()) {
-            Map.Entry me = (Map.Entry) it.next();
-            List.add((Integer) me.getValue());
-            System.out.println(me.getValue());
-        }
+//        Set set = map.entrySet();
+//        Iterator it = set.iterator();
+//        ArrayList<Integer> List = new ArrayList<>();
+//        while (it.hasNext()) {
+//            Map.Entry me = (Map.Entry) it.next();
+//            List.add((Integer) me.getValue());
+//            System.out.println(me.getValue());
+//        }
 
-        return List;
+        return map;
         //tri du plus proche au plus éloigné 
     }
     

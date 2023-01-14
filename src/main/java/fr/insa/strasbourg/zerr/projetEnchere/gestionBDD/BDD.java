@@ -1579,9 +1579,9 @@ public class BDD {
             ResultSet res = st.executeQuery();
 
             while (res.next()) {
-                if (DistanceObjetFromUtiilisateur(idUtil, res.getInt("id")) <= distancemax) {
+                //if (DistanceObjetFromUtiilisateur(idUtil, res.getInt("id")) <= distancemax) {
                     map.put(DistanceObjetFromUtiilisateur(idUtil, res.getInt("id")), res.getInt("id"));
-                }
+                //}
             }
         }
 
