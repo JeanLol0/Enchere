@@ -79,7 +79,7 @@ public class TopBar extends HBox {
 
         this.menuUser = new MenuButton();
         this.menuUser.setGraphic(imageView);
-        this.menuUser.getItems().addAll(this.miAnnonce, this.miEnchere, this.milogout);
+        this.menuUser.getItems().addAll(this.miAnnonce, this.miEnchere, this.miMessagerie,this.milogout);
         this.menuUser.setPopupSide(Side.TOP);
         this.menuUser.setGraphicTextGap(200);
         this.menuUser.setPrefSize(50, 50);
