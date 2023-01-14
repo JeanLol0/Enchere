@@ -57,6 +57,8 @@ public class Annonce extends HBox {
     private String stringImage;
     private GridPane grid;
     private ImageView imageV;
+    
+    private int compteur=0;
 
     private Label npVendeur;
     private Label tTime;
@@ -109,13 +111,12 @@ public class Annonce extends HBox {
         this.grid.add(tTempsR, 0, 6);
         this.grid.add(tTime, 1, 6);
         this.getChildren().addAll(this.imageV, this.grid);
-
         ActualisationTempsRestant();
         ActualisePrix();
 
         this.tTitre.setOnMouseClicked((t) -> {
             try {
-                this.main.setRight(new VueAnnonceDetaille(this.main, this.id,1));
+                this.main.setRight(new VueAnnonceDetaille(this.main, this.id,1,compteur));
             } catch (SQLException | ClassNotFoundException | IOException ex) {
                 Logger.getLogger(Annonce.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -131,7 +132,6 @@ public class Annonce extends HBox {
             st.setInt(1, id);
             ResultSet res = st.executeQuery();
             while (res.next()) {
-                System.out.println(res.getString("titre"));
                 this.titre = res.getString("titre");
                 this.debut = res.getTimestamp("debut");
                 this.fin = res.getTimestamp("fin");
@@ -357,9 +357,13 @@ public class Annonce extends HBox {
             if (secR < 0) {
                 tTime.setText("Enchere terminée");
                 try {
-                    if ((recupereEtatLivraison(this.main.getBDD(), this.id) != 2) || (recupereEtatLivraison(this.main.getBDD(), this.id) != 3)) {
+                    if ((this.compteur == 0) && ((recupereEtatLivraison(this.main.getBDD(), this.id) != 2) || (recupereEtatLivraison(this.main.getBDD(), this.id) != 3))) {
+                        System.out.println(this.compteur);
                         setEtatLivraison(this.main.getBDD(), 1, this.id); //ca veut dire que l'objet n'est plus en vente mais que mode de livraison n'est pas déterminé
                         messageFin();
+                        System.out.println("coucouccoucoc");
+                        System.out.println("fr.insa.strasbourg.zerr.projetEnchere.FX.vues.Annonce.ActualisationTempsRestant()");
+                        this.compteur = 1;
                     }
                 } catch (SQLException ex) {
                     Logger.getLogger(Annonce.class.getName()).log(Level.SEVERE, null, ex);
@@ -377,7 +381,7 @@ public class Annonce extends HBox {
         long secR = secRestant(this.fin);
         if (secR < 0) {
             tempsRestant.stop();;
-            tTime.setText("Stop timeline");
+            tTime.setText("Enchere Terminée");
         }
     }
 
@@ -394,15 +398,16 @@ public class Annonce extends HBox {
         return etat;
     }
 
+    
     public static void setEtatLivraison(Connection con, int valeur, int idObjet) throws SQLException {
         con.setAutoCommit(false);
         try ( PreparedStatement pst = con.prepareStatement(
-                "update objet set Etatlivraison = ? where id = ?", PreparedStatement.RETURN_GENERATED_KEYS)) {
+                "update objet set etatlivraison = ? where id = ?", PreparedStatement.RETURN_GENERATED_KEYS)) {
             pst.setInt(1, valeur);
             pst.setInt(2, idObjet);
             pst.executeUpdate();
             con.commit();
-            System.out.println("categorie créé");
+            System.out.println("ca passe ici");
             try ( ResultSet rid = pst.getGeneratedKeys()) {
                 // et comme ici je suis sur qu'il y a une et une seule clé, je
                 // fait un simple next 
@@ -459,7 +464,7 @@ public class Annonce extends HBox {
     public int UtilDernierEnchereSurObjet(int idObjet) throws ClassNotFoundException, SQLException {
         Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
         int idDernierUtil = -1;
-        try ( PreparedStatement st = con.prepareStatement("select * from enchere where (select max(montant) from enchere where sur=?)")) {
+        try ( PreparedStatement st = con.prepareStatement("select * from enchere where montant = (select max(montant) from enchere where sur = ?)")) {
             st.setInt(1, idObjet);
             ResultSet res = st.executeQuery();
             while (res.next()) {
@@ -495,5 +500,9 @@ public class Annonce extends HBox {
   
         return str; 
     } 
+    
+    public int getCompteur(){
+        return this.compteur;
+    }
 
 }

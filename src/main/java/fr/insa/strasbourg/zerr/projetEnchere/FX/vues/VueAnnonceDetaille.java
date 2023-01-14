@@ -8,6 +8,7 @@ import fr.insa.strasbourg.zerr.projetEnchere.FX.JavaFXUtils;
 import fr.insa.strasbourg.zerr.projetEnchere.FX.composants.BarRecherche;
 import static fr.insa.strasbourg.zerr.projetEnchere.FX.vues.Annonce.CalculDistance;
 import static fr.insa.strasbourg.zerr.projetEnchere.FX.vues.Annonce.getNbr;
+import static fr.insa.strasbourg.zerr.projetEnchere.FX.vues.Annonce.setEtatLivraison;
 import static fr.insa.strasbourg.zerr.projetEnchere.FX.vues.Annonce.texteEnImage;
 import fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD;
 import static fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD.connectGeneralPostGres;
@@ -57,6 +58,8 @@ public class VueAnnonceDetaille extends BorderPane {
     private Label lEnchere;
     private TextField tfEnchere;
     private Button bEnchere;
+    
+    private int compteur;
 
     private int idObj;
     private Label prix;
@@ -95,8 +98,9 @@ public class VueAnnonceDetaille extends BorderPane {
     private Button bRetour;
     
 
-    public VueAnnonceDetaille(FenetrePrincipale main, int idO) throws SQLException, ClassNotFoundException, IOException {
+    public VueAnnonceDetaille(FenetrePrincipale main, int idO,int compteur) throws SQLException, ClassNotFoundException, IOException {
         this.main = main;
+        this.compteur=compteur;
         this.gridPane = new GridPane();
         this.main.setLeft(null);
         this.idObj = idO;
@@ -194,8 +198,9 @@ public class VueAnnonceDetaille extends BorderPane {
         });
         JavaFXUtils.addSimpleBorder(this);
     }
-    public VueAnnonceDetaille(FenetrePrincipale main, int idO,int i) throws SQLException, ClassNotFoundException, IOException {
+    public VueAnnonceDetaille(FenetrePrincipale main, int idO,int i,int comp) throws SQLException, ClassNotFoundException, IOException {
         this.main = main;
+        this.compteur=comp;
         this.gridPane = new GridPane();
         this.main.setLeft(null);
         this.idObj = idO;
@@ -297,7 +302,7 @@ public class VueAnnonceDetaille extends BorderPane {
         JavaFXUtils.addSimpleBorder(this);
         this.bGoEnchere.setOnAction((t) -> {
             try {
-                this.main.setCenter(new VueAnnonceDetaille(main, idObj));
+                this.main.setCenter(new VueAnnonceDetaille(main, idObj,this.compteur));
                 this.main.setRight(null);
             } catch (SQLException ex) {
                 Logger.getLogger(VueAnnonceDetaille.class.getName()).log(Level.SEVERE, null, ex);
@@ -414,17 +419,19 @@ public String getNom(Integer idU) throws SQLException {
 //            long diffH = ldt.until(ldt3, ChronoUnit.HOURS);
             if (secR < 0) {
                 tTime.setText("Enchere terminée");
-
-                try {
-                    if ((recupereEtatLivraison(this.main.getBDD(), this.idObj) != 2) || (recupereEtatLivraison(this.main.getBDD(), this.idObj) != 3)) {
-                        setEtatLivraison(this.main.getBDD(), 1); //ca veut dire que l'objet n'est plus en vente mais que mode de livraison n'est pas déterminé
-                        messageFin();
-                    }
-                } catch (SQLException ex) {
-                    Logger.getLogger(Annonce.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(Annonce.class.getName()).log(Level.SEVERE, null, ex);
-                }
+//
+//                try {
+//                    if ((this.compteur == 0) &&((recupereEtatLivraison(this.main.getBDD(), this.idObj) != 2) || (recupereEtatLivraison(this.main.getBDD(), this.idObj) != 3))) {
+//                        setEtatLivraison(this.main.getBDD(), 1, this.idObj); //ca veut dire que l'objet n'est plus en vente mais que mode de livraison n'est pas déterminé
+//                        messageFin();
+//                        System.out.println("coucouccoucoc");
+//                        this.compteur = 1;
+//                    }
+//                } catch (SQLException ex) {
+//                    Logger.getLogger(Annonce.class.getName()).log(Level.SEVERE, null, ex);
+//                } catch (ClassNotFoundException ex) {
+//                    Logger.getLogger(Annonce.class.getName()).log(Level.SEVERE, null, ex);
+//                }
 
             } else {
                 tTime.setText(jourR + " j " + heureR + " h " + minR + " m " + secR + " s");
@@ -443,7 +450,7 @@ public String getNom(Integer idU) throws SQLException {
             } 
     }
  
-  private static int recupereEtatLivraison(Connection con, int id)
+   private static int recupereEtatLivraison(Connection con, int id)
             throws SQLException, ClassNotFoundException {
         int etat = 0;
         try ( PreparedStatement st = con.prepareStatement("select * from objet where id = ?")) {
@@ -456,14 +463,15 @@ public String getNom(Integer idU) throws SQLException {
         return etat;
     }
 
-    public static void setEtatLivraison(Connection con, int valeur) throws SQLException {
+    public static void setEtatLivraison(Connection con, int valeur, int idObjet) throws SQLException {
         con.setAutoCommit(false);
         try ( PreparedStatement pst = con.prepareStatement(
-                "update objet set Etatlivraison = ?", PreparedStatement.RETURN_GENERATED_KEYS)) {
+                "update objet set Etatlivraison = ? where id = ?", PreparedStatement.RETURN_GENERATED_KEYS)) {
             pst.setInt(1, valeur);
+            pst.setInt(2, idObjet);
             pst.executeUpdate();
             con.commit();
-            System.out.println("categorie créé");
+            System.out.println("ca passe ici");
             try ( ResultSet rid = pst.getGeneratedKeys()) {
                 // et comme ici je suis sur qu'il y a une et une seule clé, je
                 // fait un simple next 
@@ -518,7 +526,7 @@ public String getNom(Integer idU) throws SQLException {
      public int UtilDernierEnchereSurObjet(int idObjet) throws ClassNotFoundException, SQLException {
         Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
         int idDernierUtil = -1;
-        try ( PreparedStatement st = con.prepareStatement("select * from enchere where (select max(montant) from enchere where sur=?)")) {
+        try ( PreparedStatement st = con.prepareStatement("select * from enchere where montant=(select max(montant) from enchere where sur=?)")) {
             st.setInt(1, idObjet);
             ResultSet res = st.executeQuery();
             while (res.next()) {

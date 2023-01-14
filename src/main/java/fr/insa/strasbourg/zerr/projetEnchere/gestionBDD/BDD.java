@@ -281,6 +281,15 @@ public class BDD {
             try {
                 st.executeUpdate(
                         """
+                    drop table message
+                    """);
+                System.out.println("table message dropped");
+            } catch (SQLException ex) {
+                // nothing to do : maybe the table was not created
+            }
+            try {
+                st.executeUpdate(
+                        """
                     drop table categorie
                     """);
                 System.out.println("table categorie dropped");
@@ -588,7 +597,7 @@ public class BDD {
     public static int UtilDernierEnchereSurObjet(int idObjet) throws ClassNotFoundException, SQLException {
         Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
         int idDernierUtil = -1;
-        try ( PreparedStatement st = con.prepareStatement("select * from enchere where (select max(montant) from enchere where sur=?)")) {
+        try ( PreparedStatement st = con.prepareStatement("select * from enchere where montant = (select max(montant) from enchere where sur=?)")) {
             st.setInt(1, idObjet);
             ResultSet res = st.executeQuery();
             while (res.next()) {
