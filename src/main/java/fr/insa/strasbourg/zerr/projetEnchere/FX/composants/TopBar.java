@@ -4,6 +4,7 @@
  */
 package fr.insa.strasbourg.zerr.projetEnchere.FX.composants;
 
+import fr.insa.strasbourg.zerr.projetEnchere.FX.vues.VueMessagerie;
 import com.ctc.wstx.util.StringUtil;
 import fr.insa.strasbourg.zerr.projetEnchere.FX.vues.FenetrePrincipale;
 import fr.insa.strasbourg.zerr.projetEnchere.FX.vues.VueAcceuil;
@@ -52,6 +53,7 @@ public class TopBar extends HBox {
     private MenuItem milogout;
     private MenuItem miEnchere;
     private MenuItem miAnnonce;
+    private MenuItem miMessagerie;
 
     private MenuButton menuUser;
     
@@ -70,13 +72,14 @@ public class TopBar extends HBox {
         this.milogout = new MenuItem("Déconnection");
         this.miAnnonce = new MenuItem("Mes Annonces");
         this.miEnchere = new MenuItem("Mes Encheres");
+        this.miMessagerie = new MenuItem("Messagerie");
         
 
         ContextMenu cm = new ContextMenu();
 
         this.menuUser = new MenuButton();
         this.menuUser.setGraphic(imageView);
-        this.menuUser.getItems().addAll(this.miAnnonce, this.miEnchere, this.milogout);
+        this.menuUser.getItems().addAll(this.miAnnonce, this.miEnchere, this.miMessagerie,this.milogout);
         this.menuUser.setPopupSide(Side.TOP);
         this.menuUser.setGraphicTextGap(200);
         this.menuUser.setPrefSize(50, 50);
@@ -85,7 +88,7 @@ public class TopBar extends HBox {
         this.menuUser.setStyle("-fx-background-color: #ff0000; ");
         Circle cr = new Circle(30, 30, 30);
         cr.setFill(new ImagePattern(getImage("ressources/user.png", 35, 35)));
-        cm.getItems().addAll(miAnnonce, miEnchere, milogout);
+        cm.getItems().addAll(miAnnonce, miEnchere, miMessagerie,milogout);
         
         cr.setOnMouseClicked((t) -> {
             System.out.println("bib bib");
@@ -159,6 +162,10 @@ public class TopBar extends HBox {
                 Logger.getLogger(TopBar.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
+        this.miMessagerie.setOnAction((t) -> {
+            this.main.setCenter(new VueMessagerie(this.main));
+            this.main.setLeft(null);
+        });
 
     }
 
@@ -167,6 +174,7 @@ public class TopBar extends HBox {
         this.main.getSessionInfo().setCurUser(Optional.empty());
         this.main.setCenter(new VueLogin(this.main));
         this.main.setTop(null);
+        this.main.setLeft(null);
     }
 
     private ImageView getIcon(String resourcePath,int w,int h) {
