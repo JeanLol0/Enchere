@@ -120,6 +120,7 @@ public class VueImage extends BorderPane {
                 private Image image;
                 @Override
                 public void run() {
+
                     try {
                         if (!contentPane.getChildren().isEmpty()) {
                             contentPane.getChildren().remove(0);
