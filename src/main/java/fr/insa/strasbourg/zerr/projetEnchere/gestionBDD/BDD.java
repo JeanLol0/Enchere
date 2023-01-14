@@ -1591,6 +1591,7 @@ public class BDD {
         while (it.hasNext()) {
             Map.Entry me = (Map.Entry) it.next();
             List.add((Integer) me.getValue());
+            System.out.println(me.getValue());
         }
 
         return List;
