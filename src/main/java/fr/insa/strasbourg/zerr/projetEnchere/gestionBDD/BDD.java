@@ -1571,7 +1571,7 @@ public class BDD {
         return distancerenvoye;
     }//renvoit une distance en kilometres
 
-    public static ArrayList<Integer> TriDistanceObjet(int idUtil) throws ClassNotFoundException, SQLException {
+    public static ArrayList<Integer> TriDistanceObjet(int idUtil, double distancemax) throws ClassNotFoundException, SQLException {
         Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
         TreeMap<Double, Integer> map = new TreeMap();
 
@@ -1579,7 +1579,9 @@ public class BDD {
             ResultSet res = st.executeQuery();
 
             while (res.next()) {
-                map.put(DistanceObjetFromUtiilisateur(idUtil, res.getInt("id")), res.getInt("id"));
+                if (DistanceObjetFromUtiilisateur(idUtil, res.getInt("id")) <= distancemax) {
+                    map.put(DistanceObjetFromUtiilisateur(idUtil, res.getInt("id")), res.getInt("id"));
+                }
             }
         }
 
