@@ -163,7 +163,13 @@ public class TopBar extends HBox {
             }
         });
         this.miMessagerie.setOnAction((t) -> {
-            this.main.setCenter(new VueMessagerie(this.main));
+            try {
+                this.main.setCenter(new VueMessagerie(this.main));
+            } catch (SQLException ex) {
+                Logger.getLogger(TopBar.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(TopBar.class.getName()).log(Level.SEVERE, null, ex);
+            }
             this.main.setLeft(null);
         });
 

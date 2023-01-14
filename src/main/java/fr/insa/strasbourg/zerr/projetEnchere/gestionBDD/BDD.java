@@ -1551,7 +1551,7 @@ public class BDD {
             }
         }
         try ( PreparedStatement st = con.prepareStatement("select long,lat from objet where id=? ")) {
-            st.setInt(1, idUtilisateur);
+            st.setInt(1, IdObjet);
             ResultSet res2 = st.executeQuery();
             while (res2.next()) {
                 Objlat = res2.getInt("long");
