@@ -179,5 +179,28 @@ public class VueMesEnchere extends GridPane {
             return idDernierUtil;
         }
     }
+    
+    public void setEtatLivraison(int valeur, int idObjet) throws SQLException {
+        Connection con = this.main.getBDD();
+        con.setAutoCommit(false);
+        try ( PreparedStatement pst = con.prepareStatement(
+                "update objet set Etatlivraison = ? where id = ?", PreparedStatement.RETURN_GENERATED_KEYS)) {
+            pst.setInt(1, valeur);
+            pst.setInt(2, idObjet);
+            pst.executeUpdate();
+            con.commit();
+            System.out.println("categorie créé");
+            try ( ResultSet rid = pst.getGeneratedKeys()) {
+                // et comme ici je suis sur qu'il y a une et une seule clé, je
+                // fait un simple next 
+                rid.next();
+                // puis je récupère la valeur de la clé créé qui est dans la
+                // première colonne du ResultSet
+                int id = rid.getInt(1);
+            }
+        } finally {
+            con.setAutoCommit(true);
+        }
+    }
 }
 

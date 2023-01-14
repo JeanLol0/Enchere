@@ -41,9 +41,9 @@ public class VueAnnonces extends BorderPane {
 
     public VueAnnonces(FenetrePrincipale main) throws SQLException, ClassNotFoundException, IOException {
         this.main = main;
-        this.setPrefWidth(this.main.getWidth()/2);
+        this.setPrefWidth(this.main.getWidth() / 2);
         this.gridPane = new GridPane();
-        
+
         this.barRe = new BarRecherche(this.main);
         this.idAnnonce = new ArrayList<Integer>();
         this.con = this.main.getBDD();
@@ -107,7 +107,7 @@ public class VueAnnonces extends BorderPane {
                     Logger.getLogger(VueAnnonces.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            
+
         });
         this.barRe.getbCategorie().setOnAction((t) -> {
             try {
@@ -118,7 +118,7 @@ public class VueAnnonces extends BorderPane {
             } catch (SQLException | ClassNotFoundException | IOException ex) {
                 Logger.getLogger(VueAnnonces.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
         });
 
     }
@@ -143,7 +143,9 @@ public class VueAnnonces extends BorderPane {
         try ( PreparedStatement st = this.con.prepareStatement("select id from objet")) {
             ResultSet res = st.executeQuery();
             while (res.next()) {
-                this.idAnnonce.add(res.getInt("id"));
+                if (ValiditeDateEnchere(res.getInt("id")) == false) {
+                    this.idAnnonce.add(res.getInt("id"));
+                }
 //                System.out.println("ids recupéré nb:" + this.idAnnonce.size());
 //            if (ValiditeDateEnchere(res.getInt("id")) == false) {
 //                int size = this.idAnnonce.size();
@@ -308,7 +310,7 @@ public class VueAnnonces extends BorderPane {
         ArrayList<Integer> List = new ArrayList<>();
         System.out.println("on est ici");
         try ( PreparedStatement st = con.prepareStatement("select * from objet where titre like ?")) {
-            st.setString(1, "%"+texte+"%");
+            st.setString(1, "%" + texte + "%");
             ResultSet res = st.executeQuery();
             while (res.next()) {
                 int resultat = res.getInt("id");
@@ -318,7 +320,7 @@ public class VueAnnonces extends BorderPane {
             }
         }
         try ( PreparedStatement st = con.prepareStatement("select * from objet where bio like ?")) {
-            st.setString(1, "%"+texte+"%");
+            st.setString(1, "%" + texte + "%");
             ResultSet res = st.executeQuery();
             while (res.next()) {
                 int resultat = res.getInt("id");
@@ -329,7 +331,7 @@ public class VueAnnonces extends BorderPane {
         }
         Set<Integer> set = new LinkedHashSet<>(List);
         ArrayList<Integer> sansdoublons = new ArrayList<>(set);
-        
+
 //        try ( Statement st = con.createStatement()) {
 //            String queryssg = ""select * from objet where titre like '%""" + texte + "%'";
 //            try ( ResultSet tlu = st.executeQuery(queryssg)) {
