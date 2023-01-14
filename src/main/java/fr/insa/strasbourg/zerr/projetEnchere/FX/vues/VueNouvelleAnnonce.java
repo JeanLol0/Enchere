@@ -254,6 +254,7 @@ public class VueNouvelleAnnonce extends ScrollPane {
 
             } else {
                 String titre = this.tfTitre.getText();
+                String bio = this.taDescription.getText();
                 int yearD = dDebut.getValue().getYear();
                 int monthD = dDebut.getValue().getMonthValue();
                 int dayD = dDebut.getValue().getDayOfMonth();
@@ -269,7 +270,7 @@ public class VueNouvelleAnnonce extends ScrollPane {
                 Image img = image.getImage();
                 Timestamp t1 = Timestamp.valueOf(LocalDateTime.of(yearD, monthD, dayD, heureD, minuteD));
                 Timestamp t2 = Timestamp.valueOf(LocalDateTime.of(yearF, monthF, dayF, heureF, minuteF));
-                BDD.createObjet(con, titre, t1, t2, Integer.parseInt(this.prixBase.getText()), idcategorie, this.sessionInfo.getUserID(), "Texte", img);
+                BDD.createObjet(con, titre, t1, t2, Integer.parseInt(this.prixBase.getText()), idcategorie, this.sessionInfo.getUserID(), bio, img);
                 this.main.setCenter(new VuePrincipale(this.main));
             }
         } catch (SQLException ex) {

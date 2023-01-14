@@ -8,7 +8,6 @@ import fr.insa.strasbourg.zerr.projetEnchere.FX.JavaFXUtils;
 import fr.insa.strasbourg.zerr.projetEnchere.FX.composants.BarRecherche;
 import static fr.insa.strasbourg.zerr.projetEnchere.FX.vues.Annonce.CalculDistance;
 import static fr.insa.strasbourg.zerr.projetEnchere.FX.vues.Annonce.getNbr;
-import static fr.insa.strasbourg.zerr.projetEnchere.FX.vues.Annonce.setEtatLivraison;
 import static fr.insa.strasbourg.zerr.projetEnchere.FX.vues.Annonce.texteEnImage;
 import fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD;
 import static fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD.connectGeneralPostGres;
@@ -34,13 +33,13 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.text.Text;
 
@@ -54,7 +53,7 @@ public class VueAnnonceDetaille extends BorderPane {
     private String titre;
     private GridPane gridPane;
     private Label desc;
-    private Text tDesc;
+    private TextArea tDesc;
     private Label lEnchere;
     private TextField tfEnchere;
     private Button bEnchere;
@@ -211,16 +210,8 @@ public class VueAnnonceDetaille extends BorderPane {
         this.gridPane.setHgap(20);
         this.image = texteEnImage(this.stringImage);
         this.imageV = new ImageView(this.image);
-
-        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-        int width = gd.getDisplayMode().getWidth() / 2;
-//        this.imageV.setFitHeight(width*0.8);
-//        this.imageV.setFitWidth(width*0.8);
-        this.gridPane.setPrefWidth(width);
         
-        this.gridPane.setVgap(10);
-
-        this.tTime = new Label("Temps restant :");
+         this.tTime = new Label("Temps restant :");
         this.tPrix = new Label("Prix actuel :");
         this.tCategorie = new Label("Catégorie :");
         this.tVendeur = new Label("Nom du vendeur :");
@@ -228,6 +219,19 @@ public class VueAnnonceDetaille extends BorderPane {
         this.tTempsR = new Label("Temps restant :");
         this.tDistance = new Label("Distance");
         this.bEnchere = new Button("Encherir");
+        
+
+        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+        int width = gd.getDisplayMode().getWidth() / 2;
+        this.imageV.setFitHeight(width*0.5);
+        this.imageV.setFitWidth(width*0.5);
+        this.tDesc.setMaxWidth(width*0.5);
+        this.tTitre.setMaxWidth(width*0.5);
+//        this.gridPane.setPrefWidth(width);
+        
+        this.gridPane.setVgap(10);
+
+       
 
         int idUtil = this.main.getSessionInfo().getUserID();
         RecupCoordUtil(idUtil);
@@ -255,16 +259,6 @@ public class VueAnnonceDetaille extends BorderPane {
         this.gridPane.add(imageV, 0, 1, 2, 1);
         this.gridPane.add(this.desc, 0, 2, 1, 1);
         this.gridPane.add(this.tDesc, 0, 3, 2, 1);
-        this.gridPane.add(tCategorie, 0, 4);
-        this.gridPane.add(categorie, 1, 4);
-        this.gridPane.add(tVendeur, 0, 5);
-        this.gridPane.add(npVendeur, 1, 5);
-        this.gridPane.add(tDistance, 0, 6);
-        this.gridPane.add(this.distance, 1, 6);
-        this.gridPane.add(tTempsR, 0, 7);
-        this.gridPane.add(tTime, 1, 7);
-        this.gridPane.add(tPrix, 0, 8);
-        this.gridPane.add(prixActuel, 1, 8);
         this.gridPane.add(bGoEnchere, 0, 9);
         this.gridPane.add(bRetour,1 , 9);
 
@@ -326,7 +320,9 @@ public class VueAnnonceDetaille extends BorderPane {
             st.setInt(1, id);
             ResultSet res = st.executeQuery();
             while (res.next()) {
-                this.tDesc = new Text(res.getString("bio"));
+                this.tDesc = new TextArea(res.getString("bio"));
+                this.tDesc.setEditable(false);
+                this.tDesc.setWrapText(true);
                 this.prix = new Label(res.getString("prixactuel"));
 
                 this.titre = res.getString("titre");
@@ -607,6 +603,18 @@ public String getNom(Integer idU) throws SQLException {
         }
 
     }
+    
+    static String getNbr(String str) 
+    { 
+        // Remplacer chaque nombre non numérique par un espace
+        str = str.replaceAll("[^\\d]", " "); 
+        // Supprimer les espaces de début et de fin 
+        str = str.trim(); 
+        // Remplacez les espaces consécutifs par un seul espace
+        str = str.replaceAll(" +", ""); 
+  
+        return str; 
+    } 
 
     
 }

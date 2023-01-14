@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -54,6 +55,11 @@ public class VueAcceuil extends GridPane{
         this.add(this.bAffAnnonce, 0, 4);
         this.add(this.bAffMesAnnonces, 0, 6);
         this.add(this.bAffMesEnchere, 0, 8);
+        
+        this.setHalignment(this.tBienvenue, HPos.CENTER);
+        this.setHalignment(this.bAffAnnonce, HPos.CENTER);
+        this.setHalignment(this.bAffMesAnnonces, HPos.CENTER);
+        this.setHalignment(this.bAffMesEnchere, HPos.CENTER);
         
         this.bAffAnnonce.setOnAction((t) -> {
             try {

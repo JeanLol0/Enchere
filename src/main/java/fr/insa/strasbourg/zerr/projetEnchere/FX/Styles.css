@@ -23,7 +23,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 
 #annonce {
     -fx-font-family: Segoe UI;
-    -fx-font-size: 25px;
+    -fx-font-size: 22px;
     -fx-letter-spacing: 1px;
     -fx-word-spacing: 4px;
     -fx-color: #238636;
@@ -49,7 +49,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 }
 #vue-nouvelle-annonce {
     -fx-font-family: Segoe UI;
-    -fx-font-size: 25px;
+    -fx-font-size: 22px;
     /*    -fx-letter-spacing: 1px;
         -fx-word-spacing: 4px;*/
     -fx-color: #238636;
@@ -76,7 +76,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 
 #nom-prenom {
     -fx-font-family: Tahoma;
-    -fx-font-size: 35px;
+    -fx-font-size: 30px;
     -fx-color: #241f31;
     -fx-font-weight: bold;
     -fx-font-variant: small-caps;
@@ -253,7 +253,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     
     -fx-background-color:#A9BBFF;
     -fx-background-radius: 15px;
-    -fx-font-size: 35px;
+    -fx-font-size: 30px;
 }
 #bouton-nouvelle-annonce:hover{
     -fx-background-color:#148ca7;

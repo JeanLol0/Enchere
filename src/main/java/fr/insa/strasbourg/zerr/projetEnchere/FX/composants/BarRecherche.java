@@ -28,6 +28,7 @@ public class BarRecherche extends ScrollPane {
     private Button bRecherche;
     private Button bCategorie;
     private Button bDistance;
+    private Button bReinitialise;
     private VBox center;
     private ComboBox trieCombo;
     private TextField tfRecherche;
@@ -39,8 +40,6 @@ public class BarRecherche extends ScrollPane {
     private Label lCategorie;
     private Label lDistance;
     private Label lValeur;
-    
-    
 
     private Slider sliderDistance;
 
@@ -69,27 +68,25 @@ public class BarRecherche extends ScrollPane {
         this.sliderDistance = new Slider();
 
         this.sliderDistance.setMin(0);
-        this.sliderDistance.setMax(1000);
+        this.sliderDistance.setMax(500);
         this.sliderDistance.setValue(100);
 
         this.sliderDistance.setShowTickLabels(true);
         this.sliderDistance.setShowTickMarks(true);
         this.lDistance = new Label("Trier par distance");
         this.lDistance.setId("text-recherche");
-        this.lValeur = new Label("Distance: "+this.sliderDistance.getValue()+" km");
+        this.lValeur = new Label("Distance: " + this.sliderDistance.getValue() + " km");
         this.lValeur.setId("text-recherche");
         this.sliderDistance.valueProperty().addListener(
                 new ChangeListener<Number>() {
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-
-                lValeur.setText("Distance: "+newValue+" km");
+                int entier = newValue.intValue();
+                lValeur.setText("Distance: " + entier + " km");
             }
         });
-        this.bDistance= new Button("Rechercher par distance");
-        this.bDistance.setOnAction((t) -> {
-            System.out.println("A completer");
-        });
-
+        this.bDistance = new Button("Rechercher par distance");
+        this.bReinitialise = new Button("Réinitialiser la recherche");
+        
         this.sliderDistance.setBlockIncrement(50);
 
         this.lCategorie = new Label("Rechercher par catégorie");
@@ -99,11 +96,6 @@ public class BarRecherche extends ScrollPane {
 
         this.bRecherche = new Button("Rechercher");
         this.bCategorie = new Button("Rechercher par catégorie");
-        this.bCategorie.setOnAction((t) -> {
-            System.out.println(this.categorie.getTextCategorieSelected());
-        });
-        //this.setAlignment(Pos.TOP_CENTER);
-
         this.tfRecherche = new TextField();
         this.tfRecherche.setPromptText("Effectuer une recherche");
         this.center = new VBox();
@@ -114,18 +106,22 @@ public class BarRecherche extends ScrollPane {
         this.trieCombo.prefWidthProperty().bind(this.widthProperty());
         this.bCategorie.prefWidthProperty().bind(this.widthProperty());
         this.bDistance.prefWidthProperty().bind(this.widthProperty());
-        this.center.getChildren().addAll(this.tfRecherche, this.bRecherche, 
+        this.bReinitialise.prefWidthProperty().bind(this.widthProperty());
+        this.center.getChildren().addAll(this.bReinitialise,this.tfRecherche, this.bRecherche,
                 this.lTrie, this.trieCombo,
-                this.lDistance,this.sliderDistance, this.lValeur,this.bDistance,
+                this.lDistance, this.sliderDistance, this.lValeur, this.bDistance,
                 this.lCategorie, this.categorie, this.bCategorie);
         this.center.setSpacing(10);
         this.center.setPadding(new Insets(10));
 
-        //this.getChildren().addAll(this.center);
         this.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         this.setFitToWidth(true);
         this.setContent(this.center);
 
+    }
+
+    public Button getbReinitialise() {
+        return bReinitialise;
     }
 
     public Button getbCategorie() {
@@ -182,6 +178,13 @@ public class BarRecherche extends ScrollPane {
                 = FXCollections.observableArrayList(c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15, c16, c17, c18, c19, c20, c21, c22, c23, c24);
 
         return list;
+    }
+    public String getValeurDist(){
+        return lValeur.getText();
+    }
+
+    public Button getbDistance() {
+        return bDistance;
     }
 
 }

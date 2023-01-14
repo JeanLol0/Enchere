@@ -29,19 +29,19 @@ private TableView tvEnCours;
 
     private FenetrePrincipale main;
 
-    private TableColumn<MesEncheres, String> titreC;
-    private TableColumn<MesEncheres, String> prixActuelC;
-    private TableColumn<MesEncheres, String> prixDepartC;
-    private TableColumn<MesEncheres, String> tRestantC;
-    private TableColumn<MesEncheres, String> DerEnchereC;
-    private TableColumn<MesEncheres, String> nbEnchereC;
+    private TableColumn<MesEncheresAnnonces, String> titreC;
+    private TableColumn<MesEncheresAnnonces, String> prixActuelC;
+    private TableColumn<MesEncheresAnnonces, String> prixDepartC;
+    private TableColumn<MesEncheresAnnonces, String> tRestantC;
+    private TableColumn<MesEncheresAnnonces, String> DerEnchereC;
+    private TableColumn<MesEncheresAnnonces, String> nbEnchereC;
     
-    private TableColumn<MesEncheres, String> titreT;
-    private TableColumn<MesEncheres, String> prixActuelT;
-    private TableColumn<MesEncheres, String> prixDepartT;
-    private TableColumn<MesEncheres, String> tRestantT;
-    private TableColumn<MesEncheres, String> DerEnchereT;
-    private TableColumn<MesEncheres, String> nbEnchereT;
+    private TableColumn<MesEncheresAnnonces, String> titreT;
+    private TableColumn<MesEncheresAnnonces, String> prixActuelT;
+    private TableColumn<MesEncheresAnnonces, String> prixDepartT;
+    private TableColumn<MesEncheresAnnonces, String> tRestantT;
+    private TableColumn<MesEncheresAnnonces, String> DerEnchereT;
+    private TableColumn<MesEncheresAnnonces, String> nbEnchereT;
 
     private ArrayList lAnnonceEnCours;
     private ArrayList lAnnonceEnTerminee;
@@ -70,6 +70,7 @@ private TableView tvEnCours;
         prixDepartC.setCellValueFactory(new PropertyValueFactory<>("prixDepart"));
         DerEnchereC.setCellValueFactory(new PropertyValueFactory<>("Encherisseur"));
         nbEnchereC.setCellValueFactory(new PropertyValueFactory<>("nbEnchere"));
+        tRestantC.setCellValueFactory(new PropertyValueFactory<>("tempRestant"));
         
         this.titreT = new TableColumn<>("Titre");
         this.prixActuelT = new TableColumn<>("Prix actuel");
@@ -83,6 +84,8 @@ private TableView tvEnCours;
         prixDepartT.setCellValueFactory(new PropertyValueFactory<>("prixDepart"));
         DerEnchereT.setCellValueFactory(new PropertyValueFactory<>("Encherisseur"));
         nbEnchereT.setCellValueFactory(new PropertyValueFactory<>("nbEnchere"));
+        tRestantT.setCellValueFactory(new PropertyValueFactory<>("tempRestant"));
+        
         //prixActuel.setCellValueFactory(new PropertyValueFactory<>("prix"));
 
         this.lAnnonceEnCours = AnnonceParUtilisateurCours(this.main.getSessionInfo().getUserID());
@@ -146,14 +149,14 @@ private TableView tvEnCours;
     }
     public void ajoutAnnoncesUtilisateurEnCours() throws SQLException, ClassNotFoundException {
         for (int i = 0; i < this.lAnnonceEnCours.size(); i++) {
-            this.tvEnCours.getItems().add(new MesEncheres(this.main, (Integer) lAnnonceEnCours.get(i)));
+            this.tvEnCours.getItems().add(new MesEncheresAnnonces(this.main, (Integer) lAnnonceEnCours.get(i)));
         }
 
     }
 
     private void ajoutAnnoncesUtilisateurFini() throws SQLException, ClassNotFoundException {
         for (int i = 0; i < this.lAnnonceEnTerminee.size(); i++) {
-            this.tvTerminee.getItems().add(new MesEncheres(this.main, (Integer) lAnnonceEnTerminee.get(i)));
+            this.tvTerminee.getItems().add(new MesEncheresAnnonces(this.main, (Integer) lAnnonceEnTerminee.get(i)));
         }
     }
 }

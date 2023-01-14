@@ -6,6 +6,8 @@ package fr.insa.strasbourg.zerr.projetEnchere.FX.vues;
 
 import fr.insa.strasbourg.zerr.projetEnchere.FX.JavaFXUtils;
 import fr.insa.strasbourg.zerr.projetEnchere.FX.composants.BarRecherche;
+import fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD;
+import static fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD.DistanceObjetFromUtiilisateur;
 import static fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD.ValiditeDateEnchere;
 import static fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD.connectGeneralPostGres;
 import java.io.IOException;
@@ -15,8 +17,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.geometry.Pos;
@@ -119,6 +124,27 @@ public class VueAnnonces extends BorderPane {
                 Logger.getLogger(VueAnnonces.class.getName()).log(Level.SEVERE, null, ex);
             }
 
+        });
+        this.barRe.getbDistance().setOnAction((t) -> {
+            try {
+                String StringDistMax = getNbr(this.barRe.getValeurDist());
+                int distMax = Integer.parseInt(StringDistMax);
+                int idUtil = this.main.getSessionInfo().getUserID();
+                System.out.println("distance cur"+distMax);
+                this.idAnnonce = TriDistanceObjet(idUtil, distMax);
+                afficheAnnonce();
+            } catch (ClassNotFoundException | SQLException | IOException ex) {
+                Logger.getLogger(VueAnnonces.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+        
+        this.barRe.getbReinitialise().setOnAction((t) -> {
+            try {
+                recupereIdAnnonce();
+                afficheAnnonce();
+            } catch (SQLException | ClassNotFoundException | IOException ex) {
+                Logger.getLogger(VueAnnonces.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
 
     }
@@ -357,6 +383,66 @@ public class VueAnnonces extends BorderPane {
         return sansdoublons;
 
     }
+    public static ArrayList<Integer> TriDistanceObjet(int idUtil, double distancemax) throws ClassNotFoundException, SQLException {
+        Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
+        TreeMap<Double, Integer> map = new TreeMap();
+
+        try ( PreparedStatement st = con.prepareStatement("select id from objet")) {
+            ResultSet res = st.executeQuery();
+
+            while (res.next()) {
+                if (DistanceObjetFromUtiilisateur(idUtil, res.getInt("id")) <= distancemax) {
+                    map.put(DistanceObjetFromUtiilisateur(idUtil, res.getInt("id")), res.getInt("id"));
+                }
+            }
+        }
+
+        Set set = map.entrySet();
+        Iterator it = set.iterator();
+        ArrayList<Integer> List = new ArrayList<>();
+        while (it.hasNext()) {
+            Map.Entry me = (Map.Entry) it.next();
+            List.add((Integer) me.getValue());
+            System.out.println(me.getValue());
+        }
+
+        return List;
+        //tri du plus proche au plus éloigné 
+    }
+    
+    public static ArrayList<Integer> TriDistanceObjetDsc(int idUtil) throws ClassNotFoundException, SQLException {
+        Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
+        TreeMap<Double, Integer> map = new TreeMap();
+
+        try ( PreparedStatement st = con.prepareStatement("select id from objet")) {
+            ResultSet res = st.executeQuery();
+
+            while (res.next()) {
+                map.put(DistanceObjetFromUtiilisateur(idUtil, res.getInt("id")), res.getInt("id"));
+            }
+        }
+
+        Set set = map.entrySet();
+        Iterator it = set.iterator();
+        ArrayList<Integer> List = new ArrayList<>();
+        while (it.hasNext()) {
+            Map.Entry me = (Map.Entry) it.next();
+            List.add((Integer) me.getValue());
+        }
+
+        return List;
+        //tri du plus proche au plus éloigné 
+    }
+    static String getNbr(String str) { 
+        // Remplacer chaque nombre non numérique par un espace
+        str = str.replaceAll("[^\\d]", " "); 
+        // Supprimer les espaces de début et de fin 
+        str = str.trim(); 
+        // Remplacez les espaces consécutifs par un seul espace
+        str = str.replaceAll(" +", ""); 
+  
+        return str; 
+    } 
 
 }
 //    public static void afficheUtilisateurParNom(Connection con,
