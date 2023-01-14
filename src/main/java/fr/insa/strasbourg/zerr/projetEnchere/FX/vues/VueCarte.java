@@ -85,8 +85,8 @@ public class VueCarte extends BorderPane {
             view.removeLayer(maplayer);
             this.maplayer = new CustomCircleMarker(this.mapPoint);
             view.addLayer(maplayer);
-            this.longitude=mappoint.getLongitude();
-            this.latitude=mappoint.getLatitude();
+            this.longitude=this.mapPoint.getLongitude();
+            this.latitude=this.mapPoint.getLatitude();
 
         });
         view.setZoom(this.zoom);
