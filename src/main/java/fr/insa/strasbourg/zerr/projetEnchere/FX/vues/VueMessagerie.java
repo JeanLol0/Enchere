@@ -42,53 +42,45 @@ public class VueMessagerie extends ScrollPane {
         this.grid= new GridPane();
         this.grid.add(new Label("Vue messagerie"), 0, 0);
         this.con = this.main.getBDD();
+        this.idMessages = new ArrayList <Integer>();
         recupereIdMessages();
-        
+        afficheMessages();
         this.setContent(this.grid);
-        
-        
-        
     }
-    public void afficheMessages() throws SQLException, ClassNotFoundException, IOException {
+    
+    public void afficheMessages() throws SQLException, ClassNotFoundException {
         Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
         this.grid.getChildren().clear();
-        int nbAnnonce = this.idMessages.size();
+        int nbMessage = this.idMessages.size();
 
         try ( PreparedStatement st = con.prepareStatement("select id from message where vendeur = ?")) {
             st.setInt(1, this.main.getSessionInfo().getUserID());
-//            System.out.println(this.main.getSessionInfo().getUserID());
             ResultSet res = st.executeQuery();
             while (res.next()) {
                 int resultat = res.getInt("id");
-//                System.out.println(resultat);
-                for (int i = 0; i < nbAnnonce; i++) {
+                for (int i = 0; i < nbMessage; i++) {
                     if (this.idMessages.get(i) == resultat) {
                         this.idMessages.remove(i);
-                        nbAnnonce = nbAnnonce - 1;
+                        nbMessage = nbMessage - 1;
                     }
                 }
             }
 
         }
-        nbAnnonce = this.idMessages.size();
-        for (int j = 0; j < nbAnnonce; j++) {
+        nbMessage = this.idMessages.size();
+        for (int j = 0; j < nbMessage; j++) {
             this.grid.add(new Message(this.main, this.idMessages.get(j)), 0, j);
         }
     }
     public void recupereIdMessages()
             throws SQLException, ClassNotFoundException {
-        try ( PreparedStatement st = this.con.prepareStatement("select id from objet")) {
+        try ( PreparedStatement st = this.con.prepareStatement("select id from message where vendeur = ?")) {
+            st.setInt(1, this.main.getSessionInfo().getUserID());
             ResultSet res = st.executeQuery();
             while (res.next()) {
-                if (ValiditeDateEnchere(res.getInt("id")) == false) {
                     this.idMessages.add(res.getInt("id"));
-                }
-//                System.out.println("ids recupéré nb:" + this.idAnnonce.size());
-//            if (ValiditeDateEnchere(res.getInt("id")) == false) {
-//                int size = this.idAnnonce.size();
-//                this.idAnnonce.remove(size-1);
-//            }
             }
         }
     }
+    
 }

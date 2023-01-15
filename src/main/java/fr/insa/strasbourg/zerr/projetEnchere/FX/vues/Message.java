@@ -18,6 +18,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Base64;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.animation.Animation;
@@ -41,24 +42,20 @@ public class Message extends HBox {
 
     private FenetrePrincipale main;
     private String titre;
-    private Timestamp debut;
-    private Timestamp fin;
-    private Timestamp restant;
-    private double Olongitude;
-    private double Olatitude;
-    private double Utillatitude;
-    private double Utillongitude;
-    private Label distance;
-    private Label prixActuel;
-    private Label categorie;
-    private Integer idVendeur;
-    private Integer id;
+    private Label TitreMessage;
+    private Label TexteContenu;
+    private Label textedate;
+    private Label Envoyeur;
+
     private Image image;
     private String stringImage;
     private GridPane grid;
-    private ImageView imageV;
-    
-    private int compteur=0;
+
+    private int idAcheteur;
+    private int idVendeur;
+    private int idMessage;
+    private String ContenuMessage;
+    private Timestamp date;
 
     private Label npVendeur;
     private Label tTime;
@@ -69,94 +66,45 @@ public class Message extends HBox {
     private Label tTempsR;
     private Label tDistance;
 
-    public Message(FenetrePrincipale main, Integer id) throws SQLException, ClassNotFoundException, IOException {
+    public Message(FenetrePrincipale main, Integer id) throws SQLException, ClassNotFoundException {
         //this.getStylesheets().add(getClass().getResource("StyleAnnonce.css").toExternalForm());
-        this.id = id;
+        this.idMessage = id;
         this.main = main;
-        recupereObjet(this.id);
+        int idUtil = this.main.getSessionInfo().getUserID();
+        recupereMessage(idUtil);
         this.grid = new GridPane();
         this.grid.setHgap(20);
-        this.setId("annonce");
-        this.imageV = new ImageView(this.image);
-        this.imageV.setFitHeight(200);
-        this.imageV.setFitWidth(200);
+        this.setId("message");
 
-        this.tTime = new Label("Temps restant :");
-        this.tPrix = new Label("Prix :");
-        this.tCategorie = new Label("Catégorie :");
-        this.tVendeur = new Label("Nom du vendeur :");
-        this.tTitre = new Label(this.titre);
-        this.tTempsR = new Label("Temps restant :");
-        this.tDistance = new Label("Distance");
-        int idUtil = this.main.getSessionInfo().getUserID();
-        RecupCoordUtil(idUtil);
-        double distance = CalculDistance(this.Utillongitude, Utillatitude, Olongitude, Olatitude);
-        if (distance < 1) {
-            this.distance = new Label("Moins d'un kilomètre ");
-        } else {
-            this.distance = new Label(Double.toString(distance) + " km");
-        }
-        this.tTitre.setId("grand-text-annonce");
+        this.tTime = new Label(this.titre);
+        this.TexteContenu = new Label(this.ContenuMessage);
+        this.Envoyeur = new Label(getNom(idAcheteur));
+        //this.textedate = new Label(this.date.toString());
+        
 
-        this.grid.add(this.tTitre, 0, 0, 2, 1);
-        this.grid.add(tPrix, 0, 2);
-        this.grid.add(prixActuel, 1, 2);
-        this.grid.add(tCategorie, 0, 3);
-        this.grid.add(categorie, 1, 3);
-        this.grid.add(tVendeur, 0, 4);
-        this.grid.add(npVendeur, 1, 4);
-        this.grid.add(tDistance, 0, 5);
-        this.grid.add(this.distance, 1, 5);
-        this.grid.add(tTempsR, 0, 6);
-        this.grid.add(tTime, 1, 6);
-        this.getChildren().addAll(this.imageV, this.grid);
+//        this.tTitre.setId("grand-text-annonce");
+        this.grid.add(this.tTime, 0, 0, 2, 1);
+        this.grid.add(TexteContenu, 3, 0);
+        this.grid.add(Envoyeur, 4, 8);
+        //this.grid.add(textedate, 5, 8);
 
-        this.tTitre.setOnMouseClicked((t) -> {
-            try {
-                this.main.setRight(new VueAnnonceDetaille(this.main, this.id,1,compteur));
-            } catch (SQLException | ClassNotFoundException | IOException ex) {
-                Logger.getLogger(Annonce.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        });
+        this.getChildren().addAll(this.grid);
 
     }
 
-    private void recupereObjet(int id)
+    private void recupereMessage(int id)
             throws SQLException, ClassNotFoundException {
         Connection con = this.main.getBDD();
 
-        try ( PreparedStatement st = con.prepareStatement("select * from objet where id = ?")) {
+        try ( PreparedStatement st = con.prepareStatement("select * from message where vendeur = ?")) {
             st.setInt(1, id);
             ResultSet res = st.executeQuery();
             while (res.next()) {
-                this.titre = res.getString("titre");
-                this.debut = res.getTimestamp("debut");
-                this.fin = res.getTimestamp("fin");
-                int prix = res.getInt("prixactuel");
-                this.prixActuel = new Label(String.valueOf(prix) + " €");
-                int idcat = res.getInt("categorie");
-                this.categorie = new Label(getStringCategorie(idcat));
-                String nom = getNom(res.getInt("proposerpar"));
-                String prenom = getPrenom(res.getInt("proposerpar"));
-                this.npVendeur = new Label(prenom + " " + nom);
-                this.idVendeur = res.getInt("proposerpar");
-                this.stringImage = res.getString("image");
-                this.Olongitude = res.getDouble("lat");
-                this.Olatitude = res.getDouble("long");
-            }
-        }
-
-    }
-
-    private void RecupCoordUtil(int id)
-            throws SQLException, ClassNotFoundException {
-        Connection con = this.main.getBDD();
-        try ( PreparedStatement st = con.prepareStatement("select * from utilisateur where id = ?")) {
-            st.setInt(1, id);
-            ResultSet res = st.executeQuery();
-            while (res.next()) {
-                this.Utillatitude = res.getDouble("lat");
-                this.Utillongitude = res.getDouble("long");
+                idAcheteur = res.getInt("acheteur");
+                idVendeur = res.getInt("vendeur");
+                idMessage = res.getInt(ContenuMessage);
+                ContenuMessage = res.getString("texte");
+                this.date = res.getTimestamp("date");
             }
         }
 
@@ -178,110 +126,6 @@ public class Message extends HBox {
 
         return new Timestamp(l3);
 
-    }
-
-    private long secRestant(Timestamp fin) {
-        LocalDateTime l1 = LocalDateTime.now();
-        LocalDateTime l2 = this.fin.toLocalDateTime();
-        long diffS = l1.until(l2, ChronoUnit.SECONDS);
-        return diffS % 60;
-    }
-
-    private long minRestant(Timestamp fin) {
-        LocalDateTime l1 = LocalDateTime.now();
-        LocalDateTime l2 = this.fin.toLocalDateTime();
-        long diffM = l1.until(l2, ChronoUnit.MINUTES);
-        return diffM % 60;
-
-    }
-
-    private long hRestant(Timestamp fin) {
-        LocalDateTime l1 = LocalDateTime.now();
-        LocalDateTime l2 = this.fin.toLocalDateTime();
-        long diffH = l1.until(l2, ChronoUnit.HOURS);
-        return diffH % 24;
-
-    }
-
-    private long jourRestant(Timestamp fin) {
-        LocalDateTime l1 = LocalDateTime.now();
-//        System.out.println("now"+LocalDateTime.now());
-//        System.out.println("fin"+fin.toLocalDateTime());
-        LocalDateTime l2 = fin.toLocalDateTime();
-        long diffJ = l1.until(l2, ChronoUnit.DAYS);
-
-        return diffJ;
-
-    }
-
-    public static long getHeuresRestantes(Timestamp fin) {
-        LocalDateTime debut1 = LocalDateTime.now();
-        LocalDateTime fin1 = fin.toLocalDateTime();
-        long diffHeures = fin1.until(debut1, ChronoUnit.HOURS);
-        while (diffHeures >= 8760) {
-            diffHeures = diffHeures - 8760;
-        }
-        while (diffHeures >= 730) {
-            diffHeures = diffHeures - 730;
-        }
-        while (diffHeures >= 24) {
-            diffHeures = diffHeures - 24;
-        }
-        return diffHeures;
-    }
-
-    public static long getMinutesRestantes(Timestamp fin) {
-        LocalDateTime debut1 = LocalDateTime.now();
-        LocalDateTime fin1 = fin.toLocalDateTime();
-        long diffMinutes = fin1.until(debut1, ChronoUnit.MINUTES);
-        while (diffMinutes >= 525600) {
-            diffMinutes = diffMinutes - 525600;
-        }
-        while (diffMinutes >= 43800) {
-            diffMinutes = diffMinutes - 43800;
-        }
-        while (diffMinutes >= 1440) {
-            diffMinutes = diffMinutes - 1440;
-        }
-        while (diffMinutes >= 60) {
-            diffMinutes = diffMinutes - 60;
-        }
-        return diffMinutes;
-    }
-
-    public static long getJoursRestants(Timestamp fin) {
-        LocalDateTime debut1 = LocalDateTime.now();
-        LocalDateTime fin1 = fin.toLocalDateTime();
-        long diffJours = fin1.until(debut1, ChronoUnit.MINUTES);
-        while (diffJours >= 365) {
-            diffJours = diffJours - 365;
-        }
-        while (diffJours >= 30) {
-            diffJours = diffJours - 30;
-        }
-        return diffJours;
-    }
-
-    public static long getSecondesRestantes(Timestamp fin) {
-        LocalDateTime debut1 = LocalDateTime.now();
-        LocalDateTime fin1 = fin.toLocalDateTime();
-        long diffSecondes = fin1.until(debut1, ChronoUnit.SECONDS);
-        while (diffSecondes >= 31536008) {
-            diffSecondes = diffSecondes - 31536008;
-        }
-        while (diffSecondes >= 2628003) {
-            diffSecondes = diffSecondes - 2628003;
-        }
-        while (diffSecondes >= 86400) {
-            diffSecondes = diffSecondes - 86400;
-        }
-        while (diffSecondes >= 3600) {
-            diffSecondes = diffSecondes - 3600;
-        }
-        while (diffSecondes >= 60) {
-            diffSecondes = diffSecondes - 60;
-        }
-        return diffSecondes;
     }
 
     public static Image texteEnImage(String img) throws IOException {
@@ -311,18 +155,18 @@ public class Message extends HBox {
 
     public String getNom(Integer idU) throws SQLException {
         Connection con = this.main.getBDD();
-        try ( PreparedStatement st = con.prepareCall("select nom from utilisateur where id = ?")) {
+        String nom = "";
+        String prenom = "";
+        try ( PreparedStatement st = con.prepareCall("select nom,prenom from utilisateur where id = ?")) {
             st.setInt(1, idU);
             ResultSet res = st.executeQuery();
-            if (res.next()) {
-                return res.getString("nom");
-            } else {
-                JavaFXUtils.showErrorInAlert("Erreur", "Selectionner une catégorie", "blabla");
-                return null;
+            while (res.next()) {
+                nom = res.getString("nom");
+                prenom = res.getString("prenom");
             }
-
         }
-
+        String NomEntier = nom.toUpperCase() + " " + prenom.toUpperCase();
+        return NomEntier;
     }
 
     public String getPrenom(Integer idU) throws SQLException {
@@ -341,8 +185,6 @@ public class Message extends HBox {
 
     }
 
-    
-
     private static int recupereEtatLivraison(Connection con, int id)
             throws SQLException, ClassNotFoundException {
         int etat = 0;
@@ -355,9 +197,6 @@ public class Message extends HBox {
         }
         return etat;
     }
-
-    
-    
 
     public int UtilDernierEnchereSurObjet(int idObjet) throws ClassNotFoundException, SQLException {
         Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
@@ -386,21 +225,16 @@ public class Message extends HBox {
         }
         return NOM;
     }
-    
-    static String getNbr(String str) 
-    { 
+
+    static String getNbr(String str) {
         // Remplacer chaque nombre non numérique par un espace
-        str = str.replaceAll("[^\\d]", " "); 
+        str = str.replaceAll("[^\\d]", " ");
         // Supprimer les espaces de début et de fin 
-        str = str.trim(); 
+        str = str.trim();
         // Remplacez les espaces consécutifs par un seul espace
-        str = str.replaceAll(" +", ""); 
-  
-        return str; 
-    } 
-    
-    public int getCompteur(){
-        return this.compteur;
+        str = str.replaceAll(" +", "");
+
+        return str;
     }
 
 }
