@@ -127,7 +127,7 @@ public class BDD {
                             generated always as identity,
                             texte Text not null,
                             titre integer not null, 
-                            objet integer not null,
+                            objet integer,
                             vendeur integer not null,
                             acheteur integer not null, 
                             date Timestamp not null
@@ -637,8 +637,8 @@ public class BDD {
                 String acheteurnom = recupereNomUTil(con, de);
                 String texte = "Une enchère a été faites sur l'un de vos Objet :'" + titre + "' par " + acheteurnom + ". \nConsultez votre rubrique 'Mes annonces'!";
                 int vendeur = recupereVendeurObjet(con, sur);
+                System.out.println("valeur"+sur);
                 createMessage(con, texte, vendeur, de, 1,sur);
-                //if (idUtilDernier)
                 try ( ResultSet rid = pst.getGeneratedKeys()) {
                     rid.next();
                     int id = rid.getInt(1);
@@ -1640,11 +1640,12 @@ public class BDD {
     public static void createMessage(Connection con, String texte, int IdVendeur, int IdAcheteur, int titre, int idObjet) throws SQLException {
         con.setAutoCommit(false);
         try ( PreparedStatement pst = con.prepareStatement(
-                "insert into message (texte,vendeur,acheteur,date,titre) values (?,?,?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS)) {
+                "insert into message (texte,vendeur,acheteur,date,titre,objet) values (?,?,?,?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS)) {
             pst.setString(1, texte);
             pst.setInt(2, IdVendeur);
             pst.setInt(3, IdAcheteur);
             pst.setInt(5, titre);
+            pst.setInt(6,idObjet);
             Timestamp maintenant = new Timestamp(System.currentTimeMillis());
             pst.setTimestamp(4, maintenant);
             pst.executeUpdate();
