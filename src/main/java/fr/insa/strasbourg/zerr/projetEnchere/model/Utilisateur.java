@@ -14,7 +14,7 @@ public class Utilisateur {
     private String pass;
     private String nom;
     private String prenom;
-   // private String nomRole;
+   
 
     public Utilisateur(int id, String email, String pass, String nom, String prenom) {
         this.id = id;
@@ -22,7 +22,7 @@ public class Utilisateur {
         this.pass = pass;
         this.nom = nom;
         this.prenom = prenom;
-        //this.nomRole = nomRole;
+        
     }
 
     @Override

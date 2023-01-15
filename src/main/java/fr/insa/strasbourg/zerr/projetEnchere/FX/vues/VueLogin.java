@@ -115,7 +115,6 @@ public class VueLogin extends GridPane {
                 this.main.getSessionInfo().setCurUser(user);
                 this.main.setCenter(new VueAcceuil(this.main));
                 this.main.setTop(new TopBar(this.main));
-                System.out.println(this.main.getBDD());
                 //this.main.setMainContent(new Label("vous êtes " + user));
             }
 

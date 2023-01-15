@@ -57,6 +57,7 @@ public class VueAnnonceDetaille extends BorderPane {
     private Label lEnchere;
     private TextField tfEnchere;
     private Button bEnchere;
+    private Button bRetourAnnonce;
     
     private int compteur;
 
@@ -113,8 +114,8 @@ public class VueAnnonceDetaille extends BorderPane {
 
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         int width = gd.getDisplayMode().getWidth() / 2;
-//        this.imageV.setFitHeight(width*0.8);
-//        this.imageV.setFitWidth(width*0.8);
+        this.imageV.setFitHeight(width*0.8);
+       this.imageV.setFitWidth(width*0.8);
         this.gridPane.setPrefWidth(width);
         
         this.gridPane.setVgap(10);
@@ -127,6 +128,11 @@ public class VueAnnonceDetaille extends BorderPane {
         this.tTempsR = new Label("Temps restant :");
         this.tDistance = new Label("Distance");
         this.bEnchere = new Button("Encherir");
+        this.bRetourAnnonce = new Button("Retour aux annonces");
+        this.bEnchere.setPrefWidth(400);
+        this.bEnchere.setStyle("-fx-background-radius: 5px;");
+        this.bRetourAnnonce.setPrefWidth(400);
+        this.bRetourAnnonce.setStyle("-fx-background-radius: 5px;");
 
         int idUtil = this.main.getSessionInfo().getUserID();
         RecupCoordUtil(idUtil);
@@ -145,6 +151,14 @@ public class VueAnnonceDetaille extends BorderPane {
                 tfEnchere.setText(oldValue);
             }
         });
+        
+        this.gridPane.setAlignment(Pos.TOP_CENTER);
+        this.gridPane.setHalignment(this.tTitre, HPos.CENTER);
+        this.gridPane.setHalignment(this.bEnchere, HPos.CENTER);
+        this.gridPane.setHalignment(this.bRetourAnnonce, HPos.CENTER);
+        this.gridPane.setHalignment(this.imageV, HPos.CENTER);
+        
+        
         this.tTitre.setId("grand-text-annonce");
 
         this.gridPane.add(this.tTitre, 0, 0, 2, 1);
@@ -162,13 +176,10 @@ public class VueAnnonceDetaille extends BorderPane {
         this.gridPane.add(tPrix, 0, 8);
         this.gridPane.add(prixActuel, 1, 8);
         this.gridPane.add(tfEnchere, 0, 9,2,1);
-        this.gridPane.add(bEnchere, 1, 10,2,1);
+        this.gridPane.add(bEnchere, 0, 10,1,1);
+        this.gridPane.add(bRetourAnnonce, 1, 10,1,1);
 
         
-        this.gridPane.setAlignment(Pos.TOP_CENTER);
-        this.gridPane.setHalignment(this.tTitre, HPos.CENTER);
-        this.gridPane.setHalignment(this.bEnchere, HPos.CENTER);
-        this.gridPane.setHalignment(this.imageV, HPos.CENTER);
         
 //        //this.gridPane.setGridLinesVisible(true);
 //        //this.content.setPrefWidth(this.getWidth());
@@ -186,17 +197,28 @@ public class VueAnnonceDetaille extends BorderPane {
 //        this.content.getChildren().addAll(this.gridPane);
 //        this.content.setAlignment(Pos.CENTER);
         this.scroll = new ScrollPane();
-        this.scroll.setFitToWidth(true);
+        
         this.scroll.setContent(this.gridPane);
+        this.scroll.setFitToWidth(true);
+        this.scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        this.scroll.setId("scroll-annonce");
         
         this.setCenter(this.scroll);
-        //this.BorderPane.setId("scroll-annonce");
+        
         ActualisationTempsRestant();
         ActualisePrix();
         this.bEnchere.setOnAction((t) -> {
             faireEnchere();
         });
-        JavaFXUtils.addSimpleBorder(this);
+        this.bRetourAnnonce.setOnAction((t) -> {
+            try {
+                this.main.setCenter(new VuePrincipale(main));
+            } catch (SQLException | ClassNotFoundException | IOException ex) {
+                Logger.getLogger(VueAnnonceDetaille.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        });
+        //JavaFXUtils.addSimpleBorder(this);
     }
     public VueAnnonceDetaille(FenetrePrincipale main, int idO,int i,int comp) throws SQLException, ClassNotFoundException, IOException {
         this.main = main;
@@ -255,6 +277,10 @@ public class VueAnnonceDetaille extends BorderPane {
         
         this.bGoEnchere = new Button("Plus de détails");
         this.bRetour = new Button("Fermer");
+        this.bRetour.setPrefWidth(200);
+        this.bGoEnchere.setPrefWidth(200);
+        this.gridPane.setHalignment(this.bRetour, HPos.CENTER);
+        this.gridPane.setHalignment(this.bGoEnchere, HPos.CENTER);
 
         this.gridPane.add(this.tTitre, 0, 0, 2, 1);
         this.gridPane.add(imageV, 0, 1, 2, 1);
@@ -263,7 +289,8 @@ public class VueAnnonceDetaille extends BorderPane {
         this.gridPane.add(bGoEnchere, 0, 9);
         this.gridPane.add(bRetour,1 , 9);
 
-        
+        this.bEnchere.setStyle("-fx-background-radius: 5px;");
+        this.bGoEnchere.setStyle("-fx-background-radius: 5px;");
         this.gridPane.setAlignment(Pos.TOP_CENTER);
         this.gridPane.setHalignment(this.tTitre, HPos.CENTER);
         this.gridPane.setHalignment(this.bEnchere, HPos.CENTER);
@@ -285,8 +312,11 @@ public class VueAnnonceDetaille extends BorderPane {
 //        this.HBox.getChildren().addAll(this.gri);
         
         this.scroll = new ScrollPane();
-        this.scroll.setFitToWidth(true);
         this.scroll.setContent(this.gridPane);
+        this.scroll.setFitToWidth(true);
+        this.scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
+        this.scroll.setId("scroll-annonce");
         
         this.setCenter(this.scroll);
         //this.BorderPane.setId("scroll-annonce");
@@ -295,7 +325,7 @@ public class VueAnnonceDetaille extends BorderPane {
         this.bEnchere.setOnAction((t) -> {
             faireEnchere();
         });
-        JavaFXUtils.addSimpleBorder(this);
+        //JavaFXUtils.addSimpleBorder(this);
         this.bGoEnchere.setOnAction((t) -> {
             try {
                 this.main.setCenter(new VueAnnonceDetaille(main, idObj,this.compteur));

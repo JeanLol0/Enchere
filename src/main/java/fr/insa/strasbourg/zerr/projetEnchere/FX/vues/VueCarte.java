@@ -36,6 +36,7 @@ public class VueCarte extends BorderPane {
     private double latitude;
 
     public VueCarte(FenetrePrincipale main) throws IOException {
+        this.setStyle("-fx-color:#238636");
         this.main = main;
         this.bRetour = new Button("Retour à l'inscription");
         this.Confirmer = new Button("Confirmer");

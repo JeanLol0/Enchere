@@ -49,6 +49,9 @@ public class BDD {
             pst.setString(1, email);
             pst.setString(2, pass);
             ResultSet res = pst.executeQuery();
+            if(!res.equals(null)){
+                System.out.println("non null");
+            }
             if (res.next()) {
                 return Optional.of(new Utilisateur(res.getInt("id"), email, pass, res.getString("nom"), res.getString("prenom")));
 

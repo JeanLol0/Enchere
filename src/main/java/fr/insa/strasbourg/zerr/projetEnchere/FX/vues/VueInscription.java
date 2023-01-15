@@ -144,6 +144,11 @@ public class VueInscription extends GridPane {
             fileChooser.setTitle("Open Resource File");
 
         });
+        
+       
+        
+        
+        
 
     }
 
@@ -211,6 +216,9 @@ public class VueInscription extends GridPane {
         this.bChoixPos.setMaxWidth(Double.MAX_VALUE);
         this.setHalignment(this.lInscription, HPos.CENTER);
         this.setHalignment(this.avatar, HPos.CENTER);
+        this.setHalignment(this.bChoixPos, HPos.CENTER);
+        this.setHalignment(this.bInscription, HPos.CENTER);
+        this.setHalignment(this.bLogin, HPos.CENTER);
 
         JavaFXUtils.DesactiveAutoFocus(tfNom);
         JavaFXUtils.DesactiveAutoFocus(tfEmail);

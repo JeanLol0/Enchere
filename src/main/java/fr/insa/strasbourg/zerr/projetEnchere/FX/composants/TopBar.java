@@ -125,6 +125,7 @@ public class TopBar extends HBox {
             try {
                 this.main.setCenter(new VueNouvelleAnnonce(this.main));
                 this.main.setLeft(null);
+                this.main.setRight(null);
             } catch (IOException ex) {
                 Logger.getLogger(TopBar.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -158,6 +159,7 @@ public class TopBar extends HBox {
             try {
                 this.main.setCenter(new VueMesAnnonces(this.main));
                 this.main.setLeft(null);
+                this.main.setRight(null);
             } catch (ClassNotFoundException | SQLException ex) {
                 Logger.getLogger(TopBar.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -167,6 +169,7 @@ public class TopBar extends HBox {
             try {
                 this.main.setCenter(new VueMesEnchere(this.main));
                 this.main.setLeft(null);
+                this.main.setRight(null);
             } catch (ClassNotFoundException | SQLException ex) {
                 Logger.getLogger(TopBar.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -174,6 +177,8 @@ public class TopBar extends HBox {
         this.miMessagerie.setOnAction((t) -> {
             try {
                 this.main.setCenter(new VueMessagerie(this.main));
+                this.main.setRight(null);
+                this.main.setLeft(null);
             } catch (SQLException ex) {
                 Logger.getLogger(TopBar.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ClassNotFoundException ex) {

@@ -94,7 +94,7 @@ public class VueAnnonces extends BorderPane {
                     Logger.getLogger(VueAnnonces.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            if ("Dates croissante".equals(typeTri)) {
+            if ("Temps croissant".equals(typeTri)) {
                 try {
                     this.idAnnonce = TriDateCroissant();
                     afficheAnnonce();
@@ -102,7 +102,7 @@ public class VueAnnonces extends BorderPane {
                     Logger.getLogger(VueAnnonces.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            if ("Dates decroissante".equals(typeTri)) {
+            if ("Temps decroissant".equals(typeTri)) {
                 try {
                     this.idAnnonce = TriDateDecroissant();
                     afficheAnnonce();
