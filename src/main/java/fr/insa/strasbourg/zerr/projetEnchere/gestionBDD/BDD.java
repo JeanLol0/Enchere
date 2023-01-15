@@ -1684,7 +1684,6 @@ public class BDD {
             if (res.next()) {
                 valeur = res.getInt("etatlivraison");
             }
-
         }
         return valeur;
     }

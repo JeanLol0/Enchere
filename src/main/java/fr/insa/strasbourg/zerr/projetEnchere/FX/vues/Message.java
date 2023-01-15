@@ -75,10 +75,9 @@ public class Message extends HBox {
         int idUtil = this.main.getSessionInfo().getUserID();
         recupereMessage(id);
         this.grid = new GridPane();
-        this.grid.setVgap(20);
+        //this.grid.setVgap(20);
         this.grid.setHgap(40);
         this.setId("message");
-        this.grid.setGridLinesVisible(true);
         this.tTime = new Label(this.titre);
         this.TexteContenu = new Label(this.ContenuMessage);
         this.Envoyeur = new Label(getNom(idAcheteur));
@@ -87,9 +86,9 @@ public class Message extends HBox {
 
         this.tTime.setId("grand-text-annonce");
         this.grid.add(this.tTime, 0, 0, 2, 1);
-        this.grid.add(TexteContenu, 0, 1);
-        this.grid.add(this.textedate,3,3);
-        this.grid.add(Envoyeur, 3, 2);
+        this.grid.add(TexteContenu, 0, 1,3,1);
+        this.grid.add(this.textedate,2,3);
+        this.grid.add(Envoyeur, 2, 2);
         //this.grid.add(textedate, 5, 8);
         this.grid.setAlignment(Pos.CENTER);
         this.getChildren().addAll(this.grid);

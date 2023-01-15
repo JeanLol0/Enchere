@@ -40,7 +40,7 @@ public class VueMessagerie extends ScrollPane {
     public VueMessagerie(FenetrePrincipale main) throws SQLException, ClassNotFoundException {
         this.main = main;
         this.grid= new GridPane();
-        this.grid.add(new Label("Vue messagerie"), 0, 0);
+        this.grid.add(new Label("MESSAGERIE"), 0, 4);
         this.con = this.main.getBDD();
         this.idMessages = new ArrayList <Integer>();
         recupereIdMessages();
@@ -68,7 +68,7 @@ public class VueMessagerie extends ScrollPane {
 //        }
         nbMessage = this.idMessages.size();
         for (int j = 0; j < nbMessage; j++) {
-            this.grid.add(new Message(this.main, this.idMessages.get(j)), 0, j);
+            this.grid.add(new Message(this.main, this.idMessages.get(j)), 0, j+2);
         }
     }
     public void recupereIdMessages()
