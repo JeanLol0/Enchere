@@ -5,6 +5,7 @@
 package fr.insa.strasbourg.zerr.projetEnchere.gestionBDD;
 
 import fr.insa.beuvron.utils.ConsoleFdB;
+import fr.insa.strasbourg.zerr.projetEnchere.FX.JavaFXUtils;
 import fr.insa.strasbourg.zerr.projetEnchere.model.Utilisateur;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -125,6 +126,7 @@ public class BDD {
                             id integer not null primary key
                             generated always as identity,
                             texte Text not null,
+                            titre integer not null, 
                             vendeur integer not null,
                             acheteur integer not null, 
                             date Timestamp not null
@@ -634,7 +636,7 @@ public class BDD {
                 String acheteurnom = recupereNomUTil(con, de);
                 String texte = "Une enchère a été faites sur l'un de vos Objet :'" + titre + "' par " + acheteurnom + ". \nConsultez votre rubrique 'Mes annonces'!";
                 int vendeur = recupereVendeurObjet(con, sur);
-                createMessage(con, texte, vendeur, de);
+                createMessage(con, texte, vendeur, de, 1);
                 //if (idUtilDernier)
                 try ( ResultSet rid = pst.getGeneratedKeys()) {
                     rid.next();
@@ -1580,7 +1582,7 @@ public class BDD {
 
             while (res.next()) {
                 //if (DistanceObjetFromUtiilisateur(idUtil, res.getInt("id")) <= distancemax) {
-                    map.put(DistanceObjetFromUtiilisateur(idUtil, res.getInt("id")), res.getInt("id"));
+                map.put(DistanceObjetFromUtiilisateur(idUtil, res.getInt("id")), res.getInt("id"));
                 //}
             }
         }
@@ -1634,13 +1636,14 @@ public class BDD {
         }
     }
 
-    public static void createMessage(Connection con, String texte, int IdVendeur, int IdAcheteur) throws SQLException {
+    public static void createMessage(Connection con, String texte, int IdVendeur, int IdAcheteur, int titre) throws SQLException {
         con.setAutoCommit(false);
         try ( PreparedStatement pst = con.prepareStatement(
-                "insert into message (texte,vendeur,acheteur,date) values (?,?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS)) {
+                "insert into message (texte,vendeur,acheteur,date,titre) values (?,?,?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS)) {
             pst.setString(1, texte);
             pst.setInt(2, IdVendeur);
             pst.setInt(3, IdAcheteur);
+            pst.setInt(5, titre);
             Timestamp maintenant = new Timestamp(System.currentTimeMillis());
             pst.setTimestamp(4, maintenant);
             pst.executeUpdate();
@@ -1671,5 +1674,18 @@ public class BDD {
         } finally {
             con.setAutoCommit(true);
         }
+    }
+
+    public int getEtatLivraison(Connection con, Integer idObjet) throws SQLException {
+        int valeur = 0;
+        try ( PreparedStatement st = con.prepareCall("select etatlivraison from objet where id = ?")) {
+            st.setInt(1, idObjet);
+            ResultSet res = st.executeQuery();
+            if (res.next()) {
+                valeur = res.getInt("etatlivraison");
+            }
+
+        }
+        return valeur;
     }
 }

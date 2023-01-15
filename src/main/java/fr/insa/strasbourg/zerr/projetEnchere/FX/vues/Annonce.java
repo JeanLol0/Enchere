@@ -453,10 +453,10 @@ public class Annonce extends HBox {
             String TextePourVendeurSiEnchere = "Votre objet " + BDD.recupereTitreObjet(this.main.getBDD(), this.id) + " n'est plus en vente! L'utilisateur ";
             TextePourVendeurSiEnchere = TextePourVendeurSiEnchere + recupereNomUTil(this.main.getBDD(), UtilDernierEnchereSurObjet(this.id)) + " vous propose de vous l'acheter";
             System.out.println(TextePourVendeurSiPasEnchere);
-            BDD.createMessage(this.main.getBDD(), TextePourAcheteurSiEnchere, UtilDernierEnchereSurObjet(this.id), this.idVendeur);
-            BDD.createMessage(this.main.getBDD(), TextePourVendeurSiEnchere, this.idVendeur, UtilDernierEnchereSurObjet(this.id));
+            BDD.createMessage(this.main.getBDD(), TextePourAcheteurSiEnchere, UtilDernierEnchereSurObjet(this.id), this.idVendeur,2);
+            BDD.createMessage(this.main.getBDD(), TextePourVendeurSiEnchere, this.idVendeur, UtilDernierEnchereSurObjet(this.id),3);
         } else {
-            BDD.createMessage(this.main.getBDD(), TextePourVendeurSiPasEnchere, this.idVendeur, 2);
+            BDD.createMessage(this.main.getBDD(), TextePourVendeurSiPasEnchere, this.idVendeur, 2,4);
         }
 
     }

@@ -26,6 +26,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -41,7 +42,6 @@ import javax.imageio.ImageIO;
 public class Message extends HBox {
 
     private FenetrePrincipale main;
-    private String titre;
     private Label TitreMessage;
     private Label TexteContenu;
     private Label textedate;
@@ -54,6 +54,8 @@ public class Message extends HBox {
     private int idAcheteur;
     private int idVendeur;
     private int idMessage;
+    private String titre;
+    private int type;
     private String ContenuMessage;
     private Timestamp date;
 
@@ -71,23 +73,25 @@ public class Message extends HBox {
         this.idMessage = id;
         this.main = main;
         int idUtil = this.main.getSessionInfo().getUserID();
-        recupereMessage(idUtil);
+        recupereMessage(id);
         this.grid = new GridPane();
-        this.grid.setHgap(20);
+        this.grid.setVgap(20);
+        this.grid.setHgap(40);
         this.setId("message");
-
+        this.grid.setGridLinesVisible(true);
         this.tTime = new Label(this.titre);
         this.TexteContenu = new Label(this.ContenuMessage);
         this.Envoyeur = new Label(getNom(idAcheteur));
-        //this.textedate = new Label(this.date.toString());
+        this.textedate = new Label(this.date.toString());
         
 
-//        this.tTitre.setId("grand-text-annonce");
+        this.tTime.setId("grand-text-annonce");
         this.grid.add(this.tTime, 0, 0, 2, 1);
-        this.grid.add(TexteContenu, 3, 0);
-        this.grid.add(Envoyeur, 4, 8);
+        this.grid.add(TexteContenu, 0, 1);
+        this.grid.add(this.textedate,3,3);
+        this.grid.add(Envoyeur, 3, 2);
         //this.grid.add(textedate, 5, 8);
-
+        this.grid.setAlignment(Pos.CENTER);
         this.getChildren().addAll(this.grid);
 
     }
@@ -96,15 +100,27 @@ public class Message extends HBox {
             throws SQLException, ClassNotFoundException {
         Connection con = this.main.getBDD();
 
-        try ( PreparedStatement st = con.prepareStatement("select * from message where vendeur = ?")) {
+        try ( PreparedStatement st = con.prepareStatement("select distinct * from message where id = ?")) {
             st.setInt(1, id);
             ResultSet res = st.executeQuery();
             while (res.next()) {
                 idAcheteur = res.getInt("acheteur");
                 idVendeur = res.getInt("vendeur");
-                idMessage = res.getInt(ContenuMessage);
                 ContenuMessage = res.getString("texte");
+                this.type = res.getInt("titre");
                 this.date = res.getTimestamp("date");
+                if (type ==1){
+                    titre ="Nouvelle Enchere sur l'un de vos objet! ";
+                }
+                else if(type ==2){
+                    titre = "Vous avez remportez une enchère!";
+                }
+                else if(type ==3){
+                    titre = "Annonce terminée! Préparez la remise !";
+                }
+                else if(type ==4){
+                    titre = "Annonce terminée...Mauvaise nouvelle";
+                }
             }
         }
 

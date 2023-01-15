@@ -52,21 +52,20 @@ public class VueMessagerie extends ScrollPane {
         Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
         this.grid.getChildren().clear();
         int nbMessage = this.idMessages.size();
-
-        try ( PreparedStatement st = con.prepareStatement("select id from message where vendeur = ?")) {
-            st.setInt(1, this.main.getSessionInfo().getUserID());
-            ResultSet res = st.executeQuery();
-            while (res.next()) {
-                int resultat = res.getInt("id");
-                for (int i = 0; i < nbMessage; i++) {
-                    if (this.idMessages.get(i) == resultat) {
-                        this.idMessages.remove(i);
-                        nbMessage = nbMessage - 1;
-                    }
-                }
-            }
-
-        }
+//        try ( PreparedStatement st = con.prepareStatement("select id from message where vendeur = ?")) {
+//            st.setInt(1, this.main.getSessionInfo().getUserID());
+//            ResultSet res = st.executeQuery();
+//            while (res.next()) {
+//                int resultat = res.getInt("id");
+//                for (int i = 0; i < nbMessage; i++) {
+//                    if (this.idMessages.get(i) == resultat) {
+//                        this.idMessages.remove(i);
+//                        nbMessage = nbMessage - 1;
+//                    }
+//                }
+//            }
+//
+//        }
         nbMessage = this.idMessages.size();
         for (int j = 0; j < nbMessage; j++) {
             this.grid.add(new Message(this.main, this.idMessages.get(j)), 0, j);
@@ -74,7 +73,7 @@ public class VueMessagerie extends ScrollPane {
     }
     public void recupereIdMessages()
             throws SQLException, ClassNotFoundException {
-        try ( PreparedStatement st = this.con.prepareStatement("select id from message where vendeur = ?")) {
+        try ( PreparedStatement st = this.con.prepareStatement("select distinct id from message where vendeur = ?")) {
             st.setInt(1, this.main.getSessionInfo().getUserID());
             ResultSet res = st.executeQuery();
             while (res.next()) {
