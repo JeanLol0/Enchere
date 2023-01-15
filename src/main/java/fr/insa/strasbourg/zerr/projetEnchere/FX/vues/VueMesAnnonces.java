@@ -29,19 +29,19 @@ private TableView tvEnCours;
 
     private FenetrePrincipale main;
 
-    private TableColumn<MesEncheresAnnonces, String> titreC;
-    private TableColumn<MesEncheresAnnonces, String> prixActuelC;
-    private TableColumn<MesEncheresAnnonces, String> prixDepartC;
-    private TableColumn<MesEncheresAnnonces, String> tRestantC;
-    private TableColumn<MesEncheresAnnonces, String> DerEnchereC;
-    private TableColumn<MesEncheresAnnonces, String> nbEnchereC;
+    private TableColumn<MesAnnonces, String> titreC;
+    private TableColumn<MesAnnonces, String> prixActuelC;
+    private TableColumn<MesAnnonces, String> prixDepartC;
+    private TableColumn<MesAnnonces, String> tRestantC;
+    private TableColumn<MesAnnonces, String> DerEnchereC;
+    private TableColumn<MesAnnonces, String> nbEnchereC;
     
-    private TableColumn<MesEncheresAnnonces, String> titreT;
-    private TableColumn<MesEncheresAnnonces, String> prixActuelT;
-    private TableColumn<MesEncheresAnnonces, String> prixDepartT;
-    private TableColumn<MesEncheresAnnonces, String> tRestantT;
-    private TableColumn<MesEncheresAnnonces, String> DerEnchereT;
-    private TableColumn<MesEncheresAnnonces, String> nbEnchereT;
+    private TableColumn<MesAnnonces, String> titreT;
+    private TableColumn<MesAnnonces, String> prixActuelT;
+    private TableColumn<MesAnnonces, String> prixDepartT;
+    private TableColumn<MesAnnonces, String> tRestantT;
+    private TableColumn<MesAnnonces, String> DerEnchereT;
+    private TableColumn<MesAnnonces, String> nbEnchereT;
 
     private ArrayList lAnnonceEnCours;
     private ArrayList lAnnonceEnTerminee;
@@ -149,14 +149,14 @@ private TableView tvEnCours;
     }
     public void ajoutAnnoncesUtilisateurEnCours() throws SQLException, ClassNotFoundException {
         for (int i = 0; i < this.lAnnonceEnCours.size(); i++) {
-            this.tvEnCours.getItems().add(new MesEncheresAnnonces(this.main, (Integer) lAnnonceEnCours.get(i)));
+            this.tvEnCours.getItems().add(new MesEncheres(this.main, (Integer) lAnnonceEnCours.get(i)));
         }
 
     }
 
     private void ajoutAnnoncesUtilisateurFini() throws SQLException, ClassNotFoundException {
         for (int i = 0; i < this.lAnnonceEnTerminee.size(); i++) {
-            this.tvTerminee.getItems().add(new MesEncheresAnnonces(this.main, (Integer) lAnnonceEnTerminee.get(i)));
+            this.tvTerminee.getItems().add(new MesEncheres(this.main, (Integer) lAnnonceEnTerminee.get(i)));
         }
     }
 }

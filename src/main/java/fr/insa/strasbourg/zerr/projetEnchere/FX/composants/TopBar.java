@@ -181,6 +181,7 @@ public class TopBar extends HBox {
         this.main.setCenter(new VueLogin(this.main));
         this.main.setTop(null);
         this.main.setLeft(null);
+        this.main.setRight(null);
     }
 
     private ImageView getIcon(String resourcePath,int w,int h) {

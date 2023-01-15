@@ -15,7 +15,6 @@
  */
 package fr.insa.strasbourg.zerr.projetEnchere.FX.vues;
 
-import static fr.insa.strasbourg.zerr.projetEnchere.FX.vues.Annonce.setEtatLivraison;
 import static fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD.connectGeneralPostGres;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -25,18 +24,16 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.scene.control.Label;
+import javafx.scene.control.Button;
 
 /**
  *
  * @author jules
  */
-public class MesEncheresAnnonces {
+public class MesEncheres {
 
     private int idAnn;
 
@@ -46,17 +43,30 @@ public class MesEncheresAnnonces {
     private String nbEnchere;
     private String tempRestant;
     private String Encherisseur;
+    
+    private Button bExp;
+    private Button bMains;
 
     private Integer idEncherisseur;
     private FenetrePrincipale main;
     private Timestamp fin;
 
-    public MesEncheresAnnonces(FenetrePrincipale main, Integer idAnn) throws SQLException, ClassNotFoundException {
+    public MesEncheres(FenetrePrincipale main, Integer idAnn) throws SQLException, ClassNotFoundException {
         this.idAnn = idAnn;
         this.main = main;
+        this.bExp= new Button("exp");
+        this.bMains= new Button("mains pro");
         recupereAnnonce(idAnn);
         ActualisationTempsRestant();
 
+    }
+
+    public Button getbExp() {
+        return bExp;
+    }
+
+    public Button getbMains() {
+        return bMains;
     }
 
     public String getTitre() {

@@ -390,12 +390,12 @@ public class VueAnnonces extends BorderPane {
             
             System.out.println(distancemax);
             while (res.next()) {
-                System.out.println(DistanceObjetFromUtiilisateur(idUtil, res.getInt("id")));
+                System.out.println("idobj  "+res.getInt("id")+"    "+DistanceObjetFromUtiilisateur(idUtil, res.getInt("id")));
                 if (DistanceObjetFromUtiilisateur(idUtil, res.getInt("id")) <= distancemax) {
                     map.add(res.getInt("id"));
-                    System.out.println("Objet1 : "+res.getInt("id"));
-                }
                     System.out.println("Objet : "+res.getInt("id"));
+                }
+                    
             }
         }
 

@@ -4,7 +4,6 @@
  */
 package fr.insa.strasbourg.zerr.projetEnchere.FX.vues;
 
-import fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD;
 import static fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD.ValiditeDateEnchere;
 import static fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD.connectGeneralPostGres;
 import java.sql.Connection;
@@ -12,12 +11,17 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
+import javafx.util.Callback;
 
 /**
  *
@@ -30,25 +34,31 @@ public class VueMesEnchere extends GridPane {
 
     private FenetrePrincipale main;
 
-    private TableColumn<MesEncheresAnnonces, String> titreC;
-    private TableColumn<MesEncheresAnnonces, String> prixActuelC;
-    private TableColumn<MesEncheresAnnonces, String> prixDepartC;
-    private TableColumn<MesEncheresAnnonces, String> tRestantC;
-    private TableColumn<MesEncheresAnnonces, String> DerEnchereC;
-    private TableColumn<MesEncheresAnnonces, String> nbEnchereC;
+    private TableColumn<MesEncheres, String> titreC;
+    private TableColumn<MesEncheres, String> prixActuelC;
+    private TableColumn<MesEncheres, String> prixDepartC;
+    private TableColumn<MesEncheres, String> tRestantC;
+    private TableColumn<MesEncheres, String> DerEnchereC;
+    private TableColumn<MesEncheres, String> nbEnchereC;
 
-    private TableColumn<MesEncheresAnnonces, String> titreT;
-    private TableColumn<MesEncheresAnnonces, String> prixActuelT;
-    private TableColumn<MesEncheresAnnonces, String> prixDepartT;
-    private TableColumn<MesEncheresAnnonces, String> tRestantT;
-    private TableColumn<MesEncheresAnnonces, String> DerEnchereT;
-    private TableColumn<MesEncheresAnnonces, String> nbEnchereT;
+    private TableColumn<MesEncheres, String> titreT;
+    private TableColumn<MesEncheres, String> prixActuelT;
+    private TableColumn<MesEncheres, String> prixDepartT;
+    private TableColumn<MesEncheres, String> tRestantT;
+    private TableColumn<MesEncheres, String> GagnantEnchereT;
+    private TableColumn<MesEncheres, String> nbEnchereT;
+    private TableColumn<MesEncheres, String> choixRemiseT;
+    private TableColumn<MesEncheres, Void> choixMainpropreT;
+    private TableColumn<MesEncheres, Void> choixExpeditionT;
 
     private ArrayList lEnchereEnCours;
     private ArrayList lEnchereEnTerminee;
 
     private Label lEncheresC;
     private Label lEncheresT;
+
+    private Button bExp;
+    private Button bMain;
 
     public VueMesEnchere(FenetrePrincipale main) throws SQLException, ClassNotFoundException {
         this.main = main;
@@ -76,13 +86,18 @@ public class VueMesEnchere extends GridPane {
         this.prixDepartT = new TableColumn<>("Prix de départ");
         this.tRestantT = new TableColumn<>("Temps restant");
         this.nbEnchereT = new TableColumn<>("Nombre d'enchere ");
-        this.DerEnchereT = new TableColumn<>("Dernier encherisseur");
+        this.GagnantEnchereT = new TableColumn<>("Dernier encherisseur");
+        this.choixRemiseT = new TableColumn<>("Choix de remise");
+        this.choixExpeditionT = new TableColumn<MesEncheres, Void>("Expedition");
+        this.choixMainpropreT = new TableColumn<MesEncheres, Void>("Main propre");
 
         titreT.setCellValueFactory(new PropertyValueFactory<>("titre"));
         prixActuelT.setCellValueFactory(new PropertyValueFactory<>("prixActuel"));
         prixDepartT.setCellValueFactory(new PropertyValueFactory<>("prixDepart"));
-        DerEnchereT.setCellValueFactory(new PropertyValueFactory<>("Encherisseur"));
+        GagnantEnchereT.setCellValueFactory(new PropertyValueFactory<>("Encherisseur"));
         nbEnchereT.setCellValueFactory(new PropertyValueFactory<>("nbEnchere"));
+//        choixExpeditionT.setCellValueFactory(new PropertyValueFactory<MesEncheres, Void>("bExp"));
+//        choixMainpropreT.setCellValueFactory(new PropertyValueFactory<MesEncheres, Void>("bMain"));
         //prixActuel.setCellValueFactory(new PropertyValueFactory<>("prix"));
 
         this.lEnchereEnCours = EncheresUtilisateurEnCours(this.main.getSessionInfo().getUserID());
@@ -92,27 +107,140 @@ public class VueMesEnchere extends GridPane {
         ajoutEncheresUtilisateurEnCours();
         ajoutEncheresUtilisateurFini();
 
+        this.choixRemiseT.getColumns().addAll(this.choixExpeditionT, this.choixMainpropreT);
+
         this.tvEnCours.getColumns().addAll(titreC, prixDepartC, prixActuelC, tRestantC, nbEnchereC, DerEnchereC);
         this.tvEnCours.setPrefWidth(this.getPrefWidth());
 
-        this.tvTerminee.getColumns().addAll(titreT, prixDepartT, prixActuelT, tRestantT, nbEnchereT, DerEnchereT);
+        this.tvTerminee.getColumns().addAll(titreT, prixDepartT, prixActuelT, tRestantT, nbEnchereT, this.choixRemiseT, GagnantEnchereT);
         this.tvTerminee.setPrefWidth(this.getPrefWidth());
+        this.bMain = new Button("Mains propre");
+        this.bExp = new Button("Expedition");
+        addButtonToTable();
 
         this.lEncheresC = new Label("Encheres en cours");
         this.lEncheresT = new Label("Encheres terminées");
         this.lEncheresC.setId("grand-texte");
         this.lEncheresT.setId("grand-texte");
+
         
-        Button b = new Button("bouton");
-        b.setOnAction((t) -> {
+        ToggleGroup tg = new ToggleGroup();
+        
+        this.bExp.setOnAction((t) -> {
+            int index = this.tvTerminee.getSelectionModel().getFocusedIndex();
+            System.out.println(index);
+            System.out.println("bouton exp cell");
             
+//            setEtatLivraison(3, 2);
+            this.bExp.setDisable(true);
+            this.bMain.setDisable(true);
         });
-        
+        this.bMain.setOnAction((t) -> {
+            System.out.println("bouton main cell");
+            this.bExp.setDisable(true);
+            this.bMain.setDisable(true);
+        });
+
         this.add(lEncheresC, 0, 0);
         this.add(this.tvEnCours, 0, 1);
-        this.add(b, 0, 2);
         this.add(lEncheresT, 0, 3);
         this.add(this.tvTerminee, 0, 4);
+    }
+
+    private void addButtonToTable() {
+
+//        Callback<TableColumn<MesEncheres, Void>, TableCell<MesEncheres, Void>> cellFactoryBouttonExp = (final TableColumn<MesEncheres, Void> param) -> {
+//            final TableCell<MesEncheres, Void> cell = new TableCell<MesEncheres, Void>() {
+//                
+//                private  Button btn = new Button("Expedition");
+//                
+//                {
+//                    btn.setOnAction((ActionEvent event) -> {
+//                        MesEncheres data = getTableView().getItems().get(getIndex());
+//                        System.out.println("selectedData: " + data);
+//                    });
+//                }
+//                
+//                @Override
+//                public void updateItem(Void item, boolean empty) {
+//                    super.updateItem(item, empty);
+//                    if (empty) {
+//                        setGraphic(null);
+//                    } else {
+//                        setGraphic(btn);
+//                    }
+//                }
+//            };
+//            return cell;
+//        };
+//        Callback<TableColumn<MesEncheres, Void>, TableCell<MesEncheres, Void>> cellFactoryBouttonMain = (final TableColumn<MesEncheres, Void> param) -> {
+//            final TableCell<MesEncheres, Void> cell = new TableCell<MesEncheres, Void>() {
+//                
+//                private  Button btn = new Button("Mains propre");
+//                
+//                {
+//                    btn.setOnAction((ActionEvent event) -> {
+//                        MesEncheres data = getTableView().getItems().get(getIndex());
+//                        System.out.println("selectedData: " + data);
+//                    });
+//                }
+//                
+//                @Override
+//                public void updateItem(Void item, boolean empty) {
+//                    super.updateItem(item, empty);
+//                    if (empty) {
+//                        setGraphic(null);
+//                    } else {
+//                        setGraphic(btn);
+//                    }
+//                }
+//            };
+//            return cell;
+//        };
+        //this.choixMainpropreT.setCellFactory(cellFactoryBouttonMain);
+        this.choixMainpropreT.setCellFactory(col -> {
+
+            Button editButton = this.bMain;
+            TableCell<MesEncheres, Void> cell = new TableCell<MesEncheres, Void>() {
+
+                @Override
+                public void updateItem(Void person, boolean empty) {
+                    super.updateItem(person, empty);
+                    if (empty) {
+                        setGraphic(null);
+                    } else {
+                        setGraphic(editButton);
+                    }
+                }
+            };
+
+            return cell;
+        });
+        this.choixExpeditionT.setCellFactory(col -> {
+
+            Button editButton = this.bExp;
+            TableCell<MesEncheres, Void> cell = new TableCell<MesEncheres, Void>() {
+
+                @Override
+                public void updateItem(Void person, boolean empty) {
+                    super.updateItem(person, empty);
+                    if (empty) {
+                        setGraphic(null);
+                    } else {
+                        setGraphic(editButton);
+                    }
+                }
+            };
+
+            return cell;
+        });
+//        this.bExp.setOnAction((t) -> {
+//                System.out.println("bouton exp");
+//            });
+//        this.bMain.setOnAction((t) -> {
+//                System.out.println("bouton main");
+//            });
+
     }
 
     public static ArrayList<Integer> EncheresUtilisateurEnCours(int idUtil) throws ClassNotFoundException, SQLException {
@@ -152,7 +280,7 @@ public class VueMesEnchere extends GridPane {
     public void ajoutEncheresUtilisateurEnCours() throws SQLException, ClassNotFoundException {
         if (this.lEnchereEnCours.size() > 0) {
             for (int i = 0; i < this.lEnchereEnCours.size(); i++) {
-                this.tvEnCours.getItems().add(new MesEncheresAnnonces(this.main, (Integer) lEnchereEnCours.get(i)));
+                this.tvEnCours.getItems().add(new MesEncheres(this.main, (Integer) lEnchereEnCours.get(i)));
             }
         }
 
@@ -161,36 +289,36 @@ public class VueMesEnchere extends GridPane {
     private void ajoutEncheresUtilisateurFini() throws SQLException, ClassNotFoundException {
         if (this.lEnchereEnTerminee.size() > 0) {
             for (int i = 0; i < this.lEnchereEnTerminee.size(); i++) {
-                this.tvTerminee.getItems().add(new MesEncheresAnnonces(this.main, (Integer) lEnchereEnTerminee.get(i)));
+                this.tvTerminee.getItems().add(new MesEncheres(this.main, (Integer) lEnchereEnTerminee.get(i)));
             }
         }
     }
-    
-    public int UtilDernierEnchereSurObjet(int idObjet) throws ClassNotFoundException, SQLException{
+
+    public int UtilDernierEnchereSurObjet(int idObjet) throws ClassNotFoundException, SQLException {
         Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
         int idDernierUtil = -1;
-        try (PreparedStatement st = con.prepareStatement("select * from enchere where (select max(montant) from enchere where sur=?)")){
+        try (PreparedStatement st = con.prepareStatement("select * from enchere where (select max(montant) from enchere where sur=?)")) {
             st.setInt(1, idObjet);
             ResultSet res = st.executeQuery();
             while (res.next()) {
                 idDernierUtil = res.getInt("de");
-                
+
             }
             return idDernierUtil;
         }
     }
-    
+
     public void setEtatLivraison(int valeur, int idObjet) throws SQLException {
         Connection con = this.main.getBDD();
         con.setAutoCommit(false);
-        try ( PreparedStatement pst = con.prepareStatement(
+        try (PreparedStatement pst = con.prepareStatement(
                 "update objet set Etatlivraison = ? where id = ?", PreparedStatement.RETURN_GENERATED_KEYS)) {
             pst.setInt(1, valeur);
             pst.setInt(2, idObjet);
             pst.executeUpdate();
             con.commit();
             System.out.println("categorie créé");
-            try ( ResultSet rid = pst.getGeneratedKeys()) {
+            try (ResultSet rid = pst.getGeneratedKeys()) {
                 // et comme ici je suis sur qu'il y a une et une seule clé, je
                 // fait un simple next 
                 rid.next();
@@ -202,5 +330,19 @@ public class VueMesEnchere extends GridPane {
             con.setAutoCommit(true);
         }
     }
-}
+    
+    public int getEtatLivraison(Connection con, Integer idObjet) throws SQLException {
+        int valeur = 0;
+        try ( PreparedStatement st = con.prepareCall("select etatlivraison from objet where id = ?")) {
+            st.setInt(1, idObjet);
+            ResultSet res = st.executeQuery();
+            if (res.next()) {
+                valeur = res.getInt("etatlivraison");
+            }
 
+        }
+        return valeur;
+    }
+    
+   
+}
