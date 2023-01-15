@@ -186,6 +186,7 @@ public class VueAnnonceDetaille extends BorderPane {
 //        this.content.getChildren().addAll(this.gridPane);
 //        this.content.setAlignment(Pos.CENTER);
         this.scroll = new ScrollPane();
+        this.scroll.setFitToWidth(true);
         this.scroll.setContent(this.gridPane);
         
         this.setCenter(this.scroll);
@@ -284,6 +285,7 @@ public class VueAnnonceDetaille extends BorderPane {
 //        this.HBox.getChildren().addAll(this.gri);
         
         this.scroll = new ScrollPane();
+        this.scroll.setFitToWidth(true);
         this.scroll.setContent(this.gridPane);
         
         this.setCenter(this.scroll);

@@ -64,10 +64,11 @@ public class TopBar extends HBox {
     public TopBar(FenetrePrincipale main) {
         this.main = main;
         ImageView imageView = this.getIcon("ressources/user.png",25,25);
-        this.logo = getIcon("ressources/logo.png",50,50);
+        this.logo = getIcon("ressources/logoblanc.png",50,50);
         this.logo.setOnMouseClicked((t) -> {
             this.main.setCenter(new VueAcceuil(this.main));
             this.main.setLeft(null);
+            this.main.setRight(null);
         });
         this.milogout = new MenuItem("Déconnection");
         this.miAnnonce = new MenuItem("Mes Annonces");
@@ -127,6 +128,14 @@ public class TopBar extends HBox {
             } catch (IOException ex) {
                 Logger.getLogger(TopBar.class.getName()).log(Level.SEVERE, null, ex);
             }
+        });
+        this.bNouvelleAnnonce.setOnMouseEntered((t) -> {
+            this.logo = getIcon("ressources/bouton-ajouterblanc.png",35,35);
+            this.bNouvelleAnnonce.setGraphic(logo);
+        });
+        this.bNouvelleAnnonce.setOnMouseExited((t) -> {
+            this.logo = getIcon("ressources/bouton-ajouter.png",35,35);
+            this.bNouvelleAnnonce.setGraphic(logo);
         });
         
         this.milogout.setOnAction((t) -> {

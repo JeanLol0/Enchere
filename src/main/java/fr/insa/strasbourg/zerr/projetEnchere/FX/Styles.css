@@ -127,6 +127,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-alignment : center;
     -fx-padding: 3 6 6 6;
     -fx-color: #fff;
+    -fx-text-fill: white;
     -fx-background-color: #08c708;
     -fx-align-items: center;
     -fx-background-radius: 5px;
@@ -149,6 +150,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-max-width: 600;
     -fx-background-radius: 5px;
     -fx-alignment : center;
+    -fx-text-fill: white;
     -fx-background-color: #ff0000;
     -fx-text-fill: white;
     -fx-padding: 3 6 6 6;
@@ -174,6 +176,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 }
 #bouton-bleu{
     -fx-content-display : center;
+    -fx-text-fill: white;
     -fx-max-width: 600;
     -fx-font-size: 25px;
     -fx-alignment : center;
@@ -250,15 +253,38 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-text-fill: #0B2239;
 }
 #bouton-nouvelle-annonce{
-    
+    -fx-text-fill: #0B2239;
     -fx-background-color:#A9BBFF;
     -fx-background-radius: 15px;
     -fx-font-size: 30px;
+    
 }
 #bouton-nouvelle-annonce:hover{
     -fx-background-color:#148ca7;
-    -fx-text-fill: #0B2239;
+    -fx-text-fill: white;
+    
 }
 #text-recherche{
     -fx-text-fill: #238636;
+}
+
+#message {
+    -fx-font-family: Segoe UI;
+    -fx-font-size: 22px;
+    -fx-letter-spacing: 1px;
+    -fx-word-spacing: 4px;
+    -fx-color: #238636;
+    -fx-font-weight: bold;
+    -fx-text-decoration: none;
+    -fx-font-style: normal;
+    -fx-font-variant: normal;
+    -fx-text-transform: none;
+    -fx-vgap: 10px;
+    -fx-hgap: 30px;
+    -fx-border-insets: 30 ;
+    -fx-border-color: #3B2786 ;
+    -fx-border-width: 3 ;
+    -fx-border-radius:15px;
+    -fx-spacing: 10;
+    -fx-padding: 10 10 10 10;
 }

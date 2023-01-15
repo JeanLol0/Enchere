@@ -160,7 +160,7 @@ public class VueNouvelleAnnonce extends ScrollPane {
         this.tPhoto.setId("grand-text-annonce");
 
         this.bCreerAnnonce = new Button("Mettre en ligne");
-        this.bCreerAnnonce.setPrefWidth(1000);
+        //this.bCreerAnnonce.setPrefWidth(1000);
         this.categories = new Categories(this.main);
         this.image = new VueImage();
 

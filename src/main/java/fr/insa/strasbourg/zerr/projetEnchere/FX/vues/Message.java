@@ -5,7 +5,6 @@
 package fr.insa.strasbourg.zerr.projetEnchere.FX.vues;
 
 import fr.insa.strasbourg.zerr.projetEnchere.FX.JavaFXUtils;
-import fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD;
 import static fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD.connectGeneralPostGres;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -15,31 +14,19 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.Base64;
-import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingFXUtils;
-import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.text.Text;
 import javax.imageio.ImageIO;
 
 /**
  *
  * @author jules
  */
-public class Message extends HBox {
+public class Message extends GridPane {
 
     private FenetrePrincipale main;
     private Label TitreMessage;
@@ -49,7 +36,7 @@ public class Message extends HBox {
 
     private Image image;
     private String stringImage;
-    private GridPane grid;
+    //private GridPane grid;
 
     private int idAcheteur;
     private int idVendeur;
@@ -67,6 +54,9 @@ public class Message extends HBox {
     private Label tVendeur;
     private Label tTempsR;
     private Label tDistance;
+    private Label lChoixRemise;
+    private RadioButton bExp;
+    private RadioButton bMain;
 
     public Message(FenetrePrincipale main, Integer id) throws SQLException, ClassNotFoundException {
         //this.getStylesheets().add(getClass().getResource("StyleAnnonce.css").toExternalForm());
@@ -74,24 +64,46 @@ public class Message extends HBox {
         this.main = main;
         int idUtil = this.main.getSessionInfo().getUserID();
         recupereMessage(id);
-        this.grid = new GridPane();
-        //this.grid.setVgap(20);
-        this.grid.setHgap(40);
+        this.setVgap(20);
         this.setId("message");
         this.tTime = new Label(this.titre);
         this.TexteContenu = new Label(this.ContenuMessage);
         this.Envoyeur = new Label(getNom(idAcheteur));
         this.textedate = new Label(this.date.toString());
         
+        this.bExp = new RadioButton("Expédition");
+        this.bMain = new RadioButton("Main propre");
+        this.lChoixRemise = new Label("Choisissez le moyen de remise de l'objet (votre choix sera définitif)");
+        
 
         this.tTime.setId("grand-text-annonce");
-        this.grid.add(this.tTime, 0, 0, 2, 1);
-        this.grid.add(TexteContenu, 0, 1,3,1);
-        this.grid.add(this.textedate,2,3);
-        this.grid.add(Envoyeur, 2, 2);
+        this.add(this.tTime, 0, 0, 2, 1);
+        this.add(TexteContenu, 0, 1,3,1);
+        this.add(this.textedate,0,2);
+        this.add(Envoyeur, 0, 3);
+        
+        if(this.titre== "Vous avez remportez une enchère!"){
+            
+            this.add(this.lChoixRemise, 0, 4);
+            this.add(this.bExp, 0, 5);
+            this.add(this.bMain, 1, 5);
+            
+        }
+        this.bExp.setOnAction((t) -> {
+            
+//            setEtatLivraison(3, 2);
+            this.bExp.setDisable(true);
+            this.bMain.setDisable(true);
+        });
+        this.bMain.setOnAction((t) -> {
+            System.out.println("bouton main cell");
+            this.bExp.setDisable(true);
+            this.bMain.setDisable(true);
+        });
+        
         //this.grid.add(textedate, 5, 8);
-        this.grid.setAlignment(Pos.CENTER);
-        this.getChildren().addAll(this.grid);
+        //this.setGridLinesVisible(true);
+        //this.setAlignment(Pos.TOP_CENTER);
 
     }
 
@@ -199,6 +211,7 @@ public class Message extends HBox {
         }
 
     }
+    
 
     private static int recupereEtatLivraison(Connection con, int id)
             throws SQLException, ClassNotFoundException {
@@ -250,6 +263,42 @@ public class Message extends HBox {
         str = str.replaceAll(" +", "");
 
         return str;
+    }
+    
+    public void setEtatLivraison(int valeur, int idObjet) throws SQLException {
+        Connection con = this.main.getBDD();
+        con.setAutoCommit(false);
+        try (PreparedStatement pst = con.prepareStatement(
+                "update objet set Etatlivraison = ? where id = ?", PreparedStatement.RETURN_GENERATED_KEYS)) {
+            pst.setInt(1, valeur);
+            pst.setInt(2, idObjet);
+            pst.executeUpdate();
+            con.commit();
+            System.out.println("categorie créé");
+            try (ResultSet rid = pst.getGeneratedKeys()) {
+                // et comme ici je suis sur qu'il y a une et une seule clé, je
+                // fait un simple next 
+                rid.next();
+                // puis je récupère la valeur de la clé créé qui est dans la
+                // première colonne du ResultSet
+                int id = rid.getInt(1);
+            }
+        } finally {
+            con.setAutoCommit(true);
+        }
+    }
+    
+    public int getEtatLivraison(Connection con, Integer idObjet) throws SQLException {
+        int valeur = 0;
+        try ( PreparedStatement st = con.prepareCall("select etatlivraison from objet where id = ?")) {
+            st.setInt(1, idObjet);
+            ResultSet res = st.executeQuery();
+            if (res.next()) {
+                valeur = res.getInt("etatlivraison");
+            }
+
+        }
+        return valeur;
     }
 
 }

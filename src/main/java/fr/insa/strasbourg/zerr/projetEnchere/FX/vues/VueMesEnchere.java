@@ -112,7 +112,7 @@ public class VueMesEnchere extends GridPane {
         this.tvEnCours.getColumns().addAll(titreC, prixDepartC, prixActuelC, tRestantC, nbEnchereC, DerEnchereC);
         this.tvEnCours.setPrefWidth(this.getPrefWidth());
 
-        this.tvTerminee.getColumns().addAll(titreT, prixDepartT, prixActuelT, tRestantT, nbEnchereT, this.choixRemiseT, GagnantEnchereT);
+        this.tvTerminee.getColumns().addAll(titreT, prixDepartT, prixActuelT, tRestantT, nbEnchereT, GagnantEnchereT);
         this.tvTerminee.setPrefWidth(this.getPrefWidth());
         this.bMain = new Button("Mains propre");
         this.bExp = new Button("Expedition");

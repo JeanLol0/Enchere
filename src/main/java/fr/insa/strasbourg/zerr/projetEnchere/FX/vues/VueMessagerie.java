@@ -51,6 +51,7 @@ public class VueMessagerie extends ScrollPane {
         recupereIdMessages();
         afficheMessages();
         this.setContent(this.grid);
+        this.setFitToWidth(true);
     }
 
     public void afficheMessages() throws SQLException, ClassNotFoundException {
