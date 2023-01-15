@@ -128,14 +128,14 @@ public class VueAnnonces extends BorderPane {
                 String StringDistMax = getNbr(this.barRe.getValeurDist());
                 int distMax = Integer.parseInt(StringDistMax);
                 int idUtil = this.main.getSessionInfo().getUserID();
-                System.out.println("distance cur"+distMax);
+                System.out.println("distance cur" + distMax);
                 this.idAnnonce = TriDistanceObjet(idUtil, distMax);
                 afficheAnnonce();
             } catch (ClassNotFoundException | SQLException | IOException ex) {
                 Logger.getLogger(VueAnnonces.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
-        
+
         this.barRe.getbReinitialise().setOnAction((t) -> {
             try {
                 recupereIdAnnonce();
@@ -163,13 +163,17 @@ public class VueAnnonces extends BorderPane {
     }
 
     public void recupereIdAnnonce()
-            throws SQLException, ClassNotFoundException {
+            throws SQLException, ClassNotFoundException, IOException {
         try ( PreparedStatement st = this.con.prepareStatement("select id from objet")) {
             ResultSet res = st.executeQuery();
             while (res.next()) {
                 if (ValiditeDateEnchere(res.getInt("id")) == false) {
-                    this.idAnnonce.add(res.getInt("id"));
-                }
+                    this.idAnnonce.add(res.getInt("id"));}
+//                } else {
+//                    Annonce annonce = new Annonce(this.main, res.getInt("id"));
+//                    annonce.messageFin();
+//                }
+
 //                System.out.println("ids recupéré nb:" + this.idAnnonce.size());
 //            if (ValiditeDateEnchere(res.getInt("id")) == false) {
 //                int size = this.idAnnonce.size();
@@ -220,7 +224,10 @@ public class VueAnnonces extends BorderPane {
         }
         nbAnnonce = this.idAnnonce.size();
         for (int j = 0; j < nbAnnonce; j++) {
-            this.gridPane.add(new Annonce(this.main, this.idAnnonce.get(j)), 0, j);
+            if (ValiditeDateEnchere(this.idAnnonce.get(j)) == false) {
+                this.gridPane.add(new Annonce(this.main, this.idAnnonce.get(j)), 0, j);
+            }
+
         }
     }
 
@@ -381,21 +388,22 @@ public class VueAnnonces extends BorderPane {
         return sansdoublons;
 
     }
+
     public static ArrayList<Integer> TriDistanceObjet(int idUtil, double distancemax) throws ClassNotFoundException, SQLException {
         Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
 //        TreeMap<Double, Integer> map = new TreeMap();
         ArrayList<Integer> map = new ArrayList<>();
         try ( PreparedStatement st = con.prepareStatement("select id from objet")) {
             ResultSet res = st.executeQuery();
-            
+
             System.out.println(distancemax);
             while (res.next()) {
-                System.out.println("idobj  "+res.getInt("id")+"    "+DistanceObjetFromUtiilisateur(idUtil, res.getInt("id")));
+                System.out.println("idobj  " + res.getInt("id") + "    " + DistanceObjetFromUtiilisateur(idUtil, res.getInt("id")));
                 if (DistanceObjetFromUtiilisateur(idUtil, res.getInt("id")) <= distancemax) {
                     map.add(res.getInt("id"));
-                    System.out.println("Objet : "+res.getInt("id"));
+                    System.out.println("Objet : " + res.getInt("id"));
                 }
-                    
+
             }
         }
 
@@ -407,11 +415,10 @@ public class VueAnnonces extends BorderPane {
 //            List.add((Integer) me.getValue());
 //            System.out.println(me.getValue());
 //        }
-
         return map;
         //tri du plus proche au plus éloigné 
     }
-    
+
     public static ArrayList<Integer> TriDistanceObjetDsc(int idUtil) throws ClassNotFoundException, SQLException {
         Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
         TreeMap<Double, Integer> map = new TreeMap();
@@ -435,16 +442,17 @@ public class VueAnnonces extends BorderPane {
         return List;
         //tri du plus proche au plus éloigné 
     }
-    static String getNbr(String str) { 
+
+    static String getNbr(String str) {
         // Remplacer chaque nombre non numérique par un espace
-        str = str.replaceAll("[^\\d]", " "); 
+        str = str.replaceAll("[^\\d]", " ");
         // Supprimer les espaces de début et de fin 
-        str = str.trim(); 
+        str = str.trim();
         // Remplacez les espaces consécutifs par un seul espace
-        str = str.replaceAll(" +", ""); 
-  
-        return str; 
-    } 
+        str = str.replaceAll(" +", "");
+
+        return str;
+    }
 
 }
 //    public static void afficheUtilisateurParNom(Connection con,

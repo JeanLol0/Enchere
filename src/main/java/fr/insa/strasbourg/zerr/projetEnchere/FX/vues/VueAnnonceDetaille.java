@@ -503,22 +503,22 @@ public String getNom(Integer idU) throws SQLException {
         Prix.setCycleCount(Animation.INDEFINITE);
         Prix.play();
     }
-     private void messageFin() throws SQLException, ClassNotFoundException {
-        String TextePourVendeurSiPasEnchere = "Votre objet '" + BDD.recupereTitreObjet(this.main.getBDD(), this.idObj) + "' n'est plus en vente mais il n'y a pas eut d'offres! \nVous pouvez le remettre en ligne en suivant les conseils du guide";
-        int idVendeur = this.idVendeur;
-        int IdDernierMec = UtilDernierEnchereSurObjet(this.idObj);
-        if (UtilDernierEnchereSurObjet(this.idObj) != -1) {
-            String TextePourAcheteurSiEnchere = "Vous avez gagné l'enchere sur l'objet: " + BDD.recupereTitreObjet(this.main.getBDD(), this.idObj) + "\nVous pouvez à présent choisir le mode de réception sur la rubrique 'Mes Encheres Finies'";
-            String TextePourVendeurSiEnchere = "Votre objet " + BDD.recupereTitreObjet(this.main.getBDD(), this.idObj) + " n'est plus en vente! L'utilisateur ";
-            TextePourVendeurSiEnchere = TextePourVendeurSiEnchere + recupereNomUTil(this.main.getBDD(), UtilDernierEnchereSurObjet(this.idObj)) + " vous propose de vous l'acheter";
-            BDD.createMessage(this.main.getBDD(), TextePourAcheteurSiEnchere, UtilDernierEnchereSurObjet(this.idObj), this.idVendeur, 2);
-            BDD.createMessage(this.main.getBDD(), TextePourVendeurSiEnchere, this.idVendeur, UtilDernierEnchereSurObjet(this.idObj),3);
-        }
-        else{
-            //createMessage(this.main.getBDD(), TextePourVendeurSiPasEnchere, )
-        }
-
-    }
+//     private void messageFin() throws SQLException, ClassNotFoundException {
+//        String TextePourVendeurSiPasEnchere = "Votre objet '" + BDD.recupereTitreObjet(this.main.getBDD(), this.idObj) + "' n'est plus en vente mais il n'y a pas eut d'offres! \nVous pouvez le remettre en ligne en suivant les conseils du guide";
+//        int idVendeur = this.idVendeur;
+//        int IdDernierMec = UtilDernierEnchereSurObjet(this.idObj);
+//        if (UtilDernierEnchereSurObjet(this.idObj) != -1) {
+//            String TextePourAcheteurSiEnchere = "Vous avez gagné l'enchere sur l'objet: " + BDD.recupereTitreObjet(this.main.getBDD(), this.idObj) + "\nVous pouvez à présent choisir le mode de réception sur la rubrique 'Mes Encheres Finies'";
+//            String TextePourVendeurSiEnchere = "Votre objet " + BDD.recupereTitreObjet(this.main.getBDD(), this.idObj) + " n'est plus en vente! L'utilisateur ";
+//            TextePourVendeurSiEnchere = TextePourVendeurSiEnchere + recupereNomUTil(this.main.getBDD(), UtilDernierEnchereSurObjet(this.idObj)) + " vous propose de vous l'acheter";
+//            BDD.createMessage(this.main.getBDD(), TextePourAcheteurSiEnchere, UtilDernierEnchereSurObjet(this.idObj), this.idVendeur, 2);
+//            BDD.createMessage(this.main.getBDD(), TextePourVendeurSiEnchere, this.idVendeur, UtilDernierEnchereSurObjet(this.idObj),3);
+//        }
+//        else{
+//            //createMessage(this.main.getBDD(), TextePourVendeurSiPasEnchere, )
+//        }
+//
+//    }
      public int UtilDernierEnchereSurObjet(int idObjet) throws ClassNotFoundException, SQLException {
         Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
         int idDernierUtil = -1;

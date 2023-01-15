@@ -444,7 +444,7 @@ public class Annonce extends HBox {
         Prix.play();
     }
 
-    private void messageFin() throws SQLException, ClassNotFoundException {
+    public void messageFin() throws SQLException, ClassNotFoundException {
         String TextePourVendeurSiPasEnchere = "Votre objet '" + BDD.recupereTitreObjet(this.main.getBDD(), this.id) + "' n'est plus en vente mais il n'y a pas eut d'offres! \nVous pouvez le remettre en ligne en suivant les conseils du guide";
         int idVendeur = this.idVendeur;
         int IdDernierMec = UtilDernierEnchereSurObjet(this.id);
@@ -453,10 +453,10 @@ public class Annonce extends HBox {
             String TextePourVendeurSiEnchere = "Votre objet " + BDD.recupereTitreObjet(this.main.getBDD(), this.id) + " n'est plus en vente! L'utilisateur ";
             TextePourVendeurSiEnchere = TextePourVendeurSiEnchere + recupereNomUTil(this.main.getBDD(), UtilDernierEnchereSurObjet(this.id)) + " vous propose de vous l'acheter";
             System.out.println(TextePourVendeurSiPasEnchere);
-            BDD.createMessage(this.main.getBDD(), TextePourAcheteurSiEnchere, UtilDernierEnchereSurObjet(this.id), this.idVendeur,2);
-            BDD.createMessage(this.main.getBDD(), TextePourVendeurSiEnchere, this.idVendeur, UtilDernierEnchereSurObjet(this.id),3);
+            BDD.createMessage(this.main.getBDD(), TextePourAcheteurSiEnchere, UtilDernierEnchereSurObjet(this.id), this.idVendeur,2,this.id);
+            BDD.createMessage(this.main.getBDD(), TextePourVendeurSiEnchere, this.idVendeur, UtilDernierEnchereSurObjet(this.id),3,this.id);
         } else {
-            BDD.createMessage(this.main.getBDD(), TextePourVendeurSiPasEnchere, this.idVendeur, 2,4);
+            BDD.createMessage(this.main.getBDD(), TextePourVendeurSiPasEnchere, this.idVendeur, 2,4,this.id);
         }
 
     }

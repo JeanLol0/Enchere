@@ -169,6 +169,8 @@ public class TopBar extends HBox {
                 Logger.getLogger(TopBar.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(TopBar.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(TopBar.class.getName()).log(Level.SEVERE, null, ex);
             }
             this.main.setLeft(null);
         });
