@@ -73,7 +73,7 @@ public class Message extends GridPane {
         
         this.bExp = new RadioButton("Expédition");
         this.bMain = new RadioButton("Main propre");
-        this.lChoixRemise = new Label("Choisissez le moyen de remise de l'objet (votre choix sera définitif)");
+        this.lChoixRemise = new Label("Choisissez le moyen de remise de l'objet pour en informer le vendeur (votre choix sera définitif)");
         
 
         this.tTime.setId("grand-text-annonce");

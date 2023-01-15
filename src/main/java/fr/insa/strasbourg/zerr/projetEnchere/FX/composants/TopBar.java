@@ -142,7 +142,9 @@ public class TopBar extends HBox {
         this.milogout.setOnAction((t) -> {
             t.consume();
             Alert confirmer = new Alert(Alert.AlertType.CONFIRMATION);
+            
             ButtonType oui = new ButtonType("Oui");
+            
             ButtonType non = new ButtonType("Non");
             confirmer.setTitle("Attention");
             confirmer.setHeaderText("Etes-vous sur de vous déconnecter ? ");

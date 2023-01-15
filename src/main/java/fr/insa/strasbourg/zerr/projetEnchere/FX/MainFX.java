@@ -45,6 +45,7 @@ public class MainFX extends Application {
          
         this.scene = new Scene(mainVue);
         JavaFXUtils.grandeFenetre(stage);
+        //JavaFXUtils.FullScreen(stage);
         //this.scene.getStylesheets().add("FX/DarkTheme.css");
         
         
