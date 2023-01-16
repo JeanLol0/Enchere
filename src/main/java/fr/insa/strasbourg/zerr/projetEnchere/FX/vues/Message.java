@@ -353,6 +353,7 @@ public class Message extends GridPane {
         return valeur;
     }
 
+    
     public void messageExp() throws SQLException, ClassNotFoundException {
         String texte = getNom(idVendeur).toUpperCase() + " vous propose d'envoyer l'objet: " + BDD.recupereTitreObjet(this.main.getBDD(), recupereidObjet(this.main.getBDD(), this.idMessage)) + " par voie postal. \nVous disposez de 15 jours pour envoyer le colis.";
         BDD.createMessage(this.main.getBDD(), texte, idVendeur, idAcheteur, 5, recupereidObjet(this.main.getBDD(), this.idMessage));
