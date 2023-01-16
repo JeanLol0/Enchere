@@ -17,6 +17,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Base64;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
@@ -90,23 +92,50 @@ public class Message extends GridPane {
             this.add(this.bMain, 1, 5);
 
         }
-        if (getEtatLivraison(this.main.getBDD(), recupereidObjet(this.main.getBDD(), this.idMessage)) == 1) {
-
-        } else {
+        int message = getEtatLivraison(this.main.getBDD(), recupereidObjet(this.main.getBDD(), this.idMessage));
+        System.out.println(message);
+        if (getEtatLivraison(this.main.getBDD(), recupereidObjet(this.main.getBDD(), this.idMessage)) != 1) {
             this.bExp.setDisable(true);
             this.bMain.setDisable(true);
         }
 
         this.bExp.setOnAction((t) -> {
-
 //            setEtatLivraison(3, 2);
             this.bExp.setDisable(true);
             this.bMain.setDisable(true);
+            try {
+                messageMainP();
+            } catch (SQLException ex) {
+                Logger.getLogger(Message.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(Message.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            try {
+                messageConfirmation();
+            } catch (SQLException ex) {
+                Logger.getLogger(Message.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(Message.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
         this.bMain.setOnAction((t) -> {
             System.out.println("bouton main cell");
             this.bExp.setDisable(true);
             this.bMain.setDisable(true);
+            try {
+                messageExp();
+            } catch (SQLException ex) {
+                Logger.getLogger(Message.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(Message.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            try {
+                messageConfirmation();
+            } catch (SQLException ex) {
+                Logger.getLogger(Message.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(Message.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
 
         //this.grid.add(textedate, 5, 8);
@@ -135,17 +164,14 @@ public class Message extends GridPane {
                     titre = "Annonce terminée! Préparez la remise/livraison !";
                 } else if (type == 4) {
                     titre = "Annonce terminée...Mauvaise nouvelle";
-                }
-                 else if (type == 5) {
-                    titre = "Objet: "+BDD.recupereTitreObjet(this.main.getBDD(), recupereidObjet(this.main.getBDD(), this.idMessage))+" L'Acheteur a choisi le mode de livraison";
-                }
-                 else if (type == 6) {
-                    titre = "Objet: "+BDD.recupereTitreObjet(this.main.getBDD(), recupereidObjet(this.main.getBDD(), this.idMessage))+" L'Acheteur a choisi le mode de livraison";
-                }
-                 else if (type == 7) {
+                } else if (type == 5) {
+                    titre = "Objet: " + BDD.recupereTitreObjet(this.main.getBDD(), recupereidObjet(this.main.getBDD(), this.idMessage)) + " L'Acheteur a choisi le mode de livraison";
+                } else if (type == 6) {
+                    titre = "Objet: " + BDD.recupereTitreObjet(this.main.getBDD(), recupereidObjet(this.main.getBDD(), this.idMessage)) + " L'Acheteur a choisi le mode de livraison";
+                } else if (type == 7) {
                     titre = "Confirmation mode de livraison";
                 }
-                
+
             }
         }
 
@@ -340,9 +366,9 @@ public class Message extends GridPane {
     }
 
     public void messageConfirmation() throws SQLException, ClassNotFoundException {
-        String texte = "Le mode de livraison de l'objet: " + BDD.recupereTitreObjet(this.main.getBDD(), recupereidObjet(this.main.getBDD(), type)).toUpperCase() +" a bien été choisi";
-        BDD.createMessage(this.main.getBDD(), texte, idVendeur, idAcheteur,7 , recupereidObjet(this.main.getBDD(), this.idMessage));
-        BDD.createMessage(this.main.getBDD(), texte, idAcheteur, idVendeur,7 , recupereidObjet(this.main.getBDD(), this.idMessage));
+        String texte = "Le mode de livraison de l'objet: " + BDD.recupereTitreObjet(this.main.getBDD(), recupereidObjet(this.main.getBDD(), type)).toUpperCase() + " a bien été choisi";
+        BDD.createMessage(this.main.getBDD(), texte, idVendeur, idAcheteur, 7, recupereidObjet(this.main.getBDD(), this.idMessage));
+        BDD.createMessage(this.main.getBDD(), texte, idAcheteur, idVendeur, 7, recupereidObjet(this.main.getBDD(), this.idMessage));
     }
 
 }
