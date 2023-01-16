@@ -5,7 +5,9 @@
 package fr.insa.strasbourg.zerr.projetEnchere.FX.vues;
 
 import fr.insa.strasbourg.zerr.projetEnchere.FX.JavaFXUtils;
+import fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD;
 import static fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD.connectGeneralPostGres;
+import static fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD.createMessage;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -70,27 +72,33 @@ public class Message extends GridPane {
         this.TexteContenu = new Label(this.ContenuMessage);
         this.Envoyeur = new Label(getNom(idAcheteur));
         this.textedate = new Label(this.date.toString());
-        
+
         this.bExp = new RadioButton("Expédition");
         this.bMain = new RadioButton("Main propre");
         this.lChoixRemise = new Label("Choisissez le moyen de remise de l'objet pour en informer le vendeur (votre choix sera définitif)");
-        
 
         this.tTime.setId("grand-text-annonce");
         this.add(this.tTime, 0, 0, 2, 1);
-        this.add(TexteContenu, 0, 1,3,1);
-        this.add(this.textedate,0,2);
+        this.add(TexteContenu, 0, 1, 3, 1);
+        this.add(this.textedate, 0, 2);
         this.add(Envoyeur, 0, 3);
-        
-        if(this.titre== "Vous avez remportez une enchère!"){
-            
+
+        if (this.titre == "Vous avez remportez une enchère!") {
+
             this.add(this.lChoixRemise, 0, 4);
             this.add(this.bExp, 0, 5);
             this.add(this.bMain, 1, 5);
-            
+
         }
+        if (getEtatLivraison(this.main.getBDD(), recupereidObjet(this.main.getBDD(), this.idMessage)) == 1) {
+
+        } else {
+            this.bExp.setDisable(true);
+            this.bMain.setDisable(true);
+        }
+
         this.bExp.setOnAction((t) -> {
-            
+
 //            setEtatLivraison(3, 2);
             this.bExp.setDisable(true);
             this.bMain.setDisable(true);
@@ -100,11 +108,10 @@ public class Message extends GridPane {
             this.bExp.setDisable(true);
             this.bMain.setDisable(true);
         });
-        
+
         //this.grid.add(textedate, 5, 8);
         //this.setGridLinesVisible(true);
         //this.setAlignment(Pos.TOP_CENTER);
-
     }
 
     private void recupereMessage(int id)
@@ -120,18 +127,25 @@ public class Message extends GridPane {
                 ContenuMessage = res.getString("texte");
                 this.type = res.getInt("titre");
                 this.date = res.getTimestamp("date");
-                if (type ==1){
-                    titre ="Nouvelle Enchere sur l'un de vos objet! ";
-                }
-                else if(type ==2){
+                if (type == 1) {
+                    titre = "Nouvelle Enchere sur l'un de vos objet! ";
+                } else if (type == 2) {
                     titre = "Vous avez remportez une enchère!";
-                }
-                else if(type ==3){
-                    titre = "Annonce terminée! Préparez la remise !";
-                }
-                else if(type ==4){
+                } else if (type == 3) {
+                    titre = "Annonce terminée! Préparez la remise/livraison !";
+                } else if (type == 4) {
                     titre = "Annonce terminée...Mauvaise nouvelle";
                 }
+                 else if (type == 5) {
+                    titre = "Objet: "+BDD.recupereTitreObjet(this.main.getBDD(), recupereidObjet(this.main.getBDD(), this.idMessage))+" L'Acheteur a choisi le mode de livraison";
+                }
+                 else if (type == 6) {
+                    titre = "Objet: "+BDD.recupereTitreObjet(this.main.getBDD(), recupereidObjet(this.main.getBDD(), this.idMessage))+" L'Acheteur a choisi le mode de livraison";
+                }
+                 else if (type == 7) {
+                    titre = "Confirmation mode de livraison";
+                }
+                
             }
         }
 
@@ -211,7 +225,6 @@ public class Message extends GridPane {
         }
 
     }
-    
 
     private static int recupereEtatLivraison(Connection con, int id)
             throws SQLException, ClassNotFoundException {
@@ -254,6 +267,19 @@ public class Message extends GridPane {
         return NOM;
     }
 
+    public static int recupereidObjet(Connection con, int id)
+            throws SQLException, ClassNotFoundException {
+        int idObj = 0;
+        try ( PreparedStatement st = con.prepareStatement("select objet from message where id = ?")) {
+            st.setInt(1, id);
+            ResultSet res = st.executeQuery();
+            while (res.next()) {
+                idObj = res.getInt("objet");
+            }
+        }
+        return idObj;
+    }
+
     static String getNbr(String str) {
         // Remplacer chaque nombre non numérique par un espace
         str = str.replaceAll("[^\\d]", " ");
@@ -264,18 +290,18 @@ public class Message extends GridPane {
 
         return str;
     }
-    
+
     public void setEtatLivraison(int valeur, int idObjet) throws SQLException {
         Connection con = this.main.getBDD();
         con.setAutoCommit(false);
-        try (PreparedStatement pst = con.prepareStatement(
+        try ( PreparedStatement pst = con.prepareStatement(
                 "update objet set Etatlivraison = ? where id = ?", PreparedStatement.RETURN_GENERATED_KEYS)) {
             pst.setInt(1, valeur);
             pst.setInt(2, idObjet);
             pst.executeUpdate();
             con.commit();
             System.out.println("categorie créé");
-            try (ResultSet rid = pst.getGeneratedKeys()) {
+            try ( ResultSet rid = pst.getGeneratedKeys()) {
                 // et comme ici je suis sur qu'il y a une et une seule clé, je
                 // fait un simple next 
                 rid.next();
@@ -287,7 +313,7 @@ public class Message extends GridPane {
             con.setAutoCommit(true);
         }
     }
-    
+
     public int getEtatLivraison(Connection con, Integer idObjet) throws SQLException {
         int valeur = 0;
         try ( PreparedStatement st = con.prepareCall("select etatlivraison from objet where id = ?")) {
@@ -299,6 +325,24 @@ public class Message extends GridPane {
 
         }
         return valeur;
+    }
+
+    public void messageExp() throws SQLException, ClassNotFoundException {
+        String texte = getNom(idVendeur).toUpperCase() + " vous propose d'envoyer l'objet: " + BDD.recupereTitreObjet(this.main.getBDD(), recupereidObjet(this.main.getBDD(), this.idMessage)) + " par voie postal. \nVous disposez de 15 jours pour envoyer le colis.";
+        BDD.createMessage(this.main.getBDD(), texte, idVendeur, idAcheteur, 5, recupereidObjet(this.main.getBDD(), this.idMessage));
+        setEtatLivraison(2, recupereidObjet(this.main.getBDD(), this.idMessage));
+    }
+
+    public void messageMainP() throws SQLException, ClassNotFoundException {
+        String texte = getNom(idVendeur).toUpperCase() + " vous propose de vous retrouver afin de donner en main propre l'objet: " + BDD.recupereTitreObjet(this.main.getBDD(), recupereidObjet(this.main.getBDD(), this.idMessage)) + "\nVous disposez de 15 jours pour envoyer le colis.";
+        BDD.createMessage(this.main.getBDD(), texte, idVendeur, idAcheteur, 6, recupereidObjet(this.main.getBDD(), this.idMessage));
+        setEtatLivraison(2, recupereidObjet(this.main.getBDD(), this.idMessage));
+    }
+
+    public void messageConfirmation() throws SQLException, ClassNotFoundException {
+        String texte = "Le mode de livraison de l'objet: " + BDD.recupereTitreObjet(this.main.getBDD(), recupereidObjet(this.main.getBDD(), type)).toUpperCase() +" a bien été choisi";
+        BDD.createMessage(this.main.getBDD(), texte, idVendeur, idAcheteur,7 , recupereidObjet(this.main.getBDD(), this.idMessage));
+        BDD.createMessage(this.main.getBDD(), texte, idAcheteur, idVendeur,7 , recupereidObjet(this.main.getBDD(), this.idMessage));
     }
 
 }

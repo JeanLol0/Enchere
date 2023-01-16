@@ -449,7 +449,7 @@ public class Annonce extends HBox {
         int idVendeur = this.idVendeur;
         int IdDernierMec = UtilDernierEnchereSurObjet(this.id);
         if (UtilDernierEnchereSurObjet(this.id) != -1) {
-            String TextePourAcheteurSiEnchere = "Vous avez gagné l'enchere sur l'objet: " + BDD.recupereTitreObjet(this.main.getBDD(), this.id) + "\nVous pouvez à présent choisir le mode de réception sur la rubrique 'Mes Encheres Finies'";
+            String TextePourAcheteurSiEnchere = "Vous avez gagné l'enchere sur l'objet: " + BDD.recupereTitreObjet(this.main.getBDD(), this.id) +" vendu par "+ getNom(this.idVendeur)+ "\nVous pouvez à présent choisir le mode de réception sur la rubrique 'Mes Encheres Finies'";
             String TextePourVendeurSiEnchere = "Votre objet " + BDD.recupereTitreObjet(this.main.getBDD(), this.id) + " n'est plus en vente! L'utilisateur ";
             TextePourVendeurSiEnchere = TextePourVendeurSiEnchere + recupereNomUTil(this.main.getBDD(), UtilDernierEnchereSurObjet(this.id)) + " vous propose de vous l'acheter";
             System.out.println(TextePourVendeurSiPasEnchere);
