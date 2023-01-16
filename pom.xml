@@ -26,6 +26,13 @@
 
 
     <dependencies>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-web</artifactId>
+            <version>11</version>
+        </dependency>
+        <!-- Thanks for using https://jar-download.com -->
+
 
 
 

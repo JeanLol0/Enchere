@@ -41,7 +41,7 @@ public class VueMessagerie extends ScrollPane {
 
     public VueMessagerie(FenetrePrincipale main) throws SQLException, ClassNotFoundException, IOException {
         this.main = main;
-        this.setStyle("-fx-color: #238636;");
+        this.setStyle("-fx-color: #148ca7;");
         this.grid = new GridPane();
         this.grid.add(new Label("MESSAGERIE"), 0, 4);
         this.con = this.main.getBDD();
@@ -75,7 +75,7 @@ public class VueMessagerie extends ScrollPane {
 //        }
         nbMessage = this.idMessages.size();
         for (int j = 0; j < nbMessage; j++) {
-            this.grid.add(new Message(this.main, this.idMessages.get(j)), 0, j + 2);
+            this.grid.add(new Message(this.main, this.idMessages.get(j)), 0, nbMessage-j + 2);
         }
     }
 

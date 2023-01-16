@@ -168,7 +168,7 @@ public class Categories extends Accordion {
            this.setCategorieSelected("DVD & CD");
        });
        this.Decoration.setOnAction((t) -> {
-           this.setCategorieSelected("Décoraion");
+           this.setCategorieSelected("Décoration");
        });
        this.Electromenager.setOnAction((t) -> {
            this.setCategorieSelected("Electroménager");
@@ -198,7 +198,7 @@ public class Categories extends Accordion {
            this.setCategorieSelected("Motos");
        });
        this.SportsHobbies.setOnAction((t) -> {
-           this.setCategorieSelected("Sport & Hobbies");
+           this.setCategorieSelected("Sports & Hobbies");
        });
        this.Telephonie.setOnAction((t) -> {
            this.setCategorieSelected("Téléphonie");

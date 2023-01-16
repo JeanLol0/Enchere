@@ -112,7 +112,7 @@ public class BarRecherche extends ScrollPane {
         this.bDistance.prefWidthProperty().bind(this.widthProperty());
         this.bReinitialise.prefWidthProperty().bind(this.widthProperty());
         Region region = new Region();
-        region.setPrefHeight(100);
+        region.setPrefHeight(200);
         this.center.setVgrow(region, Priority.SOMETIMES);
         this.center.getChildren().addAll(this.bReinitialise,this.tfRecherche, this.bRecherche,
                 this.lTrie, this.trieCombo,

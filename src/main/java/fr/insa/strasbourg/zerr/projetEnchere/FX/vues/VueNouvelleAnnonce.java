@@ -46,6 +46,7 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+import javafx.scene.web.HTMLEditor;
 import javafx.stage.FileChooser;
 import javafx.util.Callback;
 
@@ -76,6 +77,7 @@ public class VueNouvelleAnnonce extends ScrollPane {
     private Categories categories;
 
     private TextArea taDescription;
+    private HTMLEditor HTMLDescription;
     private Integer proposerPar;
     private Button bCreerAnnonce;
 
@@ -114,6 +116,7 @@ public class VueNouvelleAnnonce extends ScrollPane {
         this.tfTitre = new TextField();
         this.tfTitre.setPromptText("Titre de l'annonce");
         this.taDescription = new TextArea();
+        this.HTMLDescription = new HTMLEditor();
         this.taDescription.setPromptText("Dercription de l'objet");
         this.taDescription.setWrapText(true);
         this.dDebut = new DatePicker(LocalDate.now());
@@ -167,7 +170,10 @@ public class VueNouvelleAnnonce extends ScrollPane {
         gridMain.setVgap(20);
         gridMain.setHgap(20);
         gridMain.setAlignment(Pos.TOP_CENTER);
-
+        
+        HTMLEditor html = new HTMLEditor();
+        html.getHtmlText();
+        
         this.gridMain.add(this.tTitre, 0, 0, 2, 1);
         this.gridMain.add(this.tfTitre, 0, 1, 2, 1);
         this.gridMain.add(this.tPhoto, 0, 2, 2, 1);

@@ -26,7 +26,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-font-size: 22px;
     -fx-letter-spacing: 1px;
     -fx-word-spacing: 4px;
-    -fx-color: #238636;
+    -fx-color: #004b6b;
     -fx-font-weight: bold;
     -fx-text-decoration: none;
     -fx-font-style: normal;
@@ -45,14 +45,14 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 
 #grand-text-annonce {
     -fx-font-size: 40px;
-    -fx-text-fill: #7ED167;
+    -fx-text-fill: #148ca7;
 }
 #vue-nouvelle-annonce {
     -fx-font-family: Segoe UI;
     -fx-font-size: 22px;
     /*    -fx-letter-spacing: 1px;
         -fx-word-spacing: 4px;*/
-    -fx-color: #238636;
+    -fx-color: #004b6b;
     -fx-font-weight: bold;
     /*-fx-text-transform: none;*/
     -fx-background-color:#001419;
@@ -77,7 +77,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 #nom-prenom {
     -fx-font-family: Tahoma;
     -fx-font-size: 30px;
-    -fx-color: #241f31;
+    -fx-color: #004b6b;
     -fx-font-weight: bold;
     -fx-font-variant: small-caps;
     -fx-text-transform: uppercase;
@@ -98,18 +98,18 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-background-color:#0B2239;
     -fx-font-size: 20px;
     -fx-padding: 9 9 9 9;
-    -fx-color: #238636;
+    -fx-color: #004b6b;
 }
 
 #scroll-recherche{
     -fx-background-color:#0B2239;
     -fx-font-size: 15px;
-    -fx-color: #238636;
+    -fx-color: #004b6b;
 }
 #scroll-annonce{
     -fx-background-color:#0B2239;
     -fx-font-size: 15px;
-    -fx-color: #238636;
+    -fx-color: #004b6b;
 }
 
 
@@ -126,7 +126,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-max-width: 600;
     -fx-alignment : center;
     -fx-padding: 3 6 6 6;
-    -fx-color: #fff;
     -fx-text-fill: white;
     -fx-background-color: #08c708;
     -fx-align-items: center;
@@ -139,7 +138,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-initial-delay:250;
     -fx-transition : 383ms;
     -fx-max-width: 300;
-    -fx-color: #19d10c;
     -fx-background-radius: 30px;
 
 }
@@ -169,7 +167,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-max-width: 300;
     -fx-alignment : center;
     -fx-padding: 3 6 6 6;
-    -fx-color: #fff;
     -fx-align-items: center;
     -fx-background-radius: 30px;
     -fx-background-color:#00bfff ;
@@ -181,7 +178,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-font-size: 25px;
     -fx-alignment : center;
     -fx-padding: 3 6 6 6;
-    -fx-color: #fff;
     -fx-align-items: center;
     -fx-background-radius: 5px;
     -fx-background-color:#00bfff ;
@@ -265,7 +261,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     
 }
 #text-recherche{
-    -fx-text-fill: #238636;
+    -fx-text-fill: #148ca7;
 }
 
 #message {
@@ -273,7 +269,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-font-size: 22px;
     -fx-letter-spacing: 1px;
     -fx-word-spacing: 4px;
-    -fx-color: #238636;
+    -fx-color: #004b6b;
     -fx-font-weight: bold;
     -fx-text-decoration: none;
     -fx-font-style: normal;

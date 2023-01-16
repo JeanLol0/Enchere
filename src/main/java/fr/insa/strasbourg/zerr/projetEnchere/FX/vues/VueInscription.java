@@ -110,10 +110,9 @@ public class VueInscription extends GridPane {
         this.add(this.tfPrenom, 0, 6);
         this.add(this.tfEmail, 0, 7);
         this.add(this.pfPass, 0, 8);
-        this.add(this.tfCodePostal, 0, 9);
-        this.add(this.bChoixPos, 0, 10);
-        this.add(this.bInscription, 0, 11);
-        this.add(this.bLogin, 0, 12);
+        this.add(this.bChoixPos, 0, 9);
+        this.add(this.bInscription, 0, 10);
+        this.add(this.bLogin, 0, 11);
 
         this.setVgap(20);
         this.setAlignment(Pos.CENTER);
@@ -204,10 +203,9 @@ public class VueInscription extends GridPane {
         this.add(this.tfPrenom, 0, 6);
         this.add(this.tfEmail, 0, 7);
         this.add(this.pfPass, 0, 8);
-        this.add(this.tfCodePostal, 0, 9);
-        this.add(this.bChoixPos, 0, 10);
-        this.add(this.bInscription, 0, 11);
-        this.add(this.bLogin, 0, 12);
+        this.add(this.bChoixPos, 0, 9);
+        this.add(this.bInscription, 0, 10);
+        this.add(this.bLogin, 0, 11);
 
         this.setVgap(20);
         this.setAlignment(Pos.CENTER);

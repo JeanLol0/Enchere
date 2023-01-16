@@ -65,7 +65,7 @@ public class VueLogin extends GridPane {
         this.bInscription = new Button("Inscription");
         this.bInscription.setId("bouton-bleu");
 
-        this.tBienvenue = new Label("Bienvenue");
+        this.tBienvenue = new Label("INS'ENCHERE");
         this.tBienvenue.setId("grand-texte");
         this.tInscription = new Label("Pas encore de compte ?");
 
