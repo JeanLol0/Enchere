@@ -6,6 +6,7 @@ package fr.insa.strasbourg.zerr.projetEnchere.FX.vues;
 
 import fr.insa.strasbourg.zerr.projetEnchere.FX.JavaFXUtils;
 import fr.insa.strasbourg.zerr.projetEnchere.FX.composants.BarRecherche;
+import fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD;
 import static fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD.DistanceObjetFromUtiilisateur;
 import static fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD.ValiditeDateEnchere;
 import static fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD.connectGeneralPostGres;
@@ -335,6 +336,32 @@ public class VueAnnonces extends BorderPane {
         }
 
     }
+    public double getLongUtil(int idUtil) throws SQLException, ClassNotFoundException {
+        Connection con = this.main.getBDD();
+        double longi=0;
+        try ( PreparedStatement st = con.prepareStatement("select * from utilisateur where id = ?")) {
+            st.setInt(1, idUtil);
+            ResultSet res = st.executeQuery();
+            while (res.next()) {
+                longi=res.getDouble("long");
+            }
+        }
+        return longi;
+
+    }
+    public double getLatUtil(int idUtil) throws SQLException, ClassNotFoundException {
+        Connection con = this.main.getBDD();
+        double lat=0;
+        try ( PreparedStatement st = con.prepareStatement("select * from utilisateur where id = ?")) {
+            st.setInt(1, idUtil);
+            ResultSet res = st.executeQuery();
+            while (res.next()) {
+                lat=res.getDouble("lat");
+            }
+        }
+        return lat;
+
+    }
 
     public static ArrayList<Integer> ObjetRechercheMots(String texte) throws ClassNotFoundException, SQLException {
         Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
@@ -389,21 +416,25 @@ public class VueAnnonces extends BorderPane {
 
     }
 
-    public static ArrayList<Integer> TriDistanceObjet(int idUtil, double distancemax) throws ClassNotFoundException, SQLException {
-        Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
+    public ArrayList<Integer> TriDistanceObjet(int idUtil, double distancemax) throws ClassNotFoundException, SQLException, IOException {
+        Connection con = this.main.getBDD();
 //        TreeMap<Double, Integer> map = new TreeMap();
         ArrayList<Integer> map = new ArrayList<>();
-        try ( PreparedStatement st = con.prepareStatement("select id from objet")) {
+        try ( PreparedStatement st = con.prepareStatement("select * from objet")) {
             ResultSet res = st.executeQuery();
 
             System.out.println(distancemax);
             while (res.next()) {
-                System.out.println("idobj  " + res.getInt("id") + "    " + DistanceObjetFromUtiilisateur(idUtil, res.getInt("id")));
-                if (DistanceObjetFromUtiilisateur(idUtil, res.getInt("id")) <= distancemax) {
-                    map.add(res.getInt("id"));
-                    System.out.println("Objet : " + res.getInt("id"));
+                double longitudeObj = res.getDouble("long");
+                double latitudeObj = res.getDouble("lat");
+                Annonce annonce = new Annonce(this.main, res.getInt("id"));
+                double distance = annonce.getDistance();
+                if(distancemax==500){
+                    distancemax = 1000000000;
                 }
-
+                if (distance <= distancemax){
+                    map.add(res.getInt("id"));
+                }
             }
         }
 

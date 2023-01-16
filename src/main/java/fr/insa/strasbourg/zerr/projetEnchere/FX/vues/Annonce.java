@@ -49,6 +49,7 @@ public class Annonce extends HBox {
     private double Utillatitude;
     private double Utillongitude;
     private Label distance;
+    private double distanceR;
     private Label prixActuel;
     private Label categorie;
     private Integer idVendeur;
@@ -91,11 +92,11 @@ public class Annonce extends HBox {
         this.tDistance = new Label("Distance");
         int idUtil = this.main.getSessionInfo().getUserID();
         RecupCoordUtil(idUtil);
-        double distance = CalculDistance(this.Utillongitude, Utillatitude, Olongitude, Olatitude);
-        if (distance < 1) {
+        this.distanceR = CalculDistance(this.Utillongitude, Utillatitude, Olongitude, Olatitude);
+        if (distanceR < 1) {
             this.distance = new Label("Moins d'un kilomètre ");
         } else {
-            this.distance = new Label(Double.toString(distance) + " km");
+            this.distance = new Label(Double.toString(distanceR) + " km");
         }
         this.tTitre.setId("grand-text-annonce");
 
@@ -503,6 +504,10 @@ public class Annonce extends HBox {
     
     public int getCompteur(){
         return this.compteur;
+    }
+    
+    public double getDistance(){
+        return this.distanceR;
     }
 
 }
