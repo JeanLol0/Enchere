@@ -31,7 +31,7 @@ public class VueCarte extends BorderPane {
     private MapPoint mapPoint;
     private Circle circle;
     public MapLayer maplayer;
-    private int zoom = 10;
+    private int zoom = 16;
     private double longitude;
     private double latitude;
 
@@ -79,7 +79,7 @@ public class VueCarte extends BorderPane {
         VBox root = new VBox();
 
         MapView view = new MapView();
-        MapPoint mappoint = new MapPoint(48.852969, 2.349903);
+        MapPoint mappoint = new MapPoint(48.582134, 7.764151);
 //        this.maplayer = new CustomCircleMarker(mapPoint);
         view.setOnMouseClicked((t) -> {
             this.mapPoint = view.getMapPosition(t.getX(), t.getY());

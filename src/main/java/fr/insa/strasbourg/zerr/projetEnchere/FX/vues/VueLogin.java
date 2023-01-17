@@ -28,6 +28,7 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Font;
 
 /**
  *
@@ -66,15 +67,15 @@ public class VueLogin extends GridPane {
         this.bInscription.setId("bouton-bleu");
 
         this.tBienvenue = new Label("INS'ENCHERE");
-        this.tBienvenue.setId("grand-texte");
+        tBienvenue.setFont(new Font("Bodoni MT Black", 70));
         this.tInscription = new Label("Pas encore de compte ?");
 
-        this.add(this.tBienvenue, 0, 5);
-        this.add(this.tfEmail, 0, 15);
-        this.add(this.pfPass, 0, 16);
-        this.add(this.bLogin, 0, 17);
-        this.add(this.tInscription, 0, 18);
-        this.add(this.bInscription, 0, 19);
+        this.add(this.tBienvenue, 0, 5,3,1);
+        this.add(this.tfEmail, 2, 15);
+        this.add(this.pfPass, 2, 16);
+        this.add(this.bLogin, 2, 17);
+        this.add(this.tInscription, 2, 18);
+        this.add(this.bInscription, 2, 19);
         //this.bLogin.setMaxWidth(Double.MAX_VALUE);
         this.setVgap(20);
         this.setAlignment(Pos.TOP_CENTER);

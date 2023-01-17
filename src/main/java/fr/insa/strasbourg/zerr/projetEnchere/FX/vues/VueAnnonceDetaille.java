@@ -22,6 +22,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.animation.Animation;
@@ -30,7 +31,10 @@ import javafx.animation.Timeline;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
@@ -42,6 +46,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.text.Text;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -58,7 +63,7 @@ public class VueAnnonceDetaille extends BorderPane {
     private TextField tfEnchere;
     private Button bEnchere;
     private Button bRetourAnnonce;
-    
+
     private int compteur;
 
     private int idObj;
@@ -87,20 +92,19 @@ public class VueAnnonceDetaille extends BorderPane {
     private Label tVendeur;
     private Label tTempsR;
     private Label tDistance;
-    
+
     private ScrollPane scroll;
     private HBox HBox;
     private Region region;
-    
+
     private GridPane gri;
-    
+
     private Button bGoEnchere;
     private Button bRetour;
-    
 
-    public VueAnnonceDetaille(FenetrePrincipale main, int idO,int compteur) throws SQLException, ClassNotFoundException, IOException {
+    public VueAnnonceDetaille(FenetrePrincipale main, int idO, int compteur) throws SQLException, ClassNotFoundException, IOException {
         this.main = main;
-        this.compteur=compteur;
+        this.compteur = compteur;
         this.gridPane = new GridPane();
         this.main.setLeft(null);
         this.idObj = idO;
@@ -114,10 +118,10 @@ public class VueAnnonceDetaille extends BorderPane {
 
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         int width = gd.getDisplayMode().getWidth() / 2;
-        this.imageV.setFitHeight(width*0.8);
-       this.imageV.setFitWidth(width*0.8);
+        this.imageV.setFitHeight(width * 0.8);
+        this.imageV.setFitWidth(width * 0.8);
         this.gridPane.setPrefWidth(width);
-        
+
         this.gridPane.setVgap(10);
 
         this.tTime = new Label("Temps restant :");
@@ -151,14 +155,13 @@ public class VueAnnonceDetaille extends BorderPane {
                 tfEnchere.setText(oldValue);
             }
         });
-        
+
         this.gridPane.setAlignment(Pos.TOP_CENTER);
         this.gridPane.setHalignment(this.tTitre, HPos.CENTER);
         this.gridPane.setHalignment(this.bEnchere, HPos.CENTER);
         this.gridPane.setHalignment(this.bRetourAnnonce, HPos.CENTER);
         this.gridPane.setHalignment(this.imageV, HPos.CENTER);
-        
-        
+
         this.tTitre.setId("grand-text-annonce");
 
         this.gridPane.add(this.tTitre, 0, 0, 2, 1);
@@ -175,12 +178,10 @@ public class VueAnnonceDetaille extends BorderPane {
         this.gridPane.add(tTime, 1, 7);
         this.gridPane.add(tPrix, 0, 8);
         this.gridPane.add(prixActuel, 1, 8);
-        this.gridPane.add(tfEnchere, 0, 9,2,1);
-        this.gridPane.add(bEnchere, 0, 10,1,1);
-        this.gridPane.add(bRetourAnnonce, 1, 10,1,1);
+        this.gridPane.add(tfEnchere, 0, 9, 2, 1);
+        this.gridPane.add(bEnchere, 0, 10, 1, 1);
+        this.gridPane.add(bRetourAnnonce, 1, 10, 1, 1);
 
-        
-        
 //        //this.gridPane.setGridLinesVisible(true);
 //        //this.content.setPrefWidth(this.getWidth());
 //        
@@ -193,18 +194,17 @@ public class VueAnnonceDetaille extends BorderPane {
 ////        this.HBox.setHgrow(this.region, Priority.SOMETIMES);
 ////        this.HBox.setHgrow(this.gridPane, Priority.ALWAYS);
 //        this.HBox.getChildren().addAll(this.gri);
-        
 //        this.content.getChildren().addAll(this.gridPane);
 //        this.content.setAlignment(Pos.CENTER);
         this.scroll = new ScrollPane();
-        
+
         this.scroll.setContent(this.gridPane);
         this.scroll.setFitToWidth(true);
         this.scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         this.scroll.setId("scroll-annonce");
-        
+
         this.setCenter(this.scroll);
-        
+
         ActualisationTempsRestant();
         ActualisePrix();
         this.bEnchere.setOnAction((t) -> {
@@ -216,13 +216,14 @@ public class VueAnnonceDetaille extends BorderPane {
             } catch (SQLException | ClassNotFoundException | IOException ex) {
                 Logger.getLogger(VueAnnonceDetaille.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
         });
         //JavaFXUtils.addSimpleBorder(this);
     }
-    public VueAnnonceDetaille(FenetrePrincipale main, int idO,int i,int comp) throws SQLException, ClassNotFoundException, IOException {
+
+    public VueAnnonceDetaille(FenetrePrincipale main, int idO, int i, int comp) throws SQLException, ClassNotFoundException, IOException {
         this.main = main;
-        this.compteur=comp;
+        this.compteur = comp;
         this.gridPane = new GridPane();
         this.main.setLeft(null);
         this.idObj = idO;
@@ -233,8 +234,8 @@ public class VueAnnonceDetaille extends BorderPane {
         this.gridPane.setHgap(20);
         this.image = texteEnImage(this.stringImage);
         this.imageV = new ImageView(this.image);
-        
-         this.tTime = new Label("Temps restant :");
+
+        this.tTime = new Label("Temps restant :");
         this.tPrix = new Label("Prix actuel :");
         this.tCategorie = new Label("Catégorie :");
         this.tVendeur = new Label("Nom du vendeur :");
@@ -242,19 +243,16 @@ public class VueAnnonceDetaille extends BorderPane {
         this.tTempsR = new Label("Temps restant :");
         this.tDistance = new Label("Distance");
         this.bEnchere = new Button("Encherir");
-        
 
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         int width = gd.getDisplayMode().getWidth() / 2;
-        this.imageV.setFitHeight(width*0.5);
-        this.imageV.setFitWidth(width*0.5);
-        this.tDesc.setMaxWidth(width*0.5);
-        this.tTitre.setMaxWidth(width*0.5);
+        this.imageV.setFitHeight(width * 0.5);
+        this.imageV.setFitWidth(width * 0.5);
+        this.tDesc.setMaxWidth(width * 0.5);
+        this.tTitre.setMaxWidth(width * 0.5);
 //        this.gridPane.setPrefWidth(width);
-        
-        this.gridPane.setVgap(10);
 
-       
+        this.gridPane.setVgap(10);
 
         int idUtil = this.main.getSessionInfo().getUserID();
         RecupCoordUtil(idUtil);
@@ -274,7 +272,7 @@ public class VueAnnonceDetaille extends BorderPane {
             }
         });
         this.tTitre.setId("grand-text-annonce");
-        
+
         this.bGoEnchere = new Button("Plus de détails");
         this.bRetour = new Button("Fermer");
         this.bRetour.setPrefWidth(200);
@@ -287,7 +285,7 @@ public class VueAnnonceDetaille extends BorderPane {
         this.gridPane.add(this.desc, 0, 2, 1, 1);
         this.gridPane.add(this.tDesc, 0, 3, 2, 1);
         this.gridPane.add(bGoEnchere, 0, 9);
-        this.gridPane.add(bRetour,1 , 9);
+        this.gridPane.add(bRetour, 1, 9);
 
         this.bEnchere.setStyle("-fx-background-radius: 5px;");
         this.bGoEnchere.setStyle("-fx-background-radius: 5px;");
@@ -297,7 +295,7 @@ public class VueAnnonceDetaille extends BorderPane {
         this.gridPane.setHalignment(this.imageV, HPos.CENTER);
         this.gridPane.setHalignment(this.bGoEnchere, HPos.CENTER);
         this.gridPane.setHalignment(this.bRetour, HPos.CENTER);
-        
+
 //        //this.gridPane.setGridLinesVisible(true);
 //        //this.content.setPrefWidth(this.getWidth());
 //        
@@ -310,14 +308,13 @@ public class VueAnnonceDetaille extends BorderPane {
 ////        this.HBox.setHgrow(this.region, Priority.SOMETIMES);
 ////        this.HBox.setHgrow(this.gridPane, Priority.ALWAYS);
 //        this.HBox.getChildren().addAll(this.gri);
-        
         this.scroll = new ScrollPane();
         this.scroll.setContent(this.gridPane);
         this.scroll.setFitToWidth(true);
         this.scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
         this.scroll.setId("scroll-annonce");
-        
+
         this.setCenter(this.scroll);
         //this.BorderPane.setId("scroll-annonce");
         ActualisationTempsRestant();
@@ -328,7 +325,7 @@ public class VueAnnonceDetaille extends BorderPane {
         //JavaFXUtils.addSimpleBorder(this);
         this.bGoEnchere.setOnAction((t) -> {
             try {
-                this.main.setCenter(new VueAnnonceDetaille(main, idObj,this.compteur));
+                this.main.setCenter(new VueAnnonceDetaille(main, idObj, this.compteur));
                 this.main.setRight(null);
             } catch (SQLException ex) {
                 Logger.getLogger(VueAnnonceDetaille.class.getName()).log(Level.SEVERE, null, ex);
@@ -348,7 +345,7 @@ public class VueAnnonceDetaille extends BorderPane {
             throws SQLException, ClassNotFoundException {
         Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
 
-        try (PreparedStatement st = con.prepareStatement("select * from objet where id = ?")) {
+        try ( PreparedStatement st = con.prepareStatement("select * from objet where id = ?")) {
             st.setInt(1, id);
             ResultSet res = st.executeQuery();
             while (res.next()) {
@@ -361,7 +358,7 @@ public class VueAnnonceDetaille extends BorderPane {
                 this.debut = res.getTimestamp("debut");
                 this.fin = res.getTimestamp("fin");
                 int prix = res.getInt("prixactuel");
-                this.prixActuel = new Label(String.valueOf(prix)+" €");
+                this.prixActuel = new Label(String.valueOf(prix) + " €");
                 int idcat = res.getInt("categorie");
                 this.categorie = new Label(getStringCategorie(idcat));
                 String nom = getNom(res.getInt("proposerpar"));
@@ -382,12 +379,17 @@ public class VueAnnonceDetaille extends BorderPane {
         int idUser = this.main.getSessionInfo().getUserID();
 
         try {
-            createEnchere(con, idObj, idUser, Integer.parseInt(this.tfEnchere.getText()));
+            int enchere = createEnchere(con, idObj, idUser, Integer.parseInt(this.tfEnchere.getText()));
+            if (enchere == -1) {
+                JOptionPane.showMessageDialog(null, "Vous devez entrer un montant supérieur au prix actuel ! ");
+            } else {JOptionPane.showMessageDialog(null, "Vous avez bien enrichi sur l'objet !");
+            }
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(VueAnnonceDetaille.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-public String getNom(Integer idU) throws SQLException {
+
+    public String getNom(Integer idU) throws SQLException {
         Connection con = this.main.getBDD();
         try ( PreparedStatement st = con.prepareCall("select nom from utilisateur where id = ?")) {
             st.setInt(1, idU);
@@ -419,7 +421,7 @@ public String getNom(Integer idU) throws SQLException {
 
     }
 
- public String getStringCategorie(Integer id) throws SQLException {
+    public String getStringCategorie(Integer id) throws SQLException {
         Connection con = this.main.getBDD();
         try ( PreparedStatement st = con.prepareCall("select * from categorie where id = ?")) {
             st.setInt(1, id);
@@ -434,8 +436,8 @@ public String getNom(Integer idU) throws SQLException {
         }
 
     }
- 
- private void ActualisationTempsRestant() {
+
+    private void ActualisationTempsRestant() {
         Timeline tempsRestant = new Timeline(new KeyFrame(javafx.util.Duration.seconds(1), (t) -> {
             Timestamp mtn = new Timestamp(System.currentTimeMillis());
             long secR = secRestant(this.fin);
@@ -467,18 +469,16 @@ public String getNom(Integer idU) throws SQLException {
         }));
         tempsRestant.setCycleCount(Animation.INDEFINITE);
         tempsRestant.play();
-        
-        
+
         long secR = secRestant(this.fin);
-        if(secR < 0) {
-                tempsRestant.stop();;
-                tTime.setText("Stop timeline");
-                
-                
-            } 
+        if (secR < 0) {
+            tempsRestant.stop();;
+            tTime.setText("Stop timeline");
+
+        }
     }
- 
-   private static int recupereEtatLivraison(Connection con, int id)
+
+    private static int recupereEtatLivraison(Connection con, int id)
             throws SQLException, ClassNotFoundException {
         int etat = 0;
         try ( PreparedStatement st = con.prepareStatement("select * from objet where id = ?")) {
@@ -551,7 +551,8 @@ public String getNom(Integer idU) throws SQLException {
 //        }
 //
 //    }
-     public int UtilDernierEnchereSurObjet(int idObjet) throws ClassNotFoundException, SQLException {
+
+    public int UtilDernierEnchereSurObjet(int idObjet) throws ClassNotFoundException, SQLException {
         Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
         int idDernierUtil = -1;
         try ( PreparedStatement st = con.prepareStatement("select * from enchere where montant=(select max(montant) from enchere where sur=?)")) {
@@ -580,6 +581,7 @@ public String getNom(Integer idU) throws SQLException {
         return NOM;
 
     }
+
     private Timestamp tempsRestant(Timestamp debut, Timestamp fin) {
         long l1 = debut.getTime();
         long l2 = fin.getTime();
@@ -622,6 +624,7 @@ public String getNom(Integer idU) throws SQLException {
         return diffJ;
 
     }
+
     private void RecupCoordUtil(int id)
             throws SQLException, ClassNotFoundException {
         Connection con = this.main.getBDD();
@@ -635,18 +638,16 @@ public String getNom(Integer idU) throws SQLException {
         }
 
     }
-    
-    static String getNbr(String str) 
-    { 
-        // Remplacer chaque nombre non numérique par un espace
-        str = str.replaceAll("[^\\d]", " "); 
-        // Supprimer les espaces de début et de fin 
-        str = str.trim(); 
-        // Remplacez les espaces consécutifs par un seul espace
-        str = str.replaceAll(" +", ""); 
-  
-        return str; 
-    } 
 
-    
+    static String getNbr(String str) {
+        // Remplacer chaque nombre non numérique par un espace
+        str = str.replaceAll("[^\\d]", " ");
+        // Supprimer les espaces de début et de fin 
+        str = str.trim();
+        // Remplacez les espaces consécutifs par un seul espace
+        str = str.replaceAll(" +", "");
+
+        return str;
+    }
+
 }

@@ -20,6 +20,8 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 /**
@@ -49,8 +51,9 @@ public class VueAcceuil extends GridPane{
         this.bAffMesAnnonces.setId("bouton-mes-annonces");
         this.bAffMesEnchere = new Button("Afficher mes encheres en cours ");
         this.bAffMesEnchere.setId("bouton-mes-enchere");
-        this.tBienvenue = new Label("Bienvenue");
-        this.tBienvenue.setId("grand-titre-bienvenue");
+        this.tBienvenue = new Label("BIENVENUE");
+        this.tBienvenue.setFont(new Font("Bodoni MT Black", 80));
+        this.tBienvenue.setTextFill(Color.WHITE);
         this.add(this.tBienvenue, 0, 0);
         this.add(this.bAffAnnonce, 0, 4);
         this.add(this.bAffMesAnnonces, 0, 6);

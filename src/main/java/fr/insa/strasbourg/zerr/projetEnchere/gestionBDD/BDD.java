@@ -652,6 +652,7 @@ public class BDD {
                 }
             }
         } else {
+            
             return -1;
         }
 
