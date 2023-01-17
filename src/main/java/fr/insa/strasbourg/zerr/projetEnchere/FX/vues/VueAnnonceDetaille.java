@@ -182,20 +182,6 @@ public class VueAnnonceDetaille extends BorderPane {
         this.gridPane.add(bEnchere, 0, 10, 1, 1);
         this.gridPane.add(bRetourAnnonce, 1, 10, 1, 1);
 
-//        //this.gridPane.setGridLinesVisible(true);
-//        //this.content.setPrefWidth(this.getWidth());
-//        
-//        this.region = new Region();
-//        this.region.setPrefWidth(this.main.getWidth()/4);
-//        this.HBox=new HBox();
-//        this.gri=new GridPane();
-//        this.gri.add(this.gridPane, 0, 0);
-//        this.gri.setHalignment(this.gridPane,HPos.CENTER);
-////        this.HBox.setHgrow(this.region, Priority.SOMETIMES);
-////        this.HBox.setHgrow(this.gridPane, Priority.ALWAYS);
-//        this.HBox.getChildren().addAll(this.gri);
-//        this.content.getChildren().addAll(this.gridPane);
-//        this.content.setAlignment(Pos.CENTER);
         this.scroll = new ScrollPane();
 
         this.scroll.setContent(this.gridPane);
@@ -295,19 +281,6 @@ public class VueAnnonceDetaille extends BorderPane {
         this.gridPane.setHalignment(this.imageV, HPos.CENTER);
         this.gridPane.setHalignment(this.bGoEnchere, HPos.CENTER);
         this.gridPane.setHalignment(this.bRetour, HPos.CENTER);
-
-//        //this.gridPane.setGridLinesVisible(true);
-//        //this.content.setPrefWidth(this.getWidth());
-//        
-//        this.region = new Region();
-//        this.region.setPrefWidth(this.main.getWidth()/4);
-//        this.HBox=new HBox();
-//        this.gri=new GridPane();
-//        this.gri.add(this.gridPane, 0, 0);
-//        this.gri.setHalignment(this.gridPane,HPos.CENTER);
-////        this.HBox.setHgrow(this.region, Priority.SOMETIMES);
-////        this.HBox.setHgrow(this.gridPane, Priority.ALWAYS);
-//        this.HBox.getChildren().addAll(this.gri);
         this.scroll = new ScrollPane();
         this.scroll.setContent(this.gridPane);
         this.scroll.setFitToWidth(true);
@@ -337,7 +310,15 @@ public class VueAnnonceDetaille extends BorderPane {
         });
         this.bRetour.setOnAction((t) -> {
             this.main.setRight(null);
-            this.main.setLeft(new BarRecherche(main));
+            try {
+                this.main.setLeft(new BarRecherche(main));
+            } catch (SQLException ex) {
+                Logger.getLogger(VueAnnonceDetaille.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(VueAnnonceDetaille.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(VueAnnonceDetaille.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
     }
 

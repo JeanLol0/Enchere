@@ -5,7 +5,16 @@
 package fr.insa.strasbourg.zerr.projetEnchere.FX.composants;
 
 import fr.insa.strasbourg.zerr.projetEnchere.FX.JavaFXUtils;
+import fr.insa.strasbourg.zerr.projetEnchere.FX.vues.Annonce;
 import fr.insa.strasbourg.zerr.projetEnchere.FX.vues.FenetrePrincipale;
+import static fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD.ValiditeDateEnchere;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -46,7 +55,7 @@ public class BarRecherche extends ScrollPane {
 
     private Slider sliderDistance;
 
-    public BarRecherche(FenetrePrincipale main) {
+    public BarRecherche(FenetrePrincipale main) throws SQLException, ClassNotFoundException, IOException {
         this.main = main;
         this.setPrefWidth(400);
 
@@ -71,7 +80,7 @@ public class BarRecherche extends ScrollPane {
         this.sliderDistance = new Slider();
 
         this.sliderDistance.setMin(0);
-        this.sliderDistance.setMax(500);
+        this.sliderDistance.setMax(recupereMaxdistance()+1);
         this.sliderDistance.setValue(100);
 
         this.sliderDistance.setShowTickLabels(true);
@@ -153,6 +162,23 @@ public class BarRecherche extends ScrollPane {
 
     public TextField getTextField() {
         return tfRecherche;
+    }
+    public double recupereMaxdistance()
+            throws SQLException, ClassNotFoundException, IOException {
+        ArrayList<Double> map = new ArrayList<>();
+        Connection con = this.main.getBDD();
+        try ( PreparedStatement st = con.prepareStatement("select id from objet")) {
+            ResultSet res = st.executeQuery();
+            while (res.next()) {
+                if (ValiditeDateEnchere(res.getInt("id")) == false) {
+                    Annonce annonce = new Annonce(main, res.getInt("id"));
+                    double distance= annonce.getDistance();
+                    map.add(distance);
+                }
+            }
+        }
+        double max = Collections.max(map);
+        return max;
     }
 
     public static ObservableList<String> getCategorieList() {

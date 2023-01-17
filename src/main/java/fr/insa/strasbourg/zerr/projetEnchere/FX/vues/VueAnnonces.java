@@ -17,6 +17,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -170,18 +172,24 @@ public class VueAnnonces extends BorderPane {
             while (res.next()) {
                 if (ValiditeDateEnchere(res.getInt("id")) == false) {
                     this.idAnnonce.add(res.getInt("id"));}
-//                } else {
-//                    Annonce annonce = new Annonce(this.main, res.getInt("id"));
-//                    annonce.messageFin();
-//                }
-
-//                System.out.println("ids recupéré nb:" + this.idAnnonce.size());
-//            if (ValiditeDateEnchere(res.getInt("id")) == false) {
-//                int size = this.idAnnonce.size();
-//                this.idAnnonce.remove(size-1);
-//            }
             }
         }
+    }
+    public double recupereMaxdistance()
+            throws SQLException, ClassNotFoundException, IOException {
+        ArrayList<Double> map = new ArrayList<>();
+        try ( PreparedStatement st = this.con.prepareStatement("select id from objet")) {
+            ResultSet res = st.executeQuery();
+            while (res.next()) {
+                if (ValiditeDateEnchere(res.getInt("id")) == false) {
+                    Annonce annonce = new Annonce(main, res.getInt("id"));
+                    double distance= annonce.getDistance();
+                    map.add(distance);
+                }
+            }
+        }
+        double max = Collections.max(map);
+        return max;
     }
 
     private void afficheAnnoncePrixDecroissante() throws SQLException, IOException {
