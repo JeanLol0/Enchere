@@ -8,6 +8,7 @@ import fr.insa.strasbourg.zerr.projetEnchere.FX.JavaFXUtils;
 import fr.insa.strasbourg.zerr.projetEnchere.FX.composants.BarRecherche;
 import static fr.insa.strasbourg.zerr.projetEnchere.FX.vues.Annonce.CalculDistance;
 import static fr.insa.strasbourg.zerr.projetEnchere.FX.vues.Annonce.getNbr;
+import static fr.insa.strasbourg.zerr.projetEnchere.FX.vues.Annonce.recupereImageUtil;
 import static fr.insa.strasbourg.zerr.projetEnchere.FX.vues.Annonce.texteEnImage;
 import fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD;
 import static fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD.connectGeneralPostGres;
@@ -45,6 +46,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javax.swing.JOptionPane;
 
@@ -68,6 +71,7 @@ public class VueAnnonceDetaille extends BorderPane {
 
     private int idObj;
     private Label prix;
+    private Circle avatar;
 
     private Timestamp debut;
     private Timestamp fin;
@@ -116,6 +120,10 @@ public class VueAnnonceDetaille extends BorderPane {
         this.gridPane.setHgap(20);
         this.image = texteEnImage(this.stringImage);
         this.imageV = new ImageView(this.image);
+        
+        Image Image = texteEnImage(recupereImageUtil(this.main.getBDD(), this.idVendeur));
+        this.avatar = new Circle(20, 20, 20);
+        this.avatar.setFill(new ImagePattern(Image));
 
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         int width = gd.getDisplayMode().getWidth() / 2;
@@ -164,7 +172,10 @@ public class VueAnnonceDetaille extends BorderPane {
         this.gridPane.setHalignment(this.imageV, HPos.CENTER);
 
         this.tTitre.setId("grand-text-annonce");
-
+        HBox hb = new HBox();
+        hb.setSpacing(10);
+        hb.getChildren().addAll(this.avatar, this.npVendeur);
+        
         this.gridPane.add(this.tTitre, 0, 0, 2, 1);
         this.gridPane.add(imageV, 0, 1, 2, 1);
         this.gridPane.add(this.desc, 0, 2, 1, 1);
@@ -172,7 +183,7 @@ public class VueAnnonceDetaille extends BorderPane {
         this.gridPane.add(tCategorie, 0, 4);
         this.gridPane.add(categorie, 1, 4);
         this.gridPane.add(tVendeur, 0, 5);
-        this.gridPane.add(npVendeur, 1, 5);
+        this.gridPane.add(hb, 1, 5);
         this.gridPane.add(tDistance, 0, 6);
         this.gridPane.add(this.distance, 1, 6);
         this.gridPane.add(tTempsR, 0, 7);

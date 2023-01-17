@@ -10,6 +10,7 @@ import static fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD.connectGenera
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -30,6 +31,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javax.imageio.ImageIO;
 
@@ -38,7 +42,7 @@ import javax.imageio.ImageIO;
  * @author jules
  */
 public class Annonce extends HBox {
-
+    
     private FenetrePrincipale main;
     private String titre;
     private Timestamp debut;
@@ -58,9 +62,10 @@ public class Annonce extends HBox {
     private String stringImage;
     private GridPane grid;
     private ImageView imageV;
+    private Circle avatar;
     
-    private int compteur=0;
-
+    private int compteur = 0;
+    
     private Label npVendeur;
     private Label tTime;
     private Label tTitre;
@@ -69,12 +74,17 @@ public class Annonce extends HBox {
     private Label tVendeur;
     private Label tTempsR;
     private Label tDistance;
-
+    
     public Annonce(FenetrePrincipale main, Integer id) throws SQLException, ClassNotFoundException, IOException {
         //this.getStylesheets().add(getClass().getResource("StyleAnnonce.css").toExternalForm());
         this.id = id;
         this.main = main;
+        
+        
         recupereObjet(this.id);
+        Image Image = texteEnImage(recupereImageUtil(this.main.getBDD(), this.idVendeur));
+        this.avatar = new Circle(20, 20, 20);
+        this.avatar.setFill(new ImagePattern(Image));
         this.grid = new GridPane();
         this.grid.setHgap(20);
         this.setId("annonce");
@@ -82,7 +92,7 @@ public class Annonce extends HBox {
         this.imageV = new ImageView(this.image);
         this.imageV.setFitHeight(200);
         this.imageV.setFitWidth(200);
-
+        
         this.tTime = new Label("Temps restant :");
         this.tPrix = new Label("Prix :");
         this.tCategorie = new Label("Catégorie :");
@@ -99,14 +109,17 @@ public class Annonce extends HBox {
             this.distance = new Label(Double.toString(distanceR) + " km");
         }
         this.tTitre.setId("grand-text-annonce");
-
+        HBox hb = new HBox();
+        hb.setSpacing(10);
+        hb.getChildren().addAll(this.avatar, this.npVendeur);
         this.grid.add(this.tTitre, 0, 0, 2, 1);
         this.grid.add(tPrix, 0, 2);
         this.grid.add(prixActuel, 1, 2);
         this.grid.add(tCategorie, 0, 3);
         this.grid.add(categorie, 1, 3);
         this.grid.add(tVendeur, 0, 4);
-        this.grid.add(npVendeur, 1, 4);
+        this.grid.add(hb, 1, 4);
+        ;
         this.grid.add(tDistance, 0, 5);
         this.grid.add(this.distance, 1, 5);
         this.grid.add(tTempsR, 0, 6);
@@ -114,22 +127,22 @@ public class Annonce extends HBox {
         this.getChildren().addAll(this.imageV, this.grid);
         ActualisationTempsRestant();
         ActualisePrix();
-
+        
         this.tTitre.setOnMouseClicked((t) -> {
             try {
-                this.main.setRight(new VueAnnonceDetaille(this.main, this.id,1,compteur));
+                this.main.setRight(new VueAnnonceDetaille(this.main, this.id, 1, compteur));
             } catch (SQLException | ClassNotFoundException | IOException ex) {
                 Logger.getLogger(Annonce.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
-
+        
     }
-
+    
     private void recupereObjet(int id)
             throws SQLException, ClassNotFoundException {
         Connection con = this.main.getBDD();
-
-        try ( PreparedStatement st = con.prepareStatement("select * from objet where id = ?")) {
+        
+        try (PreparedStatement st = con.prepareStatement("select * from objet where id = ?")) {
             st.setInt(1, id);
             ResultSet res = st.executeQuery();
             while (res.next()) {
@@ -149,13 +162,13 @@ public class Annonce extends HBox {
                 this.Olatitude = res.getDouble("long");
             }
         }
-
+        
     }
-
+    
     private void RecupCoordUtil(int id)
             throws SQLException, ClassNotFoundException {
         Connection con = this.main.getBDD();
-        try ( PreparedStatement st = con.prepareStatement("select * from utilisateur where id = ?")) {
+        try (PreparedStatement st = con.prepareStatement("select * from utilisateur where id = ?")) {
             st.setInt(1, id);
             ResultSet res = st.executeQuery();
             while (res.next()) {
@@ -163,9 +176,9 @@ public class Annonce extends HBox {
                 this.Utillongitude = res.getDouble("long");
             }
         }
-
+        
     }
-
+    
     public static int CalculDistance(double Utlong, double Utlat, double Objlong, double Objlat) {
         double value = Math.sin(Math.toRadians(Utlat)) * Math.sin(Math.toRadians(Objlat));
         double value2 = Math.cos(Math.toRadians(Objlat)) * Math.cos(Math.toRadians(Utlat)) * Math.cos(Math.toRadians(Utlong - Objlong));
@@ -179,45 +192,45 @@ public class Annonce extends HBox {
         long l1 = debut.getTime();
         long l2 = fin.getTime();
         long l3 = l2 - l1;
-
+        
         return new Timestamp(l3);
-
+        
     }
-
+    
     private long secRestant(Timestamp fin) {
         LocalDateTime l1 = LocalDateTime.now();
         LocalDateTime l2 = this.fin.toLocalDateTime();
         long diffS = l1.until(l2, ChronoUnit.SECONDS);
         return diffS % 60;
     }
-
+    
     private long minRestant(Timestamp fin) {
         LocalDateTime l1 = LocalDateTime.now();
         LocalDateTime l2 = this.fin.toLocalDateTime();
         long diffM = l1.until(l2, ChronoUnit.MINUTES);
         return diffM % 60;
-
+        
     }
-
+    
     private long hRestant(Timestamp fin) {
         LocalDateTime l1 = LocalDateTime.now();
         LocalDateTime l2 = this.fin.toLocalDateTime();
         long diffH = l1.until(l2, ChronoUnit.HOURS);
         return diffH % 24;
-
+        
     }
-
+    
     private long jourRestant(Timestamp fin) {
         LocalDateTime l1 = LocalDateTime.now();
 //        System.out.println("now"+LocalDateTime.now());
 //        System.out.println("fin"+fin.toLocalDateTime());
         LocalDateTime l2 = fin.toLocalDateTime();
         long diffJ = l1.until(l2, ChronoUnit.DAYS);
-
+        
         return diffJ;
-
+        
     }
-
+    
     public static long getHeuresRestantes(Timestamp fin) {
         LocalDateTime debut1 = LocalDateTime.now();
         LocalDateTime fin1 = fin.toLocalDateTime();
@@ -233,7 +246,7 @@ public class Annonce extends HBox {
         }
         return diffHeures;
     }
-
+    
     public static long getMinutesRestantes(Timestamp fin) {
         LocalDateTime debut1 = LocalDateTime.now();
         LocalDateTime fin1 = fin.toLocalDateTime();
@@ -252,7 +265,7 @@ public class Annonce extends HBox {
         }
         return diffMinutes;
     }
-
+    
     public static long getJoursRestants(Timestamp fin) {
         LocalDateTime debut1 = LocalDateTime.now();
         LocalDateTime fin1 = fin.toLocalDateTime();
@@ -265,7 +278,7 @@ public class Annonce extends HBox {
         }
         return diffJours;
     }
-
+    
     public static long getSecondesRestantes(Timestamp fin) {
         LocalDateTime debut1 = LocalDateTime.now();
         LocalDateTime fin1 = fin.toLocalDateTime();
@@ -287,19 +300,19 @@ public class Annonce extends HBox {
         }
         return diffSecondes;
     }
-
+    
     public static Image texteEnImage(String img) throws IOException {
-
+        
         byte[] result = Base64.getUrlDecoder().decode(img);
         ByteArrayInputStream bis = new ByteArrayInputStream(result);
         BufferedImage bImage2 = ImageIO.read(bis);
         Image Final = SwingFXUtils.toFXImage(bImage2, null);
         return Final;
     }
-
+    
     public String getStringCategorie(Integer id) throws SQLException {
         Connection con = this.main.getBDD();
-        try ( PreparedStatement st = con.prepareCall("select * from categorie where id = ?")) {
+        try (PreparedStatement st = con.prepareCall("select * from categorie where id = ?")) {
             st.setInt(1, id);
             ResultSet res = st.executeQuery();
             if (res.next()) {
@@ -308,14 +321,14 @@ public class Annonce extends HBox {
                 JavaFXUtils.showErrorInAlert("Erreur", "Selectionner une catégorie", "blabla");
                 return null;
             }
-
+            
         }
-
+        
     }
-
+    
     public String getNom(Integer idU) throws SQLException {
         Connection con = this.main.getBDD();
-        try ( PreparedStatement st = con.prepareCall("select nom from utilisateur where id = ?")) {
+        try (PreparedStatement st = con.prepareCall("select nom from utilisateur where id = ?")) {
             st.setInt(1, idU);
             ResultSet res = st.executeQuery();
             if (res.next()) {
@@ -324,14 +337,14 @@ public class Annonce extends HBox {
                 JavaFXUtils.showErrorInAlert("Erreur", "Selectionner une catégorie", "blabla");
                 return null;
             }
-
+            
         }
-
+        
     }
-
+    
     public String getPrenom(Integer idU) throws SQLException {
         Connection con = this.main.getBDD();
-        try ( PreparedStatement st = con.prepareCall("select prenom from utilisateur where id = ?")) {
+        try (PreparedStatement st = con.prepareCall("select prenom from utilisateur where id = ?")) {
             st.setInt(1, idU);
             ResultSet res = st.executeQuery();
             if (res.next()) {
@@ -340,11 +353,11 @@ public class Annonce extends HBox {
                 JavaFXUtils.showErrorInAlert("Erreur", "Selectionner une catégorie", "blabla");
                 return null;
             }
-
+            
         }
-
+        
     }
-
+    
     private void ActualisationTempsRestant() {
         Timeline tempsRestant = new Timeline(new KeyFrame(javafx.util.Duration.seconds(1), (t) -> {
             Timestamp mtn = new Timestamp(System.currentTimeMillis());
@@ -371,25 +384,25 @@ public class Annonce extends HBox {
                 } catch (ClassNotFoundException ex) {
                     Logger.getLogger(Annonce.class.getName()).log(Level.SEVERE, null, ex);
                 }
-
+                
             } else {
                 tTime.setText(jourR + " j " + heureR + " h " + minR + " m " + secR + " s");
             }
         }));
         tempsRestant.setCycleCount(Animation.INDEFINITE);
         tempsRestant.play();
-
+        
         long secR = secRestant(this.fin);
         if (secR < 0) {
             tempsRestant.stop();;
             tTime.setText("Enchere Terminée");
         }
     }
-
+    
     private static int recupereEtatLivraison(Connection con, int id)
             throws SQLException, ClassNotFoundException {
         int etat = 0;
-        try ( PreparedStatement st = con.prepareStatement("select * from objet where id = ?")) {
+        try (PreparedStatement st = con.prepareStatement("select * from objet where id = ?")) {
             st.setInt(1, id);
             ResultSet res = st.executeQuery();
             while (res.next()) {
@@ -398,18 +411,17 @@ public class Annonce extends HBox {
         }
         return etat;
     }
-
     
     public static void setEtatLivraison(Connection con, int valeur, int idObjet) throws SQLException {
         con.setAutoCommit(false);
-        try ( PreparedStatement pst = con.prepareStatement(
+        try (PreparedStatement pst = con.prepareStatement(
                 "update objet set etatlivraison = ? where id = ?", PreparedStatement.RETURN_GENERATED_KEYS)) {
             pst.setInt(1, valeur);
             pst.setInt(2, idObjet);
             pst.executeUpdate();
             con.commit();
             System.out.println("ca passe ici");
-            try ( ResultSet rid = pst.getGeneratedKeys()) {
+            try (ResultSet rid = pst.getGeneratedKeys()) {
                 // et comme ici je suis sur qu'il y a une et une seule clé, je
                 // fait un simple next 
                 rid.next();
@@ -421,13 +433,13 @@ public class Annonce extends HBox {
             con.setAutoCommit(true);
         }
     }
-
+    
     private void ActualisePrix() {
         Timeline Prix = new Timeline(new KeyFrame(javafx.util.Duration.seconds(1), (t) -> {
             int prixActu = Integer.parseInt(getNbr(this.prixActuel.getText()));
             Connection con = this.main.getBDD();
-
-            try ( PreparedStatement st = con.prepareStatement("select * from objet where id = ?")) {
+            
+            try (PreparedStatement st = con.prepareStatement("select * from objet where id = ?")) {
                 st.setInt(1, this.id);
                 ResultSet res = st.executeQuery();
                 while (res.next()) {
@@ -444,28 +456,28 @@ public class Annonce extends HBox {
         Prix.setCycleCount(Animation.INDEFINITE);
         Prix.play();
     }
-
+    
     public void messageFin() throws SQLException, ClassNotFoundException {
         String TextePourVendeurSiPasEnchere = "Votre objet '" + BDD.recupereTitreObjet(this.main.getBDD(), this.id) + "' n'est plus en vente mais il n'y a pas eut d'offres! \nVous pouvez le remettre en ligne en suivant les conseils du guide";
         int idVendeur = this.idVendeur;
         int IdDernierMec = UtilDernierEnchereSurObjet(this.id);
         if (UtilDernierEnchereSurObjet(this.id) != -1) {
-            String TextePourAcheteurSiEnchere = "Vous avez gagné l'enchere sur l'objet: " + BDD.recupereTitreObjet(this.main.getBDD(), this.id) +" vendu par "+ getNom(this.idVendeur)+ "\nVous pouvez à présent choisir le mode de réception sur la rubrique 'Mes Encheres Finies'";
+            String TextePourAcheteurSiEnchere = "Vous avez gagné l'enchere sur l'objet: " + BDD.recupereTitreObjet(this.main.getBDD(), this.id) + " vendu par " + getNom(this.idVendeur) + "\nVous pouvez à présent choisir le mode de réception sur la rubrique 'Mes Encheres Finies'";
             String TextePourVendeurSiEnchere = "Votre objet " + BDD.recupereTitreObjet(this.main.getBDD(), this.id) + " n'est plus en vente! L'utilisateur ";
             TextePourVendeurSiEnchere = TextePourVendeurSiEnchere + recupereNomUTil(this.main.getBDD(), UtilDernierEnchereSurObjet(this.id)) + " vous propose de vous l'acheter";
             System.out.println(TextePourVendeurSiPasEnchere);
-            BDD.createMessage(this.main.getBDD(), TextePourAcheteurSiEnchere, UtilDernierEnchereSurObjet(this.id), this.idVendeur,2,this.id);
-            BDD.createMessage(this.main.getBDD(), TextePourVendeurSiEnchere, this.idVendeur, UtilDernierEnchereSurObjet(this.id),3,this.id);
+            BDD.createMessage(this.main.getBDD(), TextePourAcheteurSiEnchere, UtilDernierEnchereSurObjet(this.id), this.idVendeur, 2, this.id);
+            BDD.createMessage(this.main.getBDD(), TextePourVendeurSiEnchere, this.idVendeur, UtilDernierEnchereSurObjet(this.id), 3, this.id);
         } else {
-            BDD.createMessage(this.main.getBDD(), TextePourVendeurSiPasEnchere, this.idVendeur, 2,4,this.id);
+            BDD.createMessage(this.main.getBDD(), TextePourVendeurSiPasEnchere, this.idVendeur, 2, 4, this.id);
         }
-
+        
     }
-
+    
     public int UtilDernierEnchereSurObjet(int idObjet) throws ClassNotFoundException, SQLException {
         Connection con = connectGeneralPostGres("localhost", 5432, "postgres", "postgres", "pass");
         int idDernierUtil = -1;
-        try ( PreparedStatement st = con.prepareStatement("select * from enchere where montant = (select max(montant) from enchere where sur = ?)")) {
+        try (PreparedStatement st = con.prepareStatement("select * from enchere where montant = (select max(montant) from enchere where sur = ?)")) {
             st.setInt(1, idObjet);
             ResultSet res = st.executeQuery();
             while (res.next()) {
@@ -474,11 +486,11 @@ public class Annonce extends HBox {
             return idDernierUtil;
         }
     }
-
+    
     public static String recupereNomUTil(Connection con, int id)
             throws SQLException, ClassNotFoundException {
         String NOM = "";
-        try ( PreparedStatement st = con.prepareStatement("select * from utilisateur where id = ?")) {
+        try (PreparedStatement st = con.prepareStatement("select * from utilisateur where id = ?")) {
             st.setInt(1, id);
             ResultSet res = st.executeQuery();
             while (res.next()) {
@@ -490,24 +502,51 @@ public class Annonce extends HBox {
         return NOM;
     }
     
-    static String getNbr(String str) 
-    { 
+    static String getNbr(String str) {
         // Remplacer chaque nombre non numérique par un espace
-        str = str.replaceAll("[^\\d]", " "); 
+        str = str.replaceAll("[^\\d]", " ");
         // Supprimer les espaces de début et de fin 
-        str = str.trim(); 
+        str = str.trim();
         // Remplacez les espaces consécutifs par un seul espace
-        str = str.replaceAll(" +", ""); 
-  
-        return str; 
-    } 
+        str = str.replaceAll(" +", "");        
+        
+        return str;        
+    }    
     
-    public int getCompteur(){
+    public int getCompteur() {
         return this.compteur;
     }
     
-    public double getDistance(){
+    public double getDistance() {
         return this.distanceR;
     }
+    
+    private ImageView getIcon2(String texteImage, int w, int h) throws IOException {
+        Image image = texteEnImage(texteImage);
+        ImageView IV = new ImageView(image);
+        IV.setFitHeight(h);
+        IV.setFitWidth(w);
+        return IV;
+    }
+    
+    public Image getImage(String resourcePath, int par, int par1) {
+        InputStream input //
+                = this.getClass().getResourceAsStream(resourcePath);
+        Image image = new Image(input);
+        return image;
+    }
 
+    public static String recupereImageUtil(Connection con, int idutil)
+            throws SQLException, ClassNotFoundException {
+        String NOM = "";
+        try (PreparedStatement st = con.prepareStatement("select image from utilisateur where id = ?")) {
+            st.setInt(1, idutil);
+            ResultSet res = st.executeQuery();
+            while (res.next()) {
+                NOM = res.getString("image");
+            }
+        }
+        return NOM;
+    }
+    
 }
