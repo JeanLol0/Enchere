@@ -153,7 +153,7 @@ public class VueNouvelleAnnonce extends ScrollPane {
 
         this.tTitre = new Label("Définir le titre");
         this.tCategorie = new Label("Définir une catégorie");
-        this.tDescr = new Label("Ajouter une déscription");
+        this.tDescr = new Label("Ajouter une description");
         this.tPrix = new Label("Définir le prix de départ");
         this.tPhoto = new Label("Ajouter une photo");
         this.tTitre.setId("grand-text-annonce");

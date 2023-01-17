@@ -93,7 +93,7 @@ public class VueInscription extends GridPane {
         this.bInscription = new Button("Inscription");
         this.bInscription.setId("bouton-bleu");
 
-        this.bLogin = new Button("Connection");
+        this.bLogin = new Button("Connexion");
         this.bLogin.setId("bouton-vert");
 
         this.bChoixPos = new Button("Choisir ma position");
@@ -189,7 +189,7 @@ public class VueInscription extends GridPane {
         this.bInscription = new Button("Inscription");
         this.bInscription.setId("bouton-bleu");
 
-        this.bLogin = new Button("Connection");
+        this.bLogin = new Button("Connexion");
         this.bLogin.setId("bouton-vert");
 
         this.bChoixPos = new Button("Modifier ma position");

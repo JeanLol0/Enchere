@@ -376,8 +376,8 @@ public class VueAnnonceDetaille extends BorderPane {
         try {
             int enchere = createEnchere(con, idObj, idUser, Integer.parseInt(this.tfEnchere.getText()));
             if (enchere == -1) {
-                JOptionPane.showMessageDialog(null, "Vous devez entrer un montant supérieur au prix actuel ! ");
-            } else {JOptionPane.showMessageDialog(null, "Vous avez bien enrichi sur l'objet !");
+                JOptionPane.showMessageDialog(null, "ATTENTION! Vous devez entrer un montant supérieur au prix actuel ! ");
+            } else {JOptionPane.showMessageDialog(null, "Vous avez bien enchiri sur l'objet !");
             }
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(VueAnnonceDetaille.class.getName()).log(Level.SEVERE, null, ex);

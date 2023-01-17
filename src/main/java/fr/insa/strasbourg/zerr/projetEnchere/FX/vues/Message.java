@@ -85,7 +85,7 @@ public class Message extends GridPane {
         this.add(this.textedate, 0, 2);
         this.add(Envoyeur, 0, 3);
 
-        if (this.titre == "Vous avez remportez une enchère!") {
+        if (this.titre == "Vous avez remporté une enchère!") {
 
             this.add(this.lChoixRemise, 0, 4);
             this.add(this.bExp, 0, 5);
@@ -159,7 +159,7 @@ public class Message extends GridPane {
                 if (type == 1) {
                     titre = "Nouvelle Enchere sur l'un de vos objet! ";
                 } else if (type == 2) {
-                    titre = "Vous avez remportez une enchère!";
+                    titre = "Vous avez remporté une enchère!";
                 } else if (type == 3) {
                     titre = "Annonce terminée! Préparez la remise/livraison !";
                 } else if (type == 4) {

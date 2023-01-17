@@ -80,7 +80,7 @@ public class TopBar extends HBox {
             this.main.setLeft(null);
             this.main.setRight(null);
         });
-        this.milogout = new MenuItem("Déconnection");
+        this.milogout = new MenuItem("Déconnexion");
         this.miAnnonce = new MenuItem("Mes Annonces");
         this.miEnchere = new MenuItem("Mes Encheres");
         this.miMessagerie = new MenuItem("Messagerie");
