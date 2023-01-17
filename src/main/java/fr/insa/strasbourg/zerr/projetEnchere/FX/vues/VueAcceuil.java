@@ -4,6 +4,7 @@
  */
 package fr.insa.strasbourg.zerr.projetEnchere.FX.vues;
 
+import fr.insa.strasbourg.beuvron.utils.SceneManager;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
@@ -11,6 +12,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -28,7 +31,8 @@ import javafx.scene.text.Text;
  *
  * @author jules
  */
-public class VueAcceuil extends GridPane{
+public class VueAcceuil extends GridPane {
+
     private FenetrePrincipale main;
     private Button bAffAnnonce;
     private Button bAffMesAnnonces;
@@ -38,13 +42,12 @@ public class VueAcceuil extends GridPane{
     public VueAcceuil(FenetrePrincipale main) {
         this.setAlignment(Pos.CENTER_RIGHT);
         this.main = main;
-        this.setId("vue-acceuil"); 
-        
-        
+        this.setId("vue-acceuil");
+
         Image image = getImage("ressources/acceuil.png");
         Background bg = new Background(new BackgroundImage(image, BackgroundRepeat.SPACE, BackgroundRepeat.SPACE, BackgroundPosition.CENTER, BackgroundSize.DEFAULT));
         this.setBackground(bg);
-        
+
         this.bAffAnnonce = new Button("Afficher les annonces en cours ");
         this.bAffAnnonce.setId("bouton-annonce-en-cours");
         this.bAffMesAnnonces = new Button("Afficher mes annonces en cours ");
@@ -58,20 +61,32 @@ public class VueAcceuil extends GridPane{
         this.add(this.bAffAnnonce, 0, 4);
         this.add(this.bAffMesAnnonces, 0, 6);
         this.add(this.bAffMesEnchere, 0, 8);
-        
+
         this.setHalignment(this.tBienvenue, HPos.CENTER);
         this.setHalignment(this.bAffAnnonce, HPos.CENTER);
         this.setHalignment(this.bAffMesAnnonces, HPos.CENTER);
         this.setHalignment(this.bAffMesEnchere, HPos.CENTER);
-        
+
         this.bAffAnnonce.setOnAction((t) -> {
+            Cursor cur = Cursor.WAIT;
+            Scene sc = SceneManager.getScene();
+            sc.setCursor(cur);
+            while(sc.getCursor()!=cur){
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(VueAcceuil.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            System.out.println("icicc");
             try {
+
                 this.main.setCenter(new VuePrincipale(this.main));
             } catch (SQLException | ClassNotFoundException | IOException ex) {
                 Logger.getLogger(VueAcceuil.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
-        
+
         this.bAffMesAnnonces.setOnAction((t) -> {
             try {
                 this.main.setCenter(new VueMesAnnonces(this.main));
@@ -79,7 +94,7 @@ public class VueAcceuil extends GridPane{
                 Logger.getLogger(VueAcceuil.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
-        
+
         this.bAffMesEnchere.setOnAction((t) -> {
             try {
                 this.main.setCenter(new VueMesEnchere(this.main));
@@ -88,12 +103,12 @@ public class VueAcceuil extends GridPane{
             }
         });
     }
-    
+
     private Image getImage(String resourcePath) {
         InputStream input //
                 = this.getClass().getResourceAsStream(resourcePath);
         Image image = new Image(input);
         return image;
     }
-    
+
 }

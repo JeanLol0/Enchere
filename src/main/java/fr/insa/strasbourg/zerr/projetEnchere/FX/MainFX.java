@@ -4,22 +4,17 @@
  */
 package fr.insa.strasbourg.zerr.projetEnchere.FX;
 
+import fr.insa.strasbourg.beuvron.utils.SceneManager;
 import fr.insa.strasbourg.zerr.projetEnchere.FX.vues.FenetrePrincipale;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.util.Base64;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.Cursor;
 import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import javax.imageio.ImageIO;
 
 /**
  *
@@ -30,7 +25,7 @@ public class MainFX extends Application {
     public static Pane getMainVue;
 
     private Pane mainVue;
-    private Scene scene;
+    public static Scene scene;
 
     @Override
     public void start(Stage stage) {
@@ -44,6 +39,9 @@ public class MainFX extends Application {
         this.mainVue = new FenetrePrincipale(stage);
          
         this.scene = new Scene(mainVue);
+        
+        
+        SceneManager.getInstance().setScene(this.scene);
         JavaFXUtils.grandeFenetre(stage);
         //JavaFXUtils.FullScreen(stage);
         //this.scene.getStylesheets().add("FX/DarkTheme.css");
@@ -56,6 +54,11 @@ public class MainFX extends Application {
         stage.setScene(scene);
 
         stage.show();
+    }
+    
+
+    public Scene getScene() {
+        return scene;
     }
 
     public Pane getMainVue() {

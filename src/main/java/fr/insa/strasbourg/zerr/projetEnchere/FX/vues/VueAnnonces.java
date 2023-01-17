@@ -4,6 +4,7 @@
  */
 package fr.insa.strasbourg.zerr.projetEnchere.FX.vues;
 
+import fr.insa.strasbourg.beuvron.utils.SceneManager;
 import fr.insa.strasbourg.zerr.projetEnchere.FX.JavaFXUtils;
 import fr.insa.strasbourg.zerr.projetEnchere.FX.composants.BarRecherche;
 import fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD;
@@ -11,6 +12,7 @@ import static fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD.DistanceObjet
 import static fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD.ValiditeDateEnchere;
 import static fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD.connectGeneralPostGres;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -27,6 +29,9 @@ import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.geometry.Pos;
+import javafx.scene.ImageCursor;
+import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
@@ -49,7 +54,7 @@ public class VueAnnonces extends BorderPane {
         this.main = main;
         this.setPrefWidth(this.main.getWidth() / 2);
         this.gridPane = new GridPane();
-
+        this.setStyle("-fx-background-color:#e9f8ff");
         this.barRe = new BarRecherche(this.main);
         this.idAnnonce = new ArrayList<Integer>();
         this.con = this.main.getBDD();
@@ -147,6 +152,11 @@ public class VueAnnonces extends BorderPane {
                 Logger.getLogger(VueAnnonces.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
+        
+        
+        Image curI = getImage("ressources/le-curseur.png");
+        Scene sc =SceneManager.getScene();
+        sc.setCursor(new ImageCursor(curI));
 
     }
 
@@ -492,6 +502,13 @@ public class VueAnnonces extends BorderPane {
 
         return str;
     }
+    public  Image getImage(String resourcePath) {
+        InputStream input //
+                = this.getClass().getResourceAsStream(resourcePath);
+        Image image = new Image(input);
+        return image;
+    }
+    
 
 }
 //    public static void afficheUtilisateurParNom(Connection con,

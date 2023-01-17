@@ -41,7 +41,7 @@ public class VueMessagerie extends ScrollPane {
 
     public VueMessagerie(FenetrePrincipale main) throws SQLException, ClassNotFoundException, IOException {
         this.main = main;
-        this.setStyle("-fx-color: #148ca7;");
+        this.setStyle("-fx-color: #148ca7;-fx-background-color:#e9f8ff");
         this.grid = new GridPane();
         this.grid.add(new Label("MESSAGERIE"), 0, 4);
         this.con = this.main.getBDD();

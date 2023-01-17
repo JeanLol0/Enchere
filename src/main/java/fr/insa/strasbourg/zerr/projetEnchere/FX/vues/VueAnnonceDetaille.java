@@ -104,6 +104,7 @@ public class VueAnnonceDetaille extends BorderPane {
 
     public VueAnnonceDetaille(FenetrePrincipale main, int idO, int compteur) throws SQLException, ClassNotFoundException, IOException {
         this.main = main;
+        this.setStyle("-fx-background-color:#e9f8ff");
         this.compteur = compteur;
         this.gridPane = new GridPane();
         this.main.setLeft(null);
@@ -209,6 +210,8 @@ public class VueAnnonceDetaille extends BorderPane {
 
     public VueAnnonceDetaille(FenetrePrincipale main, int idO, int i, int comp) throws SQLException, ClassNotFoundException, IOException {
         this.main = main;
+        this.setId("background");
+        this.setStyle("-fx-background-color:#e9f8ff;");
         this.compteur = comp;
         this.gridPane = new GridPane();
         this.main.setLeft(null);

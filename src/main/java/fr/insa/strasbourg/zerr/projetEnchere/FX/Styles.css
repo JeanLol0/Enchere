@@ -284,3 +284,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-spacing: 10;
     -fx-padding: 10 10 10 10;
 }
+
+#background {
+    -fx-background-color:#e9f8ff;
+}

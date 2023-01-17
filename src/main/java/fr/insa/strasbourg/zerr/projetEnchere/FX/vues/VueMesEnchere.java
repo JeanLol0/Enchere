@@ -62,6 +62,7 @@ public class VueMesEnchere extends GridPane {
 
     public VueMesEnchere(FenetrePrincipale main) throws SQLException, ClassNotFoundException {
         this.main = main;
+        this.setStyle("-fx-color:#A9BBFF;-fx-background-color:#e9f8ff");
         this.setPrefWidth(this.main.getWidth());
         this.tvEnCours = new TableView();
         this.tvTerminee = new TableView();

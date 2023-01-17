@@ -32,7 +32,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -44,7 +43,6 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.scene.web.HTMLEditor;
 import javafx.stage.FileChooser;
@@ -111,6 +109,8 @@ public class VueNouvelleAnnonce extends ScrollPane {
 //            this.gridMain.add(this.tFin, 1, 10);
 //            this.rbProgramme.setDisable(true);
 //        });
+
+
 
         this.sessionInfo = this.main.getSessionInfo();
         this.tfTitre = new TextField();
