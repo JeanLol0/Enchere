@@ -6,13 +6,18 @@ package fr.insa.strasbourg.zerr.projetEnchere.FX.vues;
 
 import fr.insa.strasbourg.zerr.projetEnchere.FX.JavaFXUtils;
 import static fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD.createUtilisateur;
+import static java.awt.SystemColor.window;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -30,6 +35,7 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
+import javax.imageio.ImageIO;
 
 /**
  *
@@ -53,7 +59,7 @@ public class VueInscription extends GridPane {
     private Button bChoixPos;
 
     private Label lInscription;
-
+    private Image image;
     private Circle avatar;
 
     private int coordonnee;
@@ -140,14 +146,19 @@ public class VueInscription extends GridPane {
         });
         this.avatar.setOnMouseClicked((t) -> {
             FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Open Resource File");
-
+            fileChooser.setTitle("Sélectionnez une image");
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("Images", "*.png")
+            );
+            File selectedFile = fileChooser.showOpenDialog(main.getFenetre());
+            if (selectedFile != null) {
+                // Chargement de l'image
+                Image image2 = new Image(selectedFile.toURI().toString());
+                avatar.setFill(new ImagePattern(image2));
+                this.image = image2;
+                System.out.println(ImageEnTexte(image2));
+            }
         });
-        
-       
-        
-        
-        
 
     }
 
@@ -233,11 +244,39 @@ public class VueInscription extends GridPane {
         });
         this.avatar.setOnMouseClicked((t) -> {
             FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Open Resource File");
-            System.out.println("Avatar");
+            fileChooser.setTitle("Sélectionnez une image");
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("Images", "*.png")
+            );
+            File selectedFile = fileChooser.showOpenDialog(main.getFenetre());
+            if (selectedFile != null) {
+                // Chargement de l'image
+                Image image2 = new Image(selectedFile.toURI().toString());
+
+                avatar.setFill(new ImagePattern(image2));
+                this.image = image2;
+            }
 
         });
 
+    }
+
+    public static String ImageEnTexte(Image img) {
+
+        BufferedImage bufi = SwingFXUtils.fromFXImage(img, null);
+
+        System.out.println("1");
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try {
+            ImageIO.write(bufi, "jpg", baos);
+            System.out.println("2");
+        } catch (IOException ex) {
+            throw new Error("pb conv image ; ne devrait pas arriver");
+        }
+        byte[] bytes = baos.toByteArray();
+        System.out.println("3");
+        String ImageTexte = Base64.getUrlEncoder().encodeToString(bytes);
+        return ImageTexte;
     }
 
     private void doInscription() {
@@ -247,7 +286,7 @@ public class VueInscription extends GridPane {
 
             } else {
                 Connection con = this.main.getBDD();
-                createUtilisateur(con, this.tfNom.getText(), this.pfPass.getText(), this.tfPrenom.getText(), this.tfEmail.getText(), null, this.latitude, this.longitude);
+                createUtilisateur(con, this.tfNom.getText(), this.pfPass.getText(), this.tfPrenom.getText(), this.tfEmail.getText(), this.image, this.latitude, this.longitude);
                 this.main.setCenter(new VueLogin(main));
             }
 

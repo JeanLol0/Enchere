@@ -12,12 +12,19 @@ import fr.insa.strasbourg.zerr.projetEnchere.FX.vues.VueLogin;
 import fr.insa.strasbourg.zerr.projetEnchere.FX.vues.VueMesAnnonces;
 import fr.insa.strasbourg.zerr.projetEnchere.FX.vues.VueMesEnchere;
 import fr.insa.strasbourg.zerr.projetEnchere.FX.vues.VueNouvelleAnnonce;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Base64;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Side;
@@ -37,6 +44,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
+import javax.imageio.ImageIO;
 import org.apache.commons.lang3.text.WordUtils;
 
 /**
@@ -56,14 +64,16 @@ public class TopBar extends HBox {
     private MenuItem miMessagerie;
 
     private MenuButton menuUser;
-    
+    private String texteimage;
     private Label lNomPrenom;
     
     
 
-    public TopBar(FenetrePrincipale main) {
+    public TopBar(FenetrePrincipale main) throws SQLException, ClassNotFoundException, IOException {
         this.main = main;
-        ImageView imageView = this.getIcon("ressources/user.png",25,25);
+        this.texteimage=recupereImageUtil(this.main.getBDD(), this.main.getSessionInfo().getUserID());
+        System.out.println(texteimage);
+        ImageView imageView = this.getIcon2(this.texteimage,25,25);
         this.logo = getIcon("ressources/logoblanc.png",50,50);
         this.logo.setOnMouseClicked((t) -> {
             this.main.setCenter(new VueAcceuil(this.main));
@@ -88,7 +98,7 @@ public class TopBar extends HBox {
         this.menuUser.setOpacity(0);
         this.menuUser.setStyle("-fx-background-color: #ff0000; ");
         Circle cr = new Circle(30, 30, 30);
-        cr.setFill(new ImagePattern(getImage("ressources/user.png", 35, 35)));
+        cr.setFill(new ImagePattern(texteEnImage(this.texteimage)));
         cm.getItems().addAll(miAnnonce, miEnchere, miMessagerie,milogout);
         
         cr.setOnMouseClicked((t) -> {
@@ -138,7 +148,6 @@ public class TopBar extends HBox {
             this.logo = getIcon("ressources/bouton-ajouter.png",35,35);
             this.bNouvelleAnnonce.setGraphic(logo);
         });
-        
         this.milogout.setOnAction((t) -> {
             t.consume();
             Alert confirmer = new Alert(Alert.AlertType.CONFIRMATION);
@@ -211,11 +220,37 @@ public class TopBar extends HBox {
         IV.setFitWidth(w);
         return IV;
     }
-
+    private ImageView getIcon2(String texteImage,int w,int h) throws IOException {
+        Image image = texteEnImage(texteImage);
+        ImageView IV = new ImageView(image);
+        IV.setFitHeight(h);
+        IV.setFitWidth(w);
+        return IV;
+    }
+    public static Image texteEnImage(String img) throws IOException {
+        byte[] result = Base64.getUrlDecoder().decode(img);
+        ByteArrayInputStream bis = new ByteArrayInputStream(result);
+        BufferedImage bImage2 = ImageIO.read(bis);
+        Image Final = SwingFXUtils.toFXImage(bImage2, null);
+        return Final;
+    }
+    
     public  Image getImage(String resourcePath, int par, int par1) {
         InputStream input //
                 = this.getClass().getResourceAsStream(resourcePath);
         Image image = new Image(input);
         return image;
+    }
+    public static String recupereImageUtil(Connection con, int idutil)
+            throws SQLException, ClassNotFoundException {
+        String NOM = "";
+        try ( PreparedStatement st = con.prepareStatement("select image from utilisateur where id = ?")) {
+            st.setInt(1, idutil);
+            ResultSet res = st.executeQuery();
+            while (res.next()) {
+                 NOM = res.getString("image");
+            }
+        }
+        return NOM;
     }
 }

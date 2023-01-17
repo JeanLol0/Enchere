@@ -84,6 +84,7 @@ import javafx.stage.Stage;
         return this.sessionInfo.getConBdD();
     }
 
+
     /**
      * @param fenetre the fenetre to set
      */

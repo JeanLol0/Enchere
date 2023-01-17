@@ -9,12 +9,15 @@ import fr.insa.strasbourg.zerr.projetEnchere.FX.composants.TopBar;
 import fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD;
 import static fr.insa.strasbourg.zerr.projetEnchere.gestionBDD.BDD.connectGeneralPostGres;
 import fr.insa.strasbourg.zerr.projetEnchere.model.Utilisateur;
+import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -95,7 +98,13 @@ public class VueLogin extends GridPane {
         JavaFXUtils.DesactiveAutoFocus(tfEmail);
 
         this.bLogin.setOnAction((t) -> {
-            doLogin();
+            try {
+                doLogin();
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(VueLogin.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(VueLogin.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
 
         this.bInscription.setOnAction((t) -> {
@@ -104,7 +113,7 @@ public class VueLogin extends GridPane {
 
     }
 
-    public void doLogin() {
+    public void doLogin() throws ClassNotFoundException, IOException {
         String nom = this.tfEmail.getText();
         String pass = this.pfPass.getText();
         try {
